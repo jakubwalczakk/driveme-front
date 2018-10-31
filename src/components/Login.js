@@ -1,37 +1,25 @@
 import React, { Component } from 'react';
+import Button from './Button';
+import Input from './Input';
+import Label from './Label';
+import './../style/App.css';
 
 class Login extends Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            email: 'EMAIL',
-            password: 'PASSWORD'
-        };
-    }
-
     render() {
         return (
-            <div>
-                <input
-                    type="email"
-                    //value={this.state.email}
-                    onChange={(event) => {
-                        this.setState({ email: event.target.value });
-                    }} />
-                <br />
-                Value of the input email: {this.state.email}
-                <br />
-                <input
-                    type="password"
-                    //value={this.state.password}
-                    onChange={(event) => {
-                        this.setState({ password: event.target.value });
-                    }} />
-                <br />
-                Value of the input password: {this.state.password}
-                <br />
+            <div className="login-container">
+                <Label id="login-email-label" class="login-item" for={'LoginEmail'} text="login" />
+                <Input id="LoginEmail" class="login-item" type={'email'} onChange={(event) => {
+                    this.setState({ email: event.target.value });
+                }} placeholder="login" />
+                <Label id="login-password-label" class="login-item" for={'LoginPassword'} text="Hasło" />
+                <Input id="LoginPassword" class="login-item" type={'password'} onChange={(event) => {
+                    console.log('password changed');
+                    this.setState({ password: event.target.value });
+                }} placeholder="hasło" minLength="8" />
+                <Button id="ButtonLogin" class="login-item" text="zaloguj" color="white" handleClick={(event) => {
+                    console.log("Button clicked!!!");
+                }} />
             </div>);
     }
 }

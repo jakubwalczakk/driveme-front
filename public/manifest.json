@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "driveMe",
+  "name": "Drive Me - szkoła nauki jazdy",
   "icons": [
     {
       "src": "favicon.ico",
