@@ -1,27 +1,57 @@
-import React, { Component } from 'react';
-import Button from './Button';
-import Input from './Input';
-import Label from './Label';
-import './../style/App.css';
+import React, { Component } from "react";
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import './../style/Login.css';
 
-class Login extends Component {
+export default class Login extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            email: "",
+            password: ""
+        };
+    }
+
+    handleChange = event => {
+        this.setState({
+            [event.target.id]: event.target.value
+        });
+    }
+
+    handleSubmit = event => {
+        event.preventDefault();
+    }
+
     render() {
         return (
-            <div className="login-container">
-                <Label id="login-email-label" class="login-item" for={'LoginEmail'} text="login" />
-                <Input id="LoginEmail" class="login-item" type={'email'} onChange={(event) => {
-                    this.setState({ email: event.target.value });
-                }} placeholder="login" />
-                <Label id="login-password-label" class="login-item" for={'LoginPassword'} text="Hasło" />
-                <Input id="LoginPassword" class="login-item" type={'password'} onChange={(event) => {
-                    console.log('password changed');
-                    this.setState({ password: event.target.value });
-                }} placeholder="hasło" minLength="8" />
-                <Button id="ButtonLogin" class="login-item" text="zaloguj" color="white" handleClick={(event) => {
-                    console.log("Button clicked!!!");
-                }} />
-            </div>);
+            <div className="Login">
+                <form onSubmit={this.handleSubmit}>
+                    <FormGroup controlId="email">
+                        <ControlLabel>E-mail</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="email"
+                            value={this.state.email}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="password">
+                        <ControlLabel>Hasło</ControlLabel>
+                        <FormControl
+                            type="password"
+                            minLength="8"
+                            value={this.state.password}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <Button
+                        block
+                        bsSize="large"
+                        type="submit">
+                        Zaloguj
+                    </Button>
+                </form>
+            </div>
+        );
     }
 }
-
-export default Login;

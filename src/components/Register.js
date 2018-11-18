@@ -1,38 +1,94 @@
 import React, { Component } from 'react';
-import Button from './Button';
-import Label from './Label';
-import Input from './Input';
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import './../style/Register.css';
 
 class Register extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            name: "",
+            surname: "",
+            email: "",
+            password: "",
+            phoneNumber: ""
+        };
+    }
+
+    handleChange = event => {
+        this.setState({
+            [event.target.id]: event.target.value
+        });
+    }
+
+    handleSubmit = event => {
+        event.preventDefault();
+    }
+
     render() {
         return (
-            <div>
-                <Label class="registration-item" for={'RegistrationName'} text="imię" />
-                <Input id="RegistrationName" class="registration-item" onChange={(event) => {
-                    this.setState({ name: event.target.value });
-                }} placeholder="imię" />
-                <Label class="registration-item" for={'RegistrationSurname'} text="nazwisko" />
-                <Input id="RegistrationSurname" class="registration-item" onChange={(event) => {
-                    this.setState({ surname: event.target.value });
-                }} placeholder="nazwisko" />
-                <Label class="registration-item" for={'RegistrationEmail'} text="login" />
-                <Input id="RegistrationEmail" class="registration-item" type={'email'} onChange={(event) => {
-                    this.setState({ email: event.target.value });
-                }} placeholder="login" />
-                <Label class="registration-item" for={'RegistrationPassword'} text="hasło" />
-                <Input id="RegistrationPassword" class="registration-item" type={'password'} onChange={(event) => {
-                    this.setState({ password: event.target.value });
-                }} placeholder="hasło" />
-                <br/>
-                <select>
-                    <option value="student">Student</option>
-                    <option value="instructor">Instruktor</option>
-                    <option value="admin">Administrator</option>
-                </select>
-                <br/>
-                <br/>
-                <Button text="ZAREJESTRUJ" />
+            <div className="Register">
+                <form onSubmit={this.handleSubmit}>
+                    <FormGroup controlId="name">
+                        <ControlLabel>Imię</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            value={this.state.name}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="surname">
+                        <ControlLabel>Nazwisko</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            value={this.state.surname}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="email">
+                        <ControlLabel>Email</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="email"
+                            value={this.state.email}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="password">
+                        <ControlLabel>Hasło</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="password"
+                            minLength="8"
+                            value={this.state.password}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="phoneNumber">
+                        <ControlLabel>Numer telefonu</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            value={this.state.phoneNumber}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="userRoleSelectList">
+                        <ControlLabel>Rola</ControlLabel>
+                        <FormControl componentClass="select" placeholder="select">
+                            <option value="student">Student</option>
+                            <option value="administrator">Administrator</option>
+                            <option value="instructor">Instruktor</option>
+                        </FormControl>
+                    </FormGroup>
+                    <Button
+                        id="buttonek"
+                        block
+                        bsSize="large"
+                        type="submit">
+                        Zarejestruj
+                    </Button>
+                </form>
             </div>);
     }
 }
