@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import './../style/Register.css';
+import './../../style/Register.css';
 
-class Register extends Component {
+export default class Register extends Component {
 
     constructor(props) {
         super(props);
@@ -82,7 +82,7 @@ class Register extends Component {
                         </FormControl>
                     </FormGroup>
                     <Button
-                        id="buttonek"
+                        id="register-button"
                         block
                         bsSize="large"
                         type="submit">
@@ -92,5 +92,3 @@ class Register extends Component {
             </div>);
     }
 }
-
-export default Register;

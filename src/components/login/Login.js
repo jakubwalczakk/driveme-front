@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import './../style/Login.css';
+import './../../style/Login.css';
 
 export default class Login extends Component {
     constructor(props) {
@@ -44,7 +44,8 @@ export default class Login extends Component {
                             onChange={this.handleChange}
                         />
                     </FormGroup>
-                    <Button
+                    <Button                    
+                        id="login-button"
                         block
                         bsSize="large"
                         type="submit">
