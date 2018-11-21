@@ -1,0 +1,32 @@
+.nav-bar{
+  background-color: #004280;
+}
+
+.nav-bar-item{
+  margin: 11px 3px 11px 3px;
+  border-radius: 6px;
+  color: black;
+}
+
+.nav-bar-item-c{
+  background-color: #cce6ff;
+}
+
+.nav-bar-btn{
+  font-weight: bold;
+  margin: 4px 2px 2px 2px;
+  padding: 10px 20px 10px 20px;
+  border-radius: 6px;
+  transition-duration: 0.5s;
+}
+
+.nav-bar-btn:hover{
+  background-color: black;
+  color: white;
+}
+
+.nav-bar-signin-button{
+}
+
+.nav-bar-signup-button{
+}

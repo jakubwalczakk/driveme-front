@@ -1,43 +1,42 @@
 import React, { Component } from "react";
 
-export default class CarList extends Component {
+export default class CityList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            cars: [],
+            cities: [],
             isLoaded: false,
         };
     }
 
+
     componentDidMount() {
-        fetch('http://localhost:8080/car')
+        fetch('http://localhost:8080/city')
             .then(res => res.json())
             .then(json => {
                 this.setState({
+                    cities: json,
                     isLoaded: true,
-                    cars: json,
                 })
             });
     }
 
     render() {
 
-        var { isLoaded, cars } = this.state;
+        var { isLoaded, cities } = this.state;
 
         if (!isLoaded) {
             return <div>Loading...</div>;
         } else {
             return (
-                <div className="ABC">
-                    <ul>
-                        {cars.map(car => (
-                            <li key={car.id}>{car.brand} - {car.model}<br />
-                                {car.licensePlate}<br />
-                                Paliwo: {car.gasType}</li>
+                <div className="cities">
+                    <ol>
+                        {cities.map(city => (
+                            <li key={city.id}>{city.name}</li>
                         ))}
-                    </ul>
+                    </ol>
                 </div>
-            )
+            );
         }
     }
 }
