@@ -17,3 +17,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+#root{
+  width: 100%;
+}
+
+#navBarPanel{
+  width:50%;
+  height: 50%;
+  border: 5px black;
+}
+
+#leftPanel{
+
+}
+
+#rightPanel{
+
+}
+
+#mainPanel{
+  
+}
+
+#footerPanel{
+  height: 10%;
+  border: 5px blue;
+}

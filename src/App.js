@@ -5,9 +5,12 @@ import Login from './components/login/Login';
 import Register from './components/login/Register';
 import CarTable from './components/car/CarTable';
 import CityList from './components/city/CityList';
-// import NavigationBar from './components/navbar/NavigationBar';
+import Rating from './components/ratings/Rating';
+import Payments from "./components/payments/Payments";
+import Instructors from "./components/instructors/Instructors";
 
 export default class App extends Component {
+
   render() {
     return (
       <div>
@@ -15,12 +18,16 @@ export default class App extends Component {
           <div>
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
-            <Route path="/car" component={CarTable} />
-            <Route path="/city" component={CityList} />
+            <Route path="/instructors" component={Instructors} />
+            <Route path="/ratings" component={Rating} />
+            <Route path="/payments" component={Payments} />
+            <Route path="/cars" component={CarTable} />
+            <Route path="/cities" component={CityList} />
           </div>
         </Router>
-        <NavigationBar />
+        {/* <NavigationBar /> */}
       </div>
+
     );
   }
 }

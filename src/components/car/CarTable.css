@@ -1,0 +1,40 @@
+#carsTableContainer{
+  margin-top: 10%;
+  width: 72%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#carsTable td, th{
+    text-align: center;
+    vertical-align: middle; 
+}
+
+#carsTable th{
+  padding: 10px;
+}
+
+#carIdCol{
+  width: 4%;
+}
+
+#carImgCol{
+  width: 30%;
+}
+
+#carBrandCol,#carModelCol{
+  width: 16%;
+}
+
+#carLicensePlateCol{
+  width: 18%;
+}
+
+#carGasTypeCol{
+  width: 12%;
+}
+
+#carImage{
+  width: 120px;
+  margin: 0 auto;
+}

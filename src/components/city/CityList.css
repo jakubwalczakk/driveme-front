@@ -1,0 +1,21 @@
+#drivingCitiesContainer{
+  margin-top: 10%;
+  width: 82%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#drivingCitiesTable td, th{
+    text-align: center;
+    vertical-align: middle; 
+    font-size: 16px;
+}
+
+#drivingCitiesTable th{
+  padding: 10px;
+} 
+
+#instructorPhoto{
+  width: 120px;
+  margin: 0 auto;
+}
