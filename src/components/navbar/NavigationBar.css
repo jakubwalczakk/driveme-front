@@ -2,6 +2,10 @@
   background-color: #004280;
 }
 
+#logoBrand{
+  width: 50px;
+}
+
 .nav-bar-item{
   margin: 11px 3px 11px 3px;
   border-radius: 6px;
@@ -21,8 +25,16 @@
 }
 
 .nav-bar-btn:hover{
-  background-color: black;
+  background-color: #004280;
   color: white;
+}
+
+#nav-bar-logged-as{
+  color: #cce6ff;
+}
+#nav-bar-logged-as-value{
+  color: white;
+  font-size: 120%;
 }
 
 .nav-bar-signin-button{

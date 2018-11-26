@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { ProgressBar, ControlLabel } from "react-bootstrap";
-import "./Rating.css";
+import { ProgressBar } from "react-bootstrap";
+import "./Ratings.css";
 
 export default class Rating extends Component {
   render() {
