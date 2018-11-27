@@ -19,3 +19,9 @@
   width: 100px;
   margin: 0 auto;
 }
+
+#instructorsLoadingLabel, #instructorsErrorLabel{
+    font-size: 32px;
+    text-align: center;
+    margin-top: 12%;
+}

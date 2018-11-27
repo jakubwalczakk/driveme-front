@@ -19,3 +19,9 @@
   width: 120px;
   margin: 0 auto;
 }
+
+#citiesLoadingLabel, #citiesErrorLabel{
+  font-size: 32px;
+  text-align: center;
+  margin-top: 12%;
+}

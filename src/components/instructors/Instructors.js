@@ -6,23 +6,38 @@ export default class Instructors extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      instructors: []
+      instructors: [],
+      isLoading: false,
+      error: null,
     };
   }
 
   componentDidMount() {
+    this.setState({ isLoading: true });
+
     fetch('http://localhost:8080/instructor')
-      .then(res => res.json())
-      .then(json => {
-        this.setState({
-          instructors: json,
-        })
-      });
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Coś poszło nie tak podczas pobierania listy instruktorów...');
+        }
+      })
+      .then(data => this.setState({ instructors: data, isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
   }
 
   render() {
 
-    var { instructors } = this.state;
+    var { instructors, isLoading, error } = this.state;
+
+    if (error) {
+      return <p id="instructorsErrorLabel">{error.message}</p>
+    }
+
+    if (isLoading) {
+      return <p id="instructorsLoadingLabel">Loading...</p>
+    }
 
     return (
       <div id="instructorsTableContainer">
@@ -38,7 +53,7 @@ export default class Instructors extends Component {
             {instructors.map(instructor => (
               <tr>
                 <td>
-                  <Image id="instructorPhoto" src={"data:image/jpeg;base64,"+instructor.instructorPhoto} rounded responsive/>
+                  <Image id="instructorPhoto" src={"data:image/jpeg;base64," + instructor.instructorPhoto} rounded responsive />
                 </td>
                 <td>{instructor.name}</td>
                 <td>{instructor.surname}</td>

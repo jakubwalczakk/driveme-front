@@ -6,23 +6,38 @@ export default class CarTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            cars: []
+            cars: [],
+            isLoading: false,
+            error: null,
         };
     }
 
     componentDidMount() {
+        this.setState({ isLoading: true });
+
         fetch('http://localhost:8080/car')
-            .then(res => res.json())
-            .then(json => {
-                this.setState({
-                    cars: json,
-                })
-            });
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Coś poszło nie tak podczas pobierania samochodów...');
+                }
+            })
+            .then(data => this.setState({ cars: data, isLoading: false }))
+            .catch(error => this.setState({ error, isLoading: false }));
     }
 
     render() {
 
-        var { cars } = this.state;
+        var { cars, isLoading, error } = this.state;
+
+        if (error) {
+            return <p id="carsErrorLabel">{error.message}</p>
+        }
+
+        if (isLoading) {
+            return <p id="carsLoadingLabel">Loading...</p>
+        }
 
         return (
             <div id="carsTableContainer">
@@ -40,7 +55,7 @@ export default class CarTable extends Component {
                             <tr>
                                 <td>{car.id}</td>
                                 <td>
-                                    <Image id="carImage" src={"data:image/jpeg;base64,"+car.carPhoto} rounded responsive />
+                                    <Image id="carImage" src={"data:image/jpeg;base64," + car.carPhoto} rounded responsive />
                                 </td>
                                 <td>{car.brand}</td>
                                 <td>{car.model}</td>

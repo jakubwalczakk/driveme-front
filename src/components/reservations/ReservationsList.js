@@ -6,22 +6,38 @@ export default class Reservations extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      reservations: []
+      reservations: [],
+      isLoading: false,
+      error: null,
     };
   }
 
   componentDidMount() {
+    this.setState({ isLoading: true });
+
     fetch('http://localhost:8080/reservation')
-      .then(res => res.json())
-      .then(json => {
-        this.setState({
-          reservations: json,
-        })
-      });
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Coś poszło nie tak podczas pobierania listy rezerwacji...');
+        }
+      })
+      .then(data => this.setState({ reservations: data, isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
   }
+
   render() {
 
-    var { reservations } = this.state;
+    var { reservations, isLoading, error } = this.state;
+
+    if (error) {
+      return <p id="reservationsErrorLabel">{error.message}</p>
+    }
+
+    if (isLoading) {
+      return <p id="reservationsLoadingLabel">Loading...</p>
+    }
 
     return (<div id="reservationsTableContainer">
       <p id="reservationsLabel">Lista dokonanych przez Ciebie rezerwacji</p>
@@ -34,10 +50,10 @@ export default class Reservations extends Component {
           <th>Data końcowa</th>
         </thead>
         <tbody>
-          {reservations.map(reservation=>(
+          {reservations.map(reservation => (
             <tr>
               <td>
-                {reservation.instructor.email} 
+                {reservation.instructor.email}
               </td>
               <td>
                 {reservation.car.licensePlate}

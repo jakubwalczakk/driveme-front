@@ -19,3 +19,9 @@
 #reservationsTable th{
   padding: 10px;
 }
+
+#reservationsLoadingLabel{
+  font-size: 32px;
+  text-align: center;
+  margin-top: 12%;
+}
