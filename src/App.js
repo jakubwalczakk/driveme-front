@@ -12,6 +12,7 @@ import ReservationList from "./components/reservations/ReservationsList";
 import Drivings from "./components/drivings/Drivings";
 import Booking from "./components/reservations/Booking";
 import Course from "./components/course/Course";
+import DownBar from "./components/navbar/DownBar";
 
 export default class App extends Component {
 
@@ -34,6 +35,7 @@ export default class App extends Component {
           </div>
         </Router>
         <NavigationBar />
+        <DownBar />
       </div>
 
     );

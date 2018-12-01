@@ -8,11 +8,9 @@ export default class NavigationBar extends Component {
         return (
             <Navbar className="nav-bar" fixedTop responsive>
                 <Navbar.Header>
-                    <Navbar.Brand>
-                        <a href="/">
-                            <Image id="logoBrand" src="/houston.png" rounded responsive />
-                        </a>
-                    </Navbar.Brand>
+                    <a href="/">
+                        <Image id="logoBrand" src="/favicon.ico" rounded responsive />
+                    </a>
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
@@ -23,11 +21,9 @@ export default class NavigationBar extends Component {
                         <NavItem className="nav-bar-item nav-bar-item-c" eventKey={2} href="/ratings">
                             Twoje postępy
                         </NavItem>
-                        <NavDropdown id="nav-bar-reservations-dropdown" className="nav-bar-item nav-bar-item-c" eventKey={3} title="Rezerwacje">
-                            <MenuItem eventKey={3.1} href="/reservations">Rezerwacje</MenuItem>
-                            <MenuItem eventKey={3.2} href="/drivings">Jazdy</MenuItem>
-                            <MenuItem eventKey={3.3} href="/book">Rezerwuj</MenuItem>
-                        </NavDropdown>
+                        <NavItem className="nav-bar-item nav-bar-item-c" eventKey={3} href="/reservations">
+                            Rezerwacje
+                        </NavItem>
                         <NavItem className="nav-bar-item nav-bar-item-c" eventKey={3} href="/payments">
                             Płatności
                         </NavItem>
@@ -43,12 +39,12 @@ export default class NavigationBar extends Component {
                     </Nav>
                     <Nav pullRight className="nav-bar-item">
                         {/* Tutaj zalogowany jako powinno pojawiać się w zamian za przycisku zaloguj, zarejestruj */}
-                        {/* <Navbar.Text id="nav-bar-logged-as">
+                        <Navbar.Text pullRight id="nav-bar-logged-as">
                             Zalogowany jako: <Navbar.Link id="nav-bar-logged-as-value" href="#jakub.walczak">Jakub Walczak</Navbar.Link>
-                        </Navbar.Text> */}
+                        </Navbar.Text>
                         {/* <Button className="nav-bar-btn nav-bar-signin-button" href="/logout">Wyloguj</Button> */}
-                        <Button className="nav-bar-btn nav-bar-signin-button" href="/login">Zaloguj</Button>
-                        <Button className="nav-bar-btn nav-bar-signup-button" href="/register">Zarejestruj</Button>
+                        {/* <Button className="nav-bar-btn nav-bar-signin-button" href="/login">Zaloguj</Button>
+                        <Button className="nav-bar-btn nav-bar-signup-button" href="/register">Zarejestruj</Button> */}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

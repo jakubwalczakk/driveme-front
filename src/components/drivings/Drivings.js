@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table } from "react-bootstrap";
+import { Table, Badge } from "react-bootstrap";
 import "./Drivings.css";
 
 export default class Drivings extends Component {
@@ -60,7 +60,7 @@ export default class Drivings extends Component {
                 <td>{driving.drivingCity}</td>
                 <td>{driving.startDate}</td>
                 <td>{driving.finishDate}</td>
-                <td>{driving.rating}</td>
+                <td><Badge>{driving.rating}</Badge></td>
               </tr>
             ))}
           </tbody>

@@ -3,11 +3,12 @@
 }
 
 #logoBrand{
-  width: 50px;
+  height: 50px;
+  margin: 11px 20px 6px 3px;
 }
 
 .nav-bar-item{
-  margin: 11px 3px 11px 3px;
+  margin: 11px 2px 6px 2px;
   border-radius: 6px;
   color: black;
 }
@@ -33,12 +34,7 @@
   color: #cce6ff;
 }
 #nav-bar-logged-as-value{
+  margin: 11px 2px 6px 2px;
   color: white;
   font-size: 120%;
-}
-
-.nav-bar-signin-button{
-}
-
-.nav-bar-signup-button{
 }
