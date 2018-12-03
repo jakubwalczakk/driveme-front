@@ -10,3 +10,7 @@
     text-align: center;
     margin-top: 12%;
 }
+
+#carBrandSelectList{
+  width: 150px;
+}

@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Table, Button } from "react-bootstrap";
+import { environment } from "environments/environment";
 import "./ReservationsList.css";
+
+const reservationUrl = environment.apiUrl + '/reservation';
 
 export default class Reservations extends Component {
   constructor(props) {
@@ -15,7 +18,7 @@ export default class Reservations extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    fetch('http://localhost:8080/reservation')
+    fetch(reservationUrl)
       .then(response => {
         if (response.ok) {
           return response.json();

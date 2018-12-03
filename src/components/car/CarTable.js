@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Table, Image } from "react-bootstrap";
+import { environment } from "environments/environment";
 import "./CarTable.css";
+
+const carUrl = environment.apiUrl + '/car';
 
 export default class CarTable extends Component {
     constructor(props) {
@@ -15,7 +18,7 @@ export default class CarTable extends Component {
     componentDidMount() {
         this.setState({ isLoading: true });
 
-        fetch('http://localhost:8080/car')
+        fetch(carUrl)
             .then(response => {
                 if (response.ok) {
                     return response.json();

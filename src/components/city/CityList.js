@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Table, Image } from "react-bootstrap";
+import { environment } from "environments/environment";
 import "./CityList.css";
+
+const cityUrl = environment.apiUrl + '/city';
 
 export default class CityList extends Component {
     constructor(props) {
@@ -16,7 +19,7 @@ export default class CityList extends Component {
     componentDidMount() {
         this.setState({ isLoading: true });
 
-        fetch('http://localhost:8080/city')
+        fetch(cityUrl)
             .then(response => {
                 if (response.ok) {
                     return response.json();

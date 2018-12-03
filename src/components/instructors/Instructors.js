@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Table, Image } from "react-bootstrap";
+import { environment } from "environments/environment";
 import "./Instructors.css";
+
+const instructorUrl = environment.apiUrl + '/instructor';
 
 export default class Instructors extends Component {
   constructor(props) {
@@ -15,7 +18,7 @@ export default class Instructors extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    fetch('http://localhost:8080/instructor')
+    fetch(instructorUrl)
       .then(response => {
         if (response.ok) {
           return response.json();

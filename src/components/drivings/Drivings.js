@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Table, Badge } from "react-bootstrap";
+import { environment } from "environments/environment";
 import "./Drivings.css";
+
+const drivingUrl = environment.apiUrl + '/driving';
 
 export default class Drivings extends Component {
 
@@ -16,7 +19,7 @@ export default class Drivings extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    fetch('http://localhost:8080/driving')
+    fetch(drivingUrl)
       .then(response => {
         if (response.ok) {
           return response.json();

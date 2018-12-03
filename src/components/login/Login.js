@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { environment } from "environments/environment";
 import "./Login.css";
 
 export default class Login extends Component {
@@ -19,7 +20,31 @@ export default class Login extends Component {
     }
 
     handleSubmit = event => {
+
+        //komunikacja z API działa tutaj!!!!
+        console.log("Uwaga działam!!!");
         event.preventDefault();
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        const data = {
+            name: 'Jakub',
+            surname: 'Walczak',
+            email: 'jakub.walczak@email.com',
+            password: "PASSWORD",
+            phoneNumber: "111222333"
+        }
+
+        const options = {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data),
+        };
+
+        const request = new Request('http://localhost:8080/user', options);
+        const response = fetch(request);
+        const status = response.status;
+        console.log(status);
     }
 
     render() {

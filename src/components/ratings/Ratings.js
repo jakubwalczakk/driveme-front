@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { ProgressBar } from "react-bootstrap";
-import Drivings from "./../../components/drivings/Drivings";
+import Drivings from "components/drivings/Drivings";
+import { environment } from "environments/environment";
 import "./Ratings.css";
 
 export default class Rating extends Component {
