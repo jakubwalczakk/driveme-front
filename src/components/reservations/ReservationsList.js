@@ -58,7 +58,7 @@ export default class Reservations extends Component {
           </thead>
           <tbody>
             {reservations.map(reservation => (
-              <tr>
+              <tr key={reservation.id}>
                 <td>
                   {reservation.instructor.email}
                 </td>

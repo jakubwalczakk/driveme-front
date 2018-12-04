@@ -1,17 +1,22 @@
 @media all and (min-width: 480px) {
-    .Register {
+    .registrationContainer {
       margin-top: 5%;
       padding: 60px 0;
     }
-  
-    .Register form {
+
+    .registrationContainer form {
       margin: 0 auto;
       max-width: 320px;
     }
+  }  
+    
+  .form-control:focus{
+    border-color: #66233f;
   }
 
   #register-button{
-    background-color: blue;
+    background-color: #631033;
     color:white;
+    font-weight: 600;
   }
   

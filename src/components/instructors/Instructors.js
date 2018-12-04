@@ -44,6 +44,7 @@ export default class Instructors extends Component {
 
     return (
       <div id="instructorsTableContainer">
+      <h1 id="instructorsHeader">Nasi instruktorzy</h1>
         <Table id="instructorsTable" responsive striped bordered condensed hover>
           <thead>
             <th id="instructorPhoto">IMG</th>
@@ -54,7 +55,7 @@ export default class Instructors extends Component {
           </thead>
           <tbody>
             {instructors.map(instructor => (
-              <tr>
+              <tr key={instructor.id}>
                 <td>
                   <Image id="instructorPhoto" src={"data:image/jpeg;base64," + instructor.instructorPhoto} rounded responsive />
                 </td>

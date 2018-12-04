@@ -57,7 +57,7 @@ export default class Drivings extends Component {
           </thead>
           <tbody>
             {drivings.map(driving => (
-              <tr>
+              <tr key={driving.id}>
                 <td>{driving.instructor.email}</td>
                 <td>{driving.car.licensePlate}</td>
                 <td>{driving.drivingCity}</td>

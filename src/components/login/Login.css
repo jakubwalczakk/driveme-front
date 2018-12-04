@@ -1,18 +1,23 @@
 @media all and (min-width: 480px) {
-    .Login {
+    .loginContainer {
       margin-top: 10%;
       padding: 60px 0;
-    }
+    }  
   
-    .Login form {
+    .loginContainer form {
       margin: 0 auto;
       max-width: 320px;
     }
   }
+  
+  .form-control:focus{
+    border-color: #66233f;
+  }
 
   #login-button{
-    background-color: blue;
+    background-color: #631033;
     color:white;
+    font-weight: 600;
   }
 
   

@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { environment } from "environments/environment";
+import ModalExample from "components/modal/ModalExample";
 import "./Booking.css";
+import MyDatePicker from "../datepicker/MyDatePicker";
 
 const carUrl = environment.apiUrl + '/car';
+const instructorUrl = environment.apiUrl + '/instructor';
 
 export default class Booking extends Component {
 
@@ -11,7 +14,7 @@ export default class Booking extends Component {
     super(props);
     this.state = {
       carBrands: [],
-      cars: [],
+      instructors: [],
     }
   }
 
@@ -26,33 +29,43 @@ export default class Booking extends Component {
       })
       .then(data => this.setState({ carBrands: data }));
 
-    fetch(carUrl)
+    fetch(instructorUrl)
       .then(response => {
         if (response.ok) {
           return response.json();
         }
       })
-      .then(data => this.setState({ cars: JSON.parse(data) }));
+      .then(data => this.setState({ instructors: data }));
   }
 
   render() {
-    var { carBrands, cars } = this.state;
-
-    // console.log(cars);
+    var { carBrands, instructors } = this.state;
 
     return (
       <div id="bookingContainer">
-        <p id="bookingLabel">Tutaj możesz dokonać rezerwacji.</p>
+        <p id="bookingLabel">Tutaj możesz dokonać rezerwacji</p>
         <p>Wybierz markę samochodu</p>
         <FormGroup id="carBrandSelectList">
           <ControlLabel>Marka</ControlLabel>
           <FormControl componentClass="select" placeholder="select">
             <option>-</option>
             {carBrands.map(brand => (
-              <option>{brand}</option>)
+              <option key={brand}>{brand}</option>)
             )}
-          </FormControl> 
-         </FormGroup>         
+          </FormControl>
+        </FormGroup>
+        <p>Wybierz instruktora</p>
+        <FormGroup id="instructorSelectList">
+          <ControlLabel>Instruktor</ControlLabel>
+          <FormControl componentClass="select" placeholder="select">
+            <option>-</option>
+            {instructors.map(instructor => (
+              <option key={instructor.id}>{instructor.name + ' ' + instructor.surname + ' - ' + instructor.email}</option>)
+            )}
+          </FormControl>
+        </FormGroup>
+        {/* <ModalExample /> */}
+        <MyDatePicker/>
       </div>
     );
   }

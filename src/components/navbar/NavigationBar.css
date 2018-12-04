@@ -1,40 +1,31 @@
 .nav-bar{
-  background-color: #004280;
+  background-color: #631033 ;
+  color: white;
 }
 
-#logoBrand{
+ #logoBrand{
   height: 50px;
-  margin: 11px 20px 6px 3px;
+  margin: 11px 6px 9px 0px;
+}
+
+.navbar-header{
+  margin-left: 10px;
 }
 
 .nav-bar-item{
-  margin: 11px 2px 6px 2px;
+  font-weight: 600;
+  margin: 11px 2px 9px 2px;
   border-radius: 6px;
-  color: black;
+  background-color: white;
 }
 
-.nav-bar-item-c{
-  background-color: #cce6ff;
+.nav-bar-item:hover{
+  font-weight: 600;
 }
 
 .nav-bar-btn{
   font-weight: bold;
-  margin: 4px 2px 2px 2px;
-  padding: 10px 20px 10px 20px;
   border-radius: 6px;
   transition-duration: 0.5s;
-}
-
-.nav-bar-btn:hover{
-  background-color: #004280;
-  color: white;
-}
-
-#nav-bar-logged-as{
-  color: #cce6ff;
-}
-#nav-bar-logged-as-value{
-  margin: 11px 2px 6px 2px;
-  color: white;
-  font-size: 120%;
+  background-color: white;
 }

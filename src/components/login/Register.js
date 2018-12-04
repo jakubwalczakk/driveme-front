@@ -46,7 +46,7 @@ export default class Register extends Component {
 
     render() {
         return (
-            <div className="Register">
+            <div className="registrationContainer">
                 <form onSubmit={this.handleSubmit}>
                     <FormGroup controlId="name">
                         <ControlLabel>Imię</ControlLabel>
@@ -82,7 +82,8 @@ export default class Register extends Component {
                     </FormGroup>
                     <FormGroup controlId="phoneNumber">
                         <ControlLabel>Numer telefonu</ControlLabel>
-                        <FormControl
+                        <FormControl type="text"
+                            pattern="^\d{3}-\d{3}-\d{3}$||^\d{3} \d{3} \d{3}$||^\d{9}$"
                             value={this.state.phoneNumber}
                             onChange={this.handleChange}
                         />

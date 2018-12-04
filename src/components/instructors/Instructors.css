@@ -1,8 +1,13 @@
 #instructorsTableContainer{
-  margin-top: 10%;
+  margin-top: 8%;
   width: 72%;
   margin-right: auto;
   margin-left: auto;
+}
+
+#instructorsHeader{
+  text-align: center;
+  padding: 5px 10px 25px 10px;
 }
 
 #instructorsTable td, th{

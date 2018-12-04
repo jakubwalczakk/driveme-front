@@ -53,7 +53,7 @@ export default class CityList extends Component {
                         </thead> */}
                     <tbody>
                         {cities.map(city => (
-                            <tr>
+                            <tr key={city.id}>
                                 <td>{city.name}</td>
                                 <td>
                                     {<Image id="drivingCityNamePhoto" src={"data:image/jpeg;base64," + city.image} responsive />}

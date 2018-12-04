@@ -55,7 +55,7 @@ export default class CarTable extends Component {
                     </thead>
                     <tbody>
                         {cars.map(car => (
-                            <tr>
+                            <tr key={car.id}>
                                 <td>{car.id}</td>
                                 <td>
                                     <Image id="carImage" src={"data:image/jpeg;base64," + car.carPhoto} rounded responsive />
