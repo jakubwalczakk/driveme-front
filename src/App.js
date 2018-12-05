@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import NavigationBar from "./components/navbar/NavigationBar";
 import Login from './components/login/Login';
 import Register from './components/login/Register';
+import ProfileSettings from './components/profile/ProfileSettings';
 import CarTable from './components/car/CarTable';
 import CityList from './components/city/CityList';
 import Ratings from './components/ratings/Ratings';
@@ -23,6 +24,7 @@ export default class App extends Component {
           <div>
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
+            <Route path="/profile" component={ProfileSettings}/>
             <Route path="/course" component={Course} />
             <Route path="/ratings" component={Ratings} />
             <Route path="/reservations" component={ReservationList} />

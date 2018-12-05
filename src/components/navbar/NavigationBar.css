@@ -19,13 +19,21 @@
   background-color: white;
 }
 
+.nav-bar-btn{
+  font-weight: bold;
+}
+
+.nav-bar-btn:hover{
+  font-weight: 700;
+}
+
 .nav-bar-item:hover{
   font-weight: 600;
 }
 
-.nav-bar-btn{
-  font-weight: bold;
+.nav-bar-item-logged{  
+  background-color: #631033;
+  margin: 11px 2px 9px 2px;
   border-radius: 6px;
-  transition-duration: 0.5s;
-  background-color: white;
+  font-weight: 700;
 }

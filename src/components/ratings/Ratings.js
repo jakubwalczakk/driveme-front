@@ -4,6 +4,8 @@ import Drivings from "components/drivings/Drivings";
 import { environment } from "environments/environment";
 import "./Ratings.css";
 
+const ratingUrl = environment.apiUrl + '/rating';
+
 export default class Rating extends Component {
   render() {
     const progress=60;
