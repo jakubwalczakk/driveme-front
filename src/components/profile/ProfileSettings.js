@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { environment } from "environments/environment";
 import "./ProfileSettings.css";
 
@@ -49,90 +49,104 @@ export default class ProfileSettings extends Component {
   }
 
   render() {
+
+    const tooltip = (
+      <Tooltip id="password-tooltip">
+        <strong>Tutaj możesz zmienić swoje hasło.</strong>
+      </Tooltip>);
+
     return (
       <div id="profileSettingsContainer">
-        <div id="nameContainer"><FormGroup id="name">
-          <ControlLabel>Imię</ControlLabel>
-          <FormControl
-            disabled
-            value={this.state.name}
-          />
-        </FormGroup> <FormGroup id="surname">
+        <div id="nameContainer">
+          <FormGroup id="name-form">
+            <ControlLabel>Imię</ControlLabel>
+            <FormControl id="name"
+              disabled
+              value={this.state.name}
+            />
+          </FormGroup>
+          <FormGroup id="surname-form">
             <ControlLabel>Nazwisko</ControlLabel>
-            <FormControl
+            <FormControl id="surname"
               disabled
               value={this.state.surname}
             />
-          </FormGroup></div>
+          </FormGroup>
+        </div>
+
         <div id="basicInfoContainer">
-          <FormGroup id="registrationDate">
+          <FormGroup id="registrationDate-form">
             <ControlLabel>Data rejestracji</ControlLabel>
-            <FormControl
+            <FormControl id="registrationDate"
               disabled
               value={this.state.registrationDate}
             />
           </FormGroup>
-          <FormGroup id="pesel">
+          <FormGroup id="pesel-form">
             <ControlLabel>PESEL</ControlLabel>
-            <FormControl
+            <FormControl id="pesel"
               disabled
               value={this.state.pesel}
             />
           </FormGroup>
-
         </div>
+
         <div id="credentialsContainer">
-          <FormGroup id="email">
+          <FormGroup id="email-form">
             <ControlLabel>E-mail</ControlLabel>
-            <FormControl
+            <FormControl id="email"
               disabled
               value={this.state.email}
             />
           </FormGroup>
-          <FormGroup id="password">
-            <ControlLabel>Hasło</ControlLabel>
-            <FormControl
-              type="password"
-              minLength={8}
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-
-          <FormGroup id="phoneNumber">
+          <OverlayTrigger placement="left" overlay={tooltip}>
+            <FormGroup id="password-form">
+              <ControlLabel>Hasło</ControlLabel>
+              <FormControl id="password"
+                type="password"
+                minLength={8}
+                value={this.state.password}
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+          </OverlayTrigger>
+          <FormGroup id="phoneNumber-form">
             <ControlLabel>Nr telefonu</ControlLabel>
-            <FormControl type="text"
+            <FormControl id="phoneNumber" type="text"
               pattern="^\d{3}-\d{3}-\d{3}$||^\d{3} \d{3} \d{3}$||^\d{9}$"
               value={this.state.phoneNumber}
               onChange={this.handleChange}
             />
-          </FormGroup></div>
+          </FormGroup>
+        </div>
+
         <div id="addressInfoContainer">
-          <FormGroup id="city">
+          <FormGroup id="city-form">
             <ControlLabel>Miasto</ControlLabel>
-            <FormControl
+            <FormControl id="city"
               value={this.state.city}
               onChange={this.handleChange}
             />
           </FormGroup>
-          <FormGroup id="zipCode">
+          <FormGroup id="zipCode-form">
             <ControlLabel>Kod pocztowy</ControlLabel>
-            <FormControl type="text"
+            <FormControl id="zipCode"
+              type="text"
               pattern="^\d{2}-\d{3}$"
               value={this.state.zipCode}
               onChange={this.handleChange}
             />
           </FormGroup>
-          <FormGroup id="street">
+          <FormGroup id="street-form">
             <ControlLabel>Ulica</ControlLabel>
-            <FormControl
+            <FormControl id="street"
               value={this.state.street}
               onChange={this.handleChange}
             />
           </FormGroup>
-          <FormGroup id="houseNumber">
+          <FormGroup id="houseNumber-form">
             <ControlLabel>Nr domu</ControlLabel>
-            <FormControl
+            <FormControl id="houseNumber"
               value={this.state.houseNumber}
               onChange={this.handleChange}
             />

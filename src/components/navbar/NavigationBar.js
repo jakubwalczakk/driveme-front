@@ -25,10 +25,10 @@ export default class NavigationBar extends Component {
         if (isLoggedIn) {
             loggingNavItem =
                 <Nav pullRight>
-                    <NavItem className="nav-bar-item-logged" href="/profile">
+                    <NavItem id="welcomeMsg" className="nav-bar-item-logged" href="/profile">
                         Cześć Jakub!
                     </NavItem>
-                    <NavItem className="material-icons nav-bar-item-logged" href="/logout">
+                    <NavItem id="logoutButton" className="material-icons nav-bar-item-logged" href="/logout">
                         power_settings_new
                     </NavItem>
                 </Nav>

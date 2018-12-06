@@ -15,6 +15,7 @@ export default class Register extends Component {
             surname: "",
             email: "",
             password: "",
+            password2: "",
             phoneNumber: ""
         };
     }
@@ -77,6 +78,15 @@ export default class Register extends Component {
                             type="password"
                             minLength="8"
                             value={this.state.password}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="password2">
+                        <ControlLabel>Powtórz hasło</ControlLabel>
+                        <FormControl
+                            type="password"
+                            minLength="8"
+                            value={this.state.password2}
                             onChange={this.handleChange}
                         />
                     </FormGroup>

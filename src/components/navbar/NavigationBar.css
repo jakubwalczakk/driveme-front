@@ -31,9 +31,15 @@
   font-weight: 600;
 }
 
-.nav-bar-item-logged{  
-  background-color: #631033;
+#welcomeMsg, #logoutButton{
+  background-color: transparent;
   margin: 11px 2px 9px 2px;
   border-radius: 6px;
   font-weight: 700;
+  color:white;
+  font-size: 125%;
+}
+
+#welcomeMsg:hover, #logoutButton:hover{
+  color:rgb(92, 92, 92);
 }

@@ -23,7 +23,7 @@ export default class CarTable extends Component {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    throw new Error('Coś poszło nie tak podczas pobierania samochodów...');
+                    throw new Error('Coś poszło nie tak podczas pobierania listy samochodów...');
                 }
             })
             .then(data => this.setState({ cars: data, isLoading: false }))
@@ -44,26 +44,25 @@ export default class CarTable extends Component {
 
         return (
             <div id="carsTableContainer">
+                <h1 id="carsHeader">Dostępne pojazdy</h1>
                 <Table id="carsTable" responsive striped bordered condensed hover>
                     <thead>
-                        <th id="carIdCol">#</th>
-                        <th id="carImgCol">Image</th>
                         <th id="carBrandCol">Marka</th>
                         <th id="carModelCol">Model</th>
-                        <th id="carLicensePlateCol">Numer rejestracji</th>
+                        {/* <th id="carLicensePlateCol">Numer rejestracji</th> */}
                         <th id="carGasTypeCol">Typ paliwa</th>
+                        <th id="carImgCol"></th>
                     </thead>
                     <tbody>
                         {cars.map(car => (
                             <tr key={car.id}>
-                                <td>{car.id}</td>
+                                <td>{car.brand}</td>
+                                <td>{car.model}</td>
+                                {/* <td>{car.licensePlate}</td> */}
+                                <td>{car.gasType}</td>
                                 <td>
                                     <Image id="carImage" src={"data:image/jpeg;base64," + car.carPhoto} rounded responsive />
                                 </td>
-                                <td>{car.brand}</td>
-                                <td>{car.model}</td>
-                                <td>{car.licensePlate}</td>
-                                <td>{car.gasType}</td>
                             </tr>
                         ))}
                     </tbody>

@@ -45,6 +45,7 @@ export default class CityList extends Component {
 
         return (
             <div id="drivingCitiesContainer" >
+            <h1 id="drivingCitiesHeader">Miasta w których jeździmy</h1>
                 <Table id="drivingCitiesTable" responsive striped bordered condensed hover>
                     {/* <thead>
                             <th id="drivingCityName">Miasto</th>
@@ -54,7 +55,7 @@ export default class CityList extends Component {
                     <tbody>
                         {cities.map(city => (
                             <tr key={city.id}>
-                                <td>{city.name}</td>
+                                {/* <td>{city.name}</td> */}
                                 <td>
                                     {<Image id="drivingCityNamePhoto" src={"data:image/jpeg;base64," + city.image} responsive />}
                                 </td>

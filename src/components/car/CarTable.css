@@ -1,17 +1,29 @@
 #carsTableContainer{
-  margin-top: 10%;
-  width: 72%;
+  margin-top: 7%;
+  width: 68%;
   margin-right: auto;
   margin-left: auto;
 }
 
-#carsTable td, th{
-    text-align: center;
-    vertical-align: middle; 
+#carsHeader{
+  text-align: center;
+  font-size: 44px;
+  padding: 10px 10px 35px 10px;
 }
 
 #carsTable th{
-  padding: 10px;
+  padding:15px;
+  font-weight: 700;
+  font-size: 22px;
+  text-align: center;
+  vertical-align: middle; 
+}
+
+#carsTable td{
+  text-align: center;
+  vertical-align: middle; 
+  font-size: 20px;
+  font-weight: 600;
 }
 
 #carIdCol{
@@ -19,7 +31,7 @@
 }
 
 #carImgCol{
-  width: 30%;
+  width: 28%;
 }
 
 #carBrandCol,#carModelCol{
@@ -31,12 +43,13 @@
 }
 
 #carGasTypeCol{
-  width: 12%;
+  width: 16%;
 }
 
 #carImage{
-  width: 120px;
-  margin: 0 auto;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #carsLoadingLabel, #carsErrorLabel{

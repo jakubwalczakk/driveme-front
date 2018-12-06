@@ -9,7 +9,9 @@ export default class Course extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      course: []
+      course: [],
+      isLoading: false,
+      error: null,
     }
   }
 
@@ -19,9 +21,12 @@ export default class Course extends Component {
       .then(response => {
         if (response.ok) {
           return response.json();
+        } else {
+          throw new Error('Coś poszło nie tak podczas pobierania listy miast...');
         }
       })
-      .then(data => this.setState({ course: data }));
+      .then(data => this.setState({ course: data, isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
   }
 
   render() {
@@ -39,11 +44,11 @@ export default class Course extends Component {
 
     return (
       <div id="courseContainer">
-        <p id="courseLabel">Tutaj pojawią się informacje na temat Twojego kursu.</p>
-        <p>Data rozpoczęcia: {course.startDate}</p>
-        <p>Liczba zaliczonych godzin: {course.takenDrivingHours}h ({percentOfCourseCompletion}%)</p>
+        {/* <p id="courseLabel">Tutaj pojawią się informacje na temat Twojego kursu.</p> */}
+        <p>Data rozpoczęcia kursu: {course.startDate}</p>
+        <p>Wpłacona kwota: {percentPaymentOfCourse}% - {currenPaymentOfCourse}PLN</p>
+        <p>Liczba ukończonych godzin: {course.takenDrivingHours}h ({percentOfCourseCompletion}%)</p>
         <ProgressBar id="drivingsHoursProgressBar" bsStyle="success" now={percentOfCourseCompletion} />
-        <p>Kwota zapłacona: {percentPaymentOfCourse}% - {currenPaymentOfCourse}PLN</p>
         <p>Status: {course.status}</p>
       </div>
     );

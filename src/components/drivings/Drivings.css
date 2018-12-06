@@ -11,6 +11,10 @@
   margin-left: auto;
 }
 
+#drivingsTable{
+  margin-top: 12px;
+}
+
 #drivingsTable td, th{
     text-align: center;
     vertical-align: middle; 

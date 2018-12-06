@@ -47,7 +47,7 @@ export default class Instructors extends Component {
       <h1 id="instructorsHeader">Nasi instruktorzy</h1>
         <Table id="instructorsTable" responsive striped bordered condensed hover>
           <thead>
-            <th id="instructorPhoto">IMG</th>
+            <th id="instructorPhoto"></th>
             <th id="instructorName">Imię</th>
             <th id="instructorSurname">Nazwisko</th>
             <th id="instructorEmail">E-mail</th>

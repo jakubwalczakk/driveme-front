@@ -43,11 +43,20 @@ export default class Drivings extends Component {
       return <p id="drivingsLoadingLabel">Loading...</p>
     }
 
+
+    function calculateTimeOfDrivings(driving) {
+      driving.startDate = new Date(driving.startDate);
+      driving.finishDate = new Date(driving.finishDate);
+      return driving.finishDate - driving.finishDate;
+    }
+
     return (
+
       <div id="drivingsTableContainer">
         <p id="drivingsLabel">Lista ukończonych przez Ciebie jazd szkoleniowych</p>
         <Table id="drivingsTable" responsive striped bordered condensed hover>
           <thead>
+            <th>Tytuł</th>
             <th>Instruktor</th>
             <th>Samochód</th>
             <th>Miasto</th>
@@ -58,11 +67,12 @@ export default class Drivings extends Component {
           <tbody>
             {drivings.map(driving => (
               <tr key={driving.id}>
-                <td>{driving.instructor.email}</td>
-                <td>{driving.car.licensePlate}</td>
+                <td>{driving.title}</td>
+                <td>{driving.instructor.name} {driving.instructor.surname}</td>
+                <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
                 <td>{driving.drivingCity}</td>
                 <td>{driving.startDate}</td>
-                <td>{driving.finishDate}</td>
+                <td>{calculateTimeOfDrivings(driving)}</td>
                 <td><Badge>{driving.rating}</Badge></td>
               </tr>
             ))}

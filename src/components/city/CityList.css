@@ -1,8 +1,14 @@
 #drivingCitiesContainer{
-  margin-top: 10%;
-  width: 82%;
+  margin-top: 7%;
+  width: 68%;
   margin-right: auto;
   margin-left: auto;
+}
+
+#drivingCitiesHeader{
+  text-align: center;
+  font-size: 44px;
+  padding: 10px 10px 35px 10px;
 }
 
 #drivingCitiesTable td, th{
@@ -15,9 +21,11 @@
   padding: 10px;
 } 
 
-#instructorPhoto{
-  width: 120px;
-  margin: 0 auto;
+#drivingCityNamePhoto{
+  padding: 10px;
+  width: 380px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #citiesLoadingLabel, #citiesErrorLabel{

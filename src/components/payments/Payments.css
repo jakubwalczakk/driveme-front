@@ -1,5 +1,40 @@
-#paymentsLabel{
+#paymentsContainer{
+  margin-top: 7%;
+  width: 78%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#paymentsHeader{
   font-size: 44px;
   text-align: center;
-  margin-top: 20%;
+  padding: 10px 10px 25px 10px;
+}
+
+#paymentsLabel{
+  font-size: 32px;
+  text-align: center;
+}
+
+#paymentsTable{
+  margin-top: 15px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#paymentsTable td, th{
+    text-align: center;
+    vertical-align: middle; 
+    font-size: 16px;
+}
+
+#paymentsTable th{
+  padding: 10px;
+} 
+
+#paymentsLoadingLabel, #paymentsErrorLabel{
+  font-size: 32px;
+  text-align: center;
+  margin-top: 12%;
 }

@@ -1,13 +1,14 @@
 #instructorsTableContainer{
-  margin-top: 8%;
-  width: 72%;
+  margin-top: 7%;
+  width: 68%;
   margin-right: auto;
   margin-left: auto;
 }
 
 #instructorsHeader{
   text-align: center;
-  padding: 5px 10px 25px 10px;
+  font-size: 44px;
+  padding: 10px 10px 35px 10px;
 }
 
 #instructorsTable td, th{
@@ -21,8 +22,9 @@
 } 
 
 #instructorPhoto{
-  width: 100px;
-  margin: 0 auto;
+  width: 110px;
+  margin-left:  auto;
+  margin-right: auto;
 }
 
 #instructorsLoadingLabel, #instructorsErrorLabel{
