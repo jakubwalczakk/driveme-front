@@ -30,3 +30,14 @@
   float: left;
   padding: 15px; 
 }
+
+#saveSettingsBtn{
+  background-color: #631033;
+  color:white;
+  height: 46px;
+  width: 18%;
+  font-size: 17px;
+  font-weight: 600;
+  margin-top:20px;
+  margin-left: 41%;
+}

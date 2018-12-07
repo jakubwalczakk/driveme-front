@@ -1,12 +1,37 @@
-#ratingProgressBar{
-  width: 50%;
-  margin-left: auto;
+#instructorDrivingsTableContainer{
+  margin-top: 7%;
+  width: 72%;
   margin-right: auto;
-  margin-top: 20px;
+  margin-left: auto;
 }
 
-#progressLabel{
-  margin-top: 7%;
-  font-size: 40px;
+#instructorDrivingsLabel{
+  font-size: 32px;
   text-align: center;
+}
+
+#drivingsTable{
+  margin-top: 12px;
+}
+
+#drivingsTable td, th{
+    text-align: center;
+    vertical-align: middle; 
+}
+
+#drivingsTable th{
+  padding: 10px;
+}
+
+#drivingsLoadingLabel, #drivingsErrorLabel{
+  font-size: 32px;
+  text-align: center;
+  margin-top: 12%;
+}
+
+#rateButton{
+  width: 100%;
+  background-color: #631033;
+  color:white;
+  font-weight: 600; 
 }

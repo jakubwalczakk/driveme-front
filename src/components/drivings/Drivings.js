@@ -43,7 +43,6 @@ export default class Drivings extends Component {
       return <p id="drivingsLoadingLabel">Loading...</p>
     }
 
-
     function calculateTimeOfDrivings(driving) {
       driving.startDate = new Date(driving.startDate);
       driving.finishDate = new Date(driving.finishDate);

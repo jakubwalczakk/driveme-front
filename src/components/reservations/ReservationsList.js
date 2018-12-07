@@ -45,7 +45,7 @@ export default class Reservations extends Component {
     return (
       <div id="reservationsTableContainer">
         <Button id="bookButton" href="/book">
-          Dokonaj rezerwacji
+          Wykonaj rezerwację
         </Button>
         <p id="reservationsLabel">Lista dokonanych przez Ciebie rezerwacji</p>
         <Table id="reservationsTable" responsive striped bordered condensed hover>
@@ -60,11 +60,9 @@ export default class Reservations extends Component {
             {reservations.map(reservation => (
               <tr key={reservation.id}>
                 <td>
-                  {reservation.instructor.email}
+                  {reservation.instructor.name} {reservation.instructor.surname}
                 </td>
-                <td>
-                  {reservation.car.licensePlate}
-                </td>
+                <td>{reservation.car.brand} {reservation.car.model} - {reservation.car.licensePlate} </td>
                 <td>{reservation.drivingCity}</td>
                 <td>{reservation.startDate}</td>
                 <td>{reservation.finishDate}</td>

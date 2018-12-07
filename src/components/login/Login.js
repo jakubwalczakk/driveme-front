@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
 import { environment } from "environments/environment";
 import "./Login.css";
 
@@ -69,6 +69,9 @@ export default class Login extends Component {
                             onChange={this.handleChange}
                         />
                     </FormGroup>
+                    <Checkbox id="rememberMeCheckbox">
+                        Zapamiętaj mnie
+                    </Checkbox>
                     <Button
                         id="login-button"
                         block

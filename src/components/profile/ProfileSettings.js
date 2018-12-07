@@ -151,8 +151,8 @@ export default class ProfileSettings extends Component {
               onChange={this.handleChange}
             />
           </FormGroup>
-          <Button>Zapisz</Button>
         </div>
+        <Button id="saveSettingsBtn">Zapisz</Button>
       </div>
     );
   }
