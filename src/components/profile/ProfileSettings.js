@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import "./ProfileSettings.css";
 
-const profileUrl = environment.apiUrl + '/student';
+const profileUrl = API_BASE_URL + '/student';
 
 export default class ProfileSettings extends Component {
   constructor(props) {

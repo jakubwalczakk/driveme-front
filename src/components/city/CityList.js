@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Table, Image } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import "./CityList.css";
 
-const cityUrl = environment.apiUrl + '/city';
+const cityUrl = API_BASE_URL + '/city';
 
 export default class CityList extends Component {
     constructor(props) {

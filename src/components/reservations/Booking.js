@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import ModalExample from "components/modal/ModalExample";
 import "./Booking.css";
 import MyDatePicker from "../datepicker/MyDatePicker";
 
-const carUrl = environment.apiUrl + '/car';
-const instructorUrl = environment.apiUrl + '/instructor';
+const carUrl = API_BASE_URL + '/car';
+const instructorUrl = API_BASE_URL + '/instructor';
 
 export default class Booking extends Component {
 

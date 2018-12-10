@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import './Register.css';
 
-const registrationUrl = environment.apiUrl + '/user';
+const registrationUrl = API_BASE_URL + '/user';
 
 export default class Register extends Component {
 

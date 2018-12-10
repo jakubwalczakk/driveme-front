@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Table, Button } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import "./ReservationsList.css";
 
-const reservationUrl = environment.apiUrl + '/reservation';
+const reservationUrl = API_BASE_URL + '/reservation';
 
 export default class Reservations extends Component {
   constructor(props) {

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { ProgressBar } from "react-bootstrap";
 import Drivings from "components/drivings/Drivings";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import "./YourProgress.css";
 
-const ratingUrl = environment.apiUrl + '/rating';
-const courseUrl = environment.apiUrl + '/course';
+const ratingUrl = API_BASE_URL + '/rating';
+const courseUrl = API_BASE_URL + '/course';
 
 export default class YourProgress extends Component {
   constructor(props) {

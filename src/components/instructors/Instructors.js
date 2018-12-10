@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Table, Image } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import "./Instructors.css";
 
-const instructorUrl = environment.apiUrl + '/instructor';
+const instructorUrl = API_BASE_URL + '/instructor';
 
 export default class Instructors extends Component {
   constructor(props) {

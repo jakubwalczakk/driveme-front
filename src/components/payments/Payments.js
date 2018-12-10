@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import "./Payments.css";
 
-const paymentUrl = environment.apiUrl + '/payment';
+const paymentUrl = API_BASE_URL + '/payment';
 
 export default class Payments extends Component {
   constructor(props) {

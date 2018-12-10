@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import "./Ratings.css";
 
-const courseUrl = environment.apiUrl + '/course';
-const drivingUrl = environment.apiUrl + '/driving';
+const courseUrl = API_BASE_URL + '/course';
+const drivingUrl = API_BASE_URL + '/driving';
 
 export default class Rating extends Component {
   constructor(props) {

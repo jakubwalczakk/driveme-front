@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { ProgressBar } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import "./Course.css";
 
-const courseUrl = environment.apiUrl + '/course';
+const courseUrl = API_BASE_URL + '/course';
 
 export default class Course extends Component {
   constructor(props) {

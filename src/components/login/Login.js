@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
-import { environment } from "environments/environment";
 import "./Login.css";
 
 export default class Login extends Component {

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Table, Image } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import "./CarTable.css";
 
-const carUrl = environment.apiUrl + '/car';
+const carUrl = API_BASE_URL + '/car';
 
 export default class CarTable extends Component {
     constructor(props) {

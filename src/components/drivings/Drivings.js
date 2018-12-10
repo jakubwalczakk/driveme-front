@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Table, Badge } from "react-bootstrap";
-import { environment } from "environments/environment";
+import { API_BASE_URL } from "constants/constants";
 import "./Drivings.css";
 
-const drivingUrl = environment.apiUrl + '/driving';
+const drivingUrl = API_BASE_URL + '/driving';
 
 export default class Drivings extends Component {
 
