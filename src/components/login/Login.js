@@ -1,49 +1,75 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
+import { ACCESS_TOKEN } from "constants/constants";
+import { login } from 'utils/APIUtils';
 import "./Login.css";
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
 
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+
         this.state = {
-            email: "",
-            password: ""
+            email: {
+                value: ''
+            },
+            password: {
+                value: ''
+            }
         };
     }
 
-    handleChange = event => {
+    handleEmailChange(event) {
+        const target = event.target;
+        const inputValue = target.value;
+
+        // console.log("target = " + target)
+        // console.log("inputValue = " + inputValue)
+
         this.setState({
-            [event.target.id]: event.target.value
+            email: {
+                value: inputValue,
+            }
+        });
+    }
+
+    handlePasswordChange(event) {
+        const target = event.target;
+        const inputValue = target.value;
+
+        // console.log("target = " + target)
+        // console.log("inputValue = " + inputValue)
+
+        this.setState({
+            password: {
+                value: inputValue,
+            }
         });
     }
 
     handleSubmit = event => {
-
-        //komunikacja z API działa tutaj!!!!
-        console.log("Uwaga działam!!!");
         event.preventDefault();
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
 
-        const data = {
-            name: 'Jakub',
-            surname: 'Walczak',
-            email: 'jakub.walczak@email.com',
-            password: "PASSWORD",
-            phoneNumber: "111222333"
-        }
-
-        const options = {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(data),
+        const loginRequest = {
+            email: this.state.email.value,
+            password: this.state.password.value
         };
 
-        const request = new Request('http://localhost:8080/user', options);
-        const response = fetch(request);
-        const status = response.status;
-        console.log(status);
+        login(loginRequest)
+            .then(response => {
+                localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+                console.log(response)
+                this.props.history.push("/");
+            }).catch(error => {
+                if (error.status === 401) {
+                    console.log('Your Username or Password is incorrect. Please try again!')
+                } else {
+                    console.log('Sorry! Something went wrong. Please try again!')
+                }
+            });
     }
 
     render() {
@@ -55,8 +81,8 @@ export default class Login extends Component {
                         <FormControl
                             autoFocus
                             type="email"
-                            value={this.state.email}
-                            onChange={this.handleChange}
+                            value={this.state.email.value}
+                            onChange={this.handleEmailChange}
                         />
                     </FormGroup>
                     <FormGroup controlId="password">
@@ -64,13 +90,14 @@ export default class Login extends Component {
                         <FormControl
                             type="password"
                             minLength="8"
-                            value={this.state.password}
-                            onChange={this.handleChange}
+                            value={this.state.password.value}
+                            onChange={this.handlePasswordChange}
                         />
                     </FormGroup>
-                    <Checkbox id="rememberMeCheckbox">
+                    {/* <Checkbox id="rememberMeCheckbox">
                         Zapamiętaj mnie
-                    </Checkbox>
+                    </Checkbox> */}
+                    <p id="registerQuestion">Nie masz konta?<a id="registerRedirect" href="/register"> Zarejestruj się!</a></p>
                     <Button
                         id="login-button"
                         block

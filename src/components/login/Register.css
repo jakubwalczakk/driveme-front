@@ -1,6 +1,6 @@
 @media all and (min-width: 480px) {
     .registrationContainer {
-      margin-top: 5%;
+      margin-top: 4%;
       padding: 60px 0;
     }
 
@@ -15,6 +15,7 @@
   }
 
   #register-button{
+    margin-top: 24px;
     background-color: #631033;
     color:white;
     font-weight: 600;

@@ -14,10 +14,22 @@
     border-color: #66233f;
   }
 
+  #registerQuestion{
+    font-size:16px;
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  #registerRedirect{
+    color:#631033;
+    font-weight: 600;
+  }
+
   #login-button{
     background-color: #631033;
     color:white;
     font-weight: 600;
+    margin-top: 15px;
   }
 
   
