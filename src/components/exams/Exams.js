@@ -65,7 +65,7 @@ export default class Exams extends Component {
         <Table id="theoreticalExamsTable" responsive striped bordered condensed hover>
           <thead>
             <th>Data egzaminu</th>
-            <th></th>
+            <th>Status</th>
             <th>Zdobyte punkty</th>
             <th>Wynik</th>
           </thead>
@@ -80,7 +80,7 @@ export default class Exams extends Component {
                     <i id="examFailed" class="material-icons">cancel</i>}
                 </td>
                 <td>{exam.scoredPoints}</td>
-                <td>{exam.result}</td>
+                <td>{Math.round(exam.result * 100) / 1}%</td>
               </tr>
             ))}
           </tbody>
