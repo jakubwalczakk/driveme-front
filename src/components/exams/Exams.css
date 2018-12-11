@@ -1,0 +1,43 @@
+#examsTableContainer{
+  margin-top: 7%;
+  width: 72%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#theoreticalExamsLabel{
+  font-size: 32px;
+  text-align: center;
+}
+
+#practicalExamLabel{
+  font-size: 32px;
+  text-align: center;
+}
+
+#theoreticalExamsTable{
+  margin-top: 12px;
+}
+
+#theoreticalExamsTable td, th{
+    text-align: center;
+    vertical-align: middle; 
+}
+
+#theoreticalExamsTable th{
+  padding: 10px;
+}
+
+#examsLoadingLabel, #examsErrorLabel{
+  font-size: 32px;
+  text-align: center;
+  margin-top: 12%;
+}
+
+#examPassed{
+  color:green;
+}
+
+#examFailed{
+  color: red;
+}

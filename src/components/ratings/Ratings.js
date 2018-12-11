@@ -4,7 +4,7 @@ import { API_BASE_URL } from "constants/constants";
 import "./Ratings.css";
 
 const courseUrl = API_BASE_URL + '/course';
-const drivingUrl = API_BASE_URL + '/driving';
+const drivingUrl = API_BASE_URL + '/driving/instructor/7';
 
 export default class Rating extends Component {
   constructor(props) {

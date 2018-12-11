@@ -1,0 +1,30 @@
+#studentsTableContainer{
+  margin-top: 7%;
+  width: 72%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#studentsTable{
+  margin-top: 12px;
+}
+
+#studentsTable td, th{
+    text-align: center;
+    vertical-align: middle; 
+}
+
+#studentsTable th{
+  padding: 10px;
+}
+
+#studentsLoadingLabel, #studentsErrorLabel{
+  font-size: 32px;
+  text-align: center;
+  margin-top: 12%;
+}
+
+#deactivateButton{
+  width: 100%;
+  color: rgb(175, 0, 0);
+}
