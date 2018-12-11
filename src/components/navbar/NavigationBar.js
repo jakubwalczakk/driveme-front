@@ -75,7 +75,7 @@ export default class NavigationBar extends Component {
                         <NavItem className="nav-bar-item" eventKey={3} href="/payments">
                             Płatności
                         </NavItem>
-                        <NavItem className="nav-bar-item" eventKey={4} href="/instructors">
+                        {/* <NavItem className="nav-bar-item" eventKey={4} href="/instructors">
                             Instruktorzy
                         </NavItem>
                         <NavItem className="nav-bar-item" eventKey={5} href="/cars">
@@ -83,7 +83,7 @@ export default class NavigationBar extends Component {
                         </NavItem>
                         <NavItem className="nav-bar-item" eventKey={6} href="/cities">
                             Miasta
-                        </NavItem>
+                        </NavItem> */}
                     </Nav>
                     {loggingNavItem}
                 </Navbar.Collapse>

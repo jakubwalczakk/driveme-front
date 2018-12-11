@@ -3,7 +3,8 @@ import { Table, Button } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
 import "./ReservationsList.css";
 
-const reservationUrl = API_BASE_URL + '/reservation';
+const studentId = 11;
+const reservationUrl = API_BASE_URL + '/reservation/student/' + studentId;
 
 export default class Reservations extends Component {
   constructor(props) {

@@ -3,7 +3,8 @@ import { Table } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
 import "./Payments.css";
 
-const paymentUrl = API_BASE_URL + '/payment';
+const studentId = 10;
+const paymentUrl = API_BASE_URL + '/payment/student/' + studentId;
 
 export default class Payments extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ export default class Payments extends Component {
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy płątności...');
+          throw new Error('Coś poszło nie tak podczas pobierania listy płatności...');
         }
       })
       .then(data => this.setState({ payments: data, isLoading: false }))

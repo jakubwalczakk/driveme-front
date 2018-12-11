@@ -4,6 +4,7 @@ import Drivings from "components/drivings/Drivings";
 import { API_BASE_URL } from "constants/constants";
 import "./YourProgress.css";
 
+const courseId = 1;
 const ratingUrl = API_BASE_URL + '/rating';
 const courseUrl = API_BASE_URL + '/course';
 
@@ -20,7 +21,7 @@ export default class YourProgress extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    fetch(courseUrl + '/1')
+    fetch(courseUrl + +'/' + courseId)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -37,10 +38,9 @@ export default class YourProgress extends Component {
 
     var { course } = this.state;
 
-    var takenDrivingHours = this.state.course.takenDrivingHours;
+    var takenDrivingHours = course.takenDrivingHours;
     const amountOfCourseDrivingHours = 30;
-    var percentOfCourseCompletion = takenDrivingHours * 100 / amountOfCourseDrivingHours;
-    percentOfCourseCompletion = Math.round(percentOfCourseCompletion * 1) / 1;
+    var percentOfCourseCompletion = Math.round(takenDrivingHours * 100) / amountOfCourseDrivingHours;
 
     return (
       <div>

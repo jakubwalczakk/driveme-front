@@ -24,6 +24,7 @@ export default class Exams extends Component {
     fetch(practicalExamUrl)
       .then(response => {
         if (response.ok) {
+          console.log(response);
           return response.json();
         } else {
           throw new Error('Coś poszło nie tak podczas pobierania egzaminu praktycznego...');
@@ -75,9 +76,9 @@ export default class Exams extends Component {
                 <td>{exam.dateOfExam}</td>
                 <td>
                   {passed &&
-                    <i id="examPassed" class="material-icons">check_circle</i>}
+                    <i id="examPassed" className="material-icons">check_circle</i>}
                   {!passed &&
-                    <i id="examFailed" class="material-icons">cancel</i>}
+                    <i id="examFailed" className="material-icons">cancel</i>}
                 </td>
                 <td>{exam.scoredPoints}</td>
                 <td>{Math.round(exam.result * 100) / 1}%</td>

@@ -46,7 +46,9 @@ export default class Course extends Component {
       <div id="courseContainer">
         {/* <p id="courseLabel">Tutaj pojawią się informacje na temat Twojego kursu.</p> */}
         <p>Data rozpoczęcia kursu: {course.startDate}</p>
-        <p>Wpłacona kwota: {percentPaymentOfCourse}% - {currenPaymentOfCourse}PLN</p>
+        <p>Wpłacona kwota: {percentPaymentOfCourse}% - {currenPaymentOfCourse}PLN
+                  {currenPaymentOfCourse === 1500.0 &&
+            <i id="paymentsAccepted" className="material-icons">check_circle</i>}</p>
         <p>Liczba ukończonych godzin: {course.takenDrivingHours}h ({percentOfCourseCompletion}%)</p>
         <ProgressBar id="drivingsHoursProgressBar" bsStyle="success" now={percentOfCourseCompletion} />
         <p>Status: {course.status}</p>

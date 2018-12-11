@@ -5,8 +5,13 @@
   margin-left: auto;
 }
 
+#studentsLabel{  
+  font-size: 32px;
+  text-align: center;
+}
+
 #studentsTable{
-  margin-top: 12px;
+  margin-top: 18px;
 }
 
 #studentsTable td, th{

@@ -13,10 +13,11 @@
 #practicalExamLabel{
   font-size: 32px;
   text-align: center;
+  margin-top: 24px;
 }
 
 #theoreticalExamsTable{
-  margin-top: 12px;
+  margin-top: 20px;
 }
 
 #theoreticalExamsTable td, th{

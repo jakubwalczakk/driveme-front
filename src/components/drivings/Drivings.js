@@ -3,7 +3,8 @@ import { Table, Badge } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
 import "./Drivings.css";
 
-const drivingUrl = API_BASE_URL + '/driving';
+const studentId = 11;
+const drivingUrl = API_BASE_URL + '/driving/student/' + studentId;
 
 export default class Drivings extends Component {
 
