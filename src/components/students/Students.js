@@ -12,6 +12,10 @@ export default class Students extends Component {
       students: [],
       isLoading: false,
       error: null,
+      // showCourse: false,
+      // showAddPayment: false,
+      // showActivate: false,
+      // showDelete: false,
     }
   }
 
@@ -54,6 +58,8 @@ export default class Students extends Component {
             <th>Data rejestracji</th>
             <th>Kurs</th>
             <th>Zapłacona kwota</th>
+            <th>Płatności</th>
+            <th>Aktywacja</th>
           </thead>
           <tbody>
             {students.map(student => (
@@ -62,18 +68,22 @@ export default class Students extends Component {
                 <td>{student.pesel}</td>
                 <td>{student.email}</td>
                 <td>{student.registrationDate}</td>
-                <td>{student.course.id} <Button>
-                  Kurs</Button></td>
-                <td>{student.course.currentPayment}</td>
                 <td>
-                  <Button>
-                    Dodaj płatność
+                  <Button disabled={student.course == null}>
+                    Kurs
                   </Button>
                 </td>
+                <td >{student.course != null && student.course.currentPayment}</td>
                 <td>
+                  {student.course != null && student.course.currentPayment !== 1500 &&
+                    <Button>
+                      Dodaj płatność
+                  </Button>}
+                </td>
+                <td>{!student.active &&
                   <Button>
                     Aktywuj
-                  </Button>
+                  </Button>}
                 </td>
                 {/* <td>
                   <Button>
@@ -92,5 +102,47 @@ export default class Students extends Component {
           </tbody>
         </Table>
       </div>);
+  }
+}
+
+class ModalXD extends Component {
+  constructor(props, showing) {
+    super(props);
+
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+
+    this.state = {
+      show: showing,
+    };
+  }
+
+  handleClose() {
+    this.setState({ show: false });
+  }
+
+  handleShow() {
+    this.setState({ show: true });
+  }
+
+  render() {
+    return (
+      <div>
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Rezerwacja</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Czy na pewno chcesz zarezerwować jazdy?
+            <hr />
+            Czy na pewno?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleClose}>Anuluj</Button>
+            <Button onClick={this.handleReservation}>Rezerwuj</Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    )
   }
 }

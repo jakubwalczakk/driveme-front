@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Nav, Navbar, NavItem, Image } from "react-bootstrap";
+import {getCurrentUser} from "../../utils/APIUtils";
 import "./NavigationBar.css";
 
 export default class NavigationBar extends Component {
@@ -21,6 +22,8 @@ export default class NavigationBar extends Component {
     render() {
         const isLoggedIn = this.state.isLoggedIn;
         let loggingNavItem;
+
+        console.log("Dzień dobry, tutaj : " + getCurrentUser().email);
 
         if (isLoggedIn) {
             loggingNavItem =

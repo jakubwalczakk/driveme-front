@@ -140,7 +140,8 @@ export default class Register extends Component {
             surname: this.state.surname.value,
             email: this.state.email.value,
             password: this.state.password.value,
-            phoneNumber: this.state.phoneNumber.value
+            phoneNumber: this.state.phoneNumber.value,
+            role: 'Student'
         };
 
         console.log("SIGNUP REQUEST = " + signupRequest)

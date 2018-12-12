@@ -58,6 +58,8 @@ export default class Exams extends Component {
       return <p id="examsLoadingLabel">Loading...</p>
     }
 
+    console.log(practicalExam);
+
     var passed = true;
 
     return (
