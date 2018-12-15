@@ -23,8 +23,6 @@ export default class NavigationBar extends Component {
         const isLoggedIn = this.state.isLoggedIn;
         let loggingNavItem;
 
-        console.log("Dzień dobry, tutaj : " + getCurrentUser().email);
-
         if (isLoggedIn) {
             loggingNavItem =
                 <Nav pullRight>

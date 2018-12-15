@@ -44,14 +44,16 @@ export default class Instructors extends Component {
 
     return (
       <div id="instructorsTableContainer">
-      <h1 id="instructorsHeader">Nasi instruktorzy</h1>
+        <h1 id="instructorsHeader">Nasi instruktorzy</h1>
         <Table id="instructorsTable" responsive striped bordered condensed hover>
           <thead>
-            <th id="instructorPhoto"></th>
-            <th id="instructorName">Imię</th>
-            <th id="instructorSurname">Nazwisko</th>
-            <th id="instructorEmail">E-mail</th>
-            <th id="instructorPhoneNumber">Nr tel.</th>
+            <tr>
+              <th id="instructorPhoto"></th>
+              <th id="instructorName">Imię</th>
+              <th id="instructorSurname">Nazwisko</th>
+              <th id="instructorEmail">E-mail</th>
+              <th id="instructorPhoneNumber">Nr tel.</th>
+            </tr>
           </thead>
           <tbody>
             {instructors.map(instructor => (

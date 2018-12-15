@@ -56,3 +56,10 @@ export function getCurrentUser() {
     method: 'GET'
   })
 }
+
+export function trimDate(date){
+  var part1 = date.split("T")[0];
+  var part2 = date.split("T")[1].split("Z")[0];
+
+  return part1 + ' ' + part2;
+}

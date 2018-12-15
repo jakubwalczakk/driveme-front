@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
+import { trimDate } from "utils/APIUtils";
 import "./Exams.css";
 
 const studentId = 10;
@@ -24,7 +25,6 @@ export default class Exams extends Component {
     fetch(practicalExamUrl)
       .then(response => {
         if (response.ok) {
-          console.log(response);
           return response.json();
         } else {
           throw new Error('Coś poszło nie tak podczas pobierania egzaminu praktycznego...');
@@ -48,7 +48,7 @@ export default class Exams extends Component {
 
   render() {
 
-    var { practicalExam, theoreticalExams, isLoading, error } = this.state;
+    var { practicalExam, theoreticalExams, error, isLoading } = this.state;
 
     if (error) {
       return <p id="examsErrorLabel">{error.message}</p>
@@ -58,7 +58,8 @@ export default class Exams extends Component {
       return <p id="examsLoadingLabel">Loading...</p>
     }
 
-    console.log(practicalExam);
+    console.log(practicalExam.dateOfExam);
+    console.log(theoreticalExams);
 
     var passed = true;
 
@@ -67,19 +68,21 @@ export default class Exams extends Component {
         <p id="theoreticalExamsLabel">Egzaminy teoretyczne</p>
         <Table id="theoreticalExamsTable" responsive striped bordered condensed hover>
           <thead>
-            <th>Data egzaminu</th>
-            <th>Status</th>
-            <th>Zdobyte punkty</th>
-            <th>Wynik</th>
+            <tr>
+              <th>Data egzaminu</th>
+              <th>Status</th>
+              <th>Zdobyte punkty</th>
+              <th>Wynik</th>
+            </tr>
           </thead>
           <tbody>
             {theoreticalExams.map(exam => (
               <tr key={exam.id}>
-                <td>{exam.dateOfExam}</td>
+                <td>{trimDate(exam.dateOfExam)}</td>
                 <td>
-                  {passed &&
+                  {exam.passed &&
                     <i id="examPassed" className="material-icons">check_circle</i>}
-                  {!passed &&
+                  {!exam.passed &&
                     <i id="examFailed" className="material-icons">cancel</i>}
                 </td>
                 <td>{exam.scoredPoints}</td>
@@ -90,6 +93,7 @@ export default class Exams extends Component {
         </Table>
         <p id="practicalExamLabel">Egzamin praktyczny</p>
         <p>{practicalExam.dateOfExam} {practicalExam.passed}</p>
+        <p>{practicalExam.car}</p>
         {/* <p>{practicalExam.car.brand} {practicalExam.car.model} {practicalExam.car.licensePlate}</p> */}
         {/* <p>{practicalExam.instructor.name} {practicalExam.instructor.surname}</p> */}
       </div>

@@ -24,36 +24,36 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: null,
+      // currentUser: null,
       isAuthenticated: false,
       isLoading: false
     }
 
     this.handleLogout = this.handleLogout.bind(this);
-    this.loadCurrentUser = this.loadCurrentUser.bind(this);
+    // this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
   }
 
-  loadCurrentUser() {
-    this.setState({
-      isLoading: true
-    });
-    getCurrentUser()
-      .then(response => {
-        this.setState({
-          currentUser: response,
-          isAuthenticated: true,
-          isLoading: false
-        });
-      }).catch(error => {
-        this.setState({
-          isLoading: false
-        });
-      });
-  }
+  // loadCurrentUser() {
+  //   this.setState({
+  //     isLoading: true
+  //   });
+  //   getCurrentUser()
+  //     .then(response => {
+  //       this.setState({
+  //         currentUser: response,
+  //         isAuthenticated: true,
+  //         isLoading: false
+  //       });
+  //     }).catch(error => {
+  //       this.setState({
+  //         isLoading: false
+  //       });
+  //     });
+  // }
 
   componentDidMount() {
-    this.loadCurrentUser();
+    // this.loadCurrentUser();
   }
 
   handleLogout(redirectTo = "/") {

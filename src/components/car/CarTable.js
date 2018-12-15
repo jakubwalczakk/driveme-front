@@ -47,11 +47,13 @@ export default class CarTable extends Component {
                 <h1 id="carsHeader">Dostępne pojazdy</h1>
                 <Table id="carsTable" responsive striped bordered condensed hover>
                     <thead>
-                        <th id="carBrandCol">Marka</th>
-                        <th id="carModelCol">Model</th>
-                        {/* <th id="carLicensePlateCol">Numer rejestracji</th> */}
-                        <th id="carGasTypeCol">Typ paliwa</th>
-                        <th id="carImgCol"></th>
+                        <tr>
+                            <th id="carBrandCol">Marka</th>
+                            <th id="carModelCol">Model</th>
+                            {/* <th id="carLicensePlateCol">Numer rejestracji</th> */}
+                            <th id="carGasTypeCol">Typ paliwa</th>
+                            <th id="carImgCol"></th>
+                        </tr>
                     </thead>
                     <tbody>
                         {cars.map(car => (

@@ -21,12 +21,12 @@ export default class YourProgress extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    fetch(courseUrl + +'/' + courseId)
+    fetch(courseUrl +'/' + courseId)
       .then(response => {
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy miast...');
+          throw new Error('Coś poszło nie tak podczas pobierania informacji na temat kursu...');
         }
       })
       .then(data => this.setState({ course: data, isLoading: false }))

@@ -32,12 +32,12 @@ export default class Course extends Component {
   render() {
 
     var { course } = this.state;
-    var currenPaymentOfCourse = this.state.course.currentPayment;
+    var currenPaymentOfCourse = course.currentPayment;
     const courseCost = 1500.0;
     var percentPaymentOfCourse = currenPaymentOfCourse * 100 / courseCost;
     percentPaymentOfCourse = Math.round(percentPaymentOfCourse * 1) / 1;
 
-    var takenDrivingHours = this.state.course.takenDrivingHours;
+    var takenDrivingHours = course.takenDrivingHours;
     const amountOfCourseDrivingHours = 30;
     var percentOfCourseCompletion = takenDrivingHours * 100 / amountOfCourseDrivingHours;
     percentOfCourseCompletion = Math.round(percentOfCourseCompletion * 1) / 1;

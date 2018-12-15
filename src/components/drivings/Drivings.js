@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Table, Badge } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
+import {trimDate} from "utils/APIUtils";
 import "./Drivings.css";
 
 const studentId = 11;
 const drivingUrl = API_BASE_URL + '/driving/student/' + studentId;
+const minuteInMicros = 1000 * 60;
 
 export default class Drivings extends Component {
 
@@ -44,25 +46,21 @@ export default class Drivings extends Component {
       return <p id="drivingsLoadingLabel">Loading...</p>
     }
 
-    function calculateTimeOfDrivings(driving) {
-      driving.startDate = new Date(driving.startDate);
-      driving.finishDate = new Date(driving.finishDate);
-      return driving.finishDate - driving.finishDate;
-    }
-
     return (
 
       <div id="drivingsTableContainer">
         <p id="drivingsLabel">Lista ukończonych przez Ciebie jazd szkoleniowych</p>
         <Table id="drivingsTable" responsive striped bordered condensed hover>
           <thead>
-            <th>Tytuł</th>
-            <th>Instruktor</th>
-            <th>Samochód</th>
-            <th>Miasto</th>
-            <th>Data rozpoczęcia</th>
-            <th>Czas trwania</th>
-            <th>Ocena</th>
+            <tr>
+              <th>Tytuł</th>
+              <th>Instruktor</th>
+              <th>Samochód</th>
+              <th>Miasto</th>
+              <th>Data rozpoczęcia</th>
+              <th>Czas trwania (min.)</th>
+              <th>Ocena</th>
+            </tr>
           </thead>
           <tbody>
             {drivings.map(driving => (
@@ -71,9 +69,11 @@ export default class Drivings extends Component {
                 <td>{driving.instructor.name} {driving.instructor.surname}</td>
                 <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
                 <td>{driving.drivingCity}</td>
-                <td>{driving.startDate}</td>
-                <td>{calculateTimeOfDrivings(driving)}</td>
-                <td><Badge>{driving.rating}</Badge></td>
+                <td>{trimDate(driving.startDate)}</td>
+                <td>{(new Date(driving.finishDate) - new Date(driving.startDate)) / minuteInMicros}</td>
+                <td>
+                  <Badge>{driving.rating}</Badge>
+                </td>
               </tr>
             ))}
           </tbody>

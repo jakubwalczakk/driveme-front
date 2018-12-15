@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
+import {trimDate} from "utils/APIUtils";
 import "./Ratings.css";
 
 const courseUrl = API_BASE_URL + '/course';
@@ -28,7 +29,7 @@ export default class Rating extends Component {
     this.setState({ showModal: true });
   }
 
-  handleRated(){
+  handleRated() {
     console.log("Zajęcia ocenione!");
   }
 
@@ -66,13 +67,15 @@ export default class Rating extends Component {
         <        p id="instructorDrivingsLabel">Lista przeprowadzonych przez Ciebie jazd szkoleniowych</p>
         <Table id="drivingsTable" responsive striped bordered condensed hover>
           <thead>
-            <th>Student</th>
-            <th>Tytuł</th>
-            <th>Samochód</th>
-            <th>Miasto</th>
-            <th>Data rozpoczęcia</th>
-            <th>Czas trwania</th>
-            <th>Ocena</th>
+            <tr>
+              <th>Student</th>
+              <th>Tytuł</th>
+              <th>Samochód</th>
+              <th>Miasto</th>
+              <th>Data rozpoczęcia</th>
+              <th>Czas trwania</th>
+              <th>Ocena</th>
+            </tr>
           </thead>
           <tbody>
             {drivings.map(driving => (
@@ -81,7 +84,7 @@ export default class Rating extends Component {
                 <td>{driving.title}</td>
                 <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
                 <td>{driving.drivingCity}</td>
-                <td>{driving.startDate}</td>
+                <td>{trimDate(driving.startDate)}</td>
                 <td>0</td>
                 <td>{driving.rating ?
                   <Badge>{driving.rating}</Badge> :

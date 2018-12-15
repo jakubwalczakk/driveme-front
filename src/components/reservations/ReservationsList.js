@@ -51,11 +51,13 @@ export default class Reservations extends Component {
         <p id="reservationsLabel">Lista dokonanych przez Ciebie rezerwacji</p>
         <Table id="reservationsTable" responsive striped bordered condensed hover>
           <thead>
-            <th>Instruktor</th>
-            <th>Samochód</th>
-            <th>Miasto</th>
-            <th>Data rozpoczęcia</th>
-            <th>Data końcowa</th>
+            <tr>
+              <th>Instruktor</th>
+              <th>Samochód</th>
+              <th>Miasto</th>
+              <th>Data rozpoczęcia</th>
+              <th>Data końcowa</th>
+            </tr>
           </thead>
           <tbody>
             {reservations.map(reservation => (

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
+import {trimDate} from "utils/APIUtils";
 import "./Students.css";
 
 const studentsUrl = API_BASE_URL + '/student';
@@ -12,11 +13,19 @@ export default class Students extends Component {
       students: [],
       isLoading: false,
       error: null,
+      show: false,
+      showDeleteModal: false
       // showCourse: false,
       // showAddPayment: false,
       // showActivate: false,
       // showDelete: false,
     }
+
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleShowDeleteModal = this.handleShowDeleteModal.bind(this);
+    this.handleCloseDeleteModal = this.handleCloseDeleteModal.bind(this);
+    this.handleDeleteStudent = this.handleDeleteStudent.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +42,28 @@ export default class Students extends Component {
       })
       .then(data => this.setState({ students: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
+  }
+
+  handleClose() {
+    this.setState({ show: false });
+  }
+
+  handleShow() {
+    this.setState({ show: true });
+  }
+
+  handleCloseDeleteModal() {
+    this.setState({ showDeleteModal: false });
+  }
+
+  handleShowDeleteModal(deleteId) {
+    this.setState({ showDeleteModal: true });
+    console.log(deleteId);
+  }
+
+  handleDeleteStudent(){
+    console.log("STUDENT ZOSTAŁ POTWIERDZONY DO USUNIĘCIA");
+    this.handleCloseDeleteModal();
   }
 
   render() {
@@ -52,14 +83,17 @@ export default class Students extends Component {
         <p id="studentsLabel">Lista obecnych kursantów</p>
         <Table id="studentsTable" responsive striped bordered condensed hover>
           <thead>
-            <th>Student</th>
-            <th>PESEL</th>
-            <th>E-mail</th>
-            <th>Data rejestracji</th>
-            <th>Kurs</th>
-            <th>Zapłacona kwota</th>
-            <th>Płatności</th>
-            <th>Aktywacja</th>
+            <tr>
+              <th>Student</th>
+              <th>PESEL</th>
+              <th>E-mail</th>
+              <th>Data rejestracji</th>
+              <th>Kurs</th>
+              <th>Zapłacona kwota</th>
+              <th>Płatności</th>
+              <th>Aktywacja</th>
+              <th>Usuń</th>
+            </tr>
           </thead>
           <tbody>
             {students.map(student => (
@@ -67,9 +101,9 @@ export default class Students extends Component {
                 <td>{student.name} {student.surname}</td>
                 <td>{student.pesel}</td>
                 <td>{student.email}</td>
-                <td>{student.registrationDate}</td>
+                <td>{trimDate(student.registrationDate)}</td>
                 <td>
-                  <Button disabled={student.course == null}>
+                  <Button disabled={student.course == null} onClick={this.handleShow}>
                     Kurs
                   </Button>
                 </td>
@@ -91,7 +125,7 @@ export default class Students extends Component {
                   </Button>
                 </td> */}
                 <td>
-                  <Button id="deactivateButton" className="material-icons">
+                  <Button id="deactivateButton" className="material-icons" onClick={this.handleShowDeleteModal}>
                     {/* remove_circle */}
                     delete_forever
                   </Button>
@@ -101,20 +135,49 @@ export default class Students extends Component {
             ))}
           </tbody>
         </Table>
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Rezerwacja</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Czy na pewno chcesz zarezerwować jazdy?
+            <hr />
+            Czy na pewno?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleClose}>Anuluj</Button>
+            <Button onClick={this.handleClose}>Rezerwuj</Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={this.state.showDeleteModal} onHide={this.handleCloseDeleteModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Usuwanie</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Czy na pewno chcesz usunąć studenta o id = (*)?
+            <hr />
+            Czy na pewno?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleCloseDeleteModal}>Anuluj</Button>
+            <Button onClick={this.handleDeleteStudent}>Potwierdź</Button>
+          </Modal.Footer>
+        </Modal>
       </div>);
   }
 }
 
-class ModalXD extends Component {
-  constructor(props, showing) {
+class CourseModal extends Component {
+  constructor(props) {
     super(props);
+
+    this.state = {
+      show: true
+    }
 
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
-
-    this.state = {
-      show: showing,
-    };
   }
 
   handleClose() {
@@ -128,7 +191,7 @@ class ModalXD extends Component {
   render() {
     return (
       <div>
-        <Modal show={this.state.show} onHide={this.handleClose}>
+        <Modal show={true} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Rezerwacja</Modal.Title>
           </Modal.Header>
@@ -139,7 +202,7 @@ class ModalXD extends Component {
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.handleClose}>Anuluj</Button>
-            <Button onClick={this.handleReservation}>Rezerwuj</Button>
+            <Button onClick={this.handleClose}>Rezerwuj</Button>
           </Modal.Footer>
         </Modal>
       </div>
