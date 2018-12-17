@@ -1,8 +1,27 @@
 #bookingContainer{
-  margin-top: 10%;
+  margin-top: 7%;
   width: 72%;
   margin-right: auto;
   margin-left: auto;
+}
+
+#selectContainer{
+  display: inline-flex;
+  margin-top: 3%;
+  margin-bottom: 5%;
+  width: 100%;
+}
+
+ #selectBrandContainer{
+   width: 30%;
+ } 
+
+#selectInstructorContainer{
+  width:46%;
+}
+
+#searchButtonContainer{
+  width: 24%;
 }
 
 #bookingLabel{
@@ -11,10 +30,33 @@
     margin-top: 12%;
 }
 
+#carBrandSelectLabel{
+  font-size: 18px;
+}
+
 #carBrandSelectList{
-  width: 150px;
+  width: 50%;
+  font-size: 16px;
+}
+
+#instructorSelectLabel{
+  font-size: 18px;
 }
 
 #instructorSelectList{
-  width: 350px;
+  width: 80%;
+  font-size: 16px;
+}
+
+#searchEventsButton{
+  width: 60%;
+  height: 44%;
+  background-color: #631033;
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20%;
 }

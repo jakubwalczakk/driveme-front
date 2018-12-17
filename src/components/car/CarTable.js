@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Image } from "react-bootstrap";
+import { Table, Image, Button } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
 import "./CarTable.css";
 
@@ -44,7 +44,10 @@ export default class CarTable extends Component {
 
         return (
             <div id="carsTableContainer">
-                <h1 id="carsHeader">Dostępne pojazdy</h1>
+                <div id="headerDiv">
+                    <h1 id="carsHeader">Dostępne pojazdy</h1>
+                    {/* <Button id="addCarButton">Dodaj samochód</Button> */}
+                </div>
                 <Table id="carsTable" responsive striped bordered condensed hover>
                     <thead>
                         <tr>

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
-import { trimDate } from "utils/APIUtils";
 import "./Exams.css";
 
 const studentId = 10;
@@ -78,7 +77,7 @@ export default class Exams extends Component {
           <tbody>
             {theoreticalExams.map(exam => (
               <tr key={exam.id}>
-                <td>{trimDate(exam.dateOfExam)}</td>
+                <td>{exam.dateOfExam}</td>
                 <td>
                   {exam.passed &&
                     <i id="examPassed" className="material-icons">check_circle</i>}
@@ -86,14 +85,14 @@ export default class Exams extends Component {
                     <i id="examFailed" className="material-icons">cancel</i>}
                 </td>
                 <td>{exam.scoredPoints}</td>
-                <td>{Math.round(exam.result * 100) / 1}%</td>
+                <td>{Math.round(exam.result * 100)}%</td>
               </tr>
             ))}
           </tbody>
         </Table>
         <p id="practicalExamLabel">Egzamin praktyczny</p>
         <p>{practicalExam.dateOfExam} {practicalExam.passed}</p>
-        <p>{practicalExam.car}</p>
+        {/* <p>{practicalExam.car}</p> */}
         {/* <p>{practicalExam.car.brand} {practicalExam.car.model} {practicalExam.car.licensePlate}</p> */}
         {/* <p>{practicalExam.instructor.name} {practicalExam.instructor.surname}</p> */}
       </div>

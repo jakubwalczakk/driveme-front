@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { Table, Badge } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
-import {trimDate} from "utils/APIUtils";
+import { API_BASE_URL,MINUTES_IN_MICROS } from "constants/constants";
 import "./Drivings.css";
 
 const studentId = 11;
 const drivingUrl = API_BASE_URL + '/driving/student/' + studentId;
-const minuteInMicros = 1000 * 60;
 
 export default class Drivings extends Component {
 
@@ -69,8 +67,8 @@ export default class Drivings extends Component {
                 <td>{driving.instructor.name} {driving.instructor.surname}</td>
                 <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
                 <td>{driving.drivingCity}</td>
-                <td>{trimDate(driving.startDate)}</td>
-                <td>{(new Date(driving.finishDate) - new Date(driving.startDate)) / minuteInMicros}</td>
+                <td>{driving.startDate}</td>
+                <td>{(new Date(driving.finishDate) - new Date(driving.startDate)) / MINUTES_IN_MICROS}</td>
                 <td>
                   <Badge>{driving.rating}</Badge>
                 </td>

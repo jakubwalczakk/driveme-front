@@ -5,10 +5,34 @@
   margin-left: auto;
 }
 
+#headerDiv{
+  width: 100%;
+  display: inline-flex;
+}
+
 #carsHeader{
   text-align: center;
   font-size: 44px;
   padding: 10px 10px 35px 10px;
+  width: 52%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#addCarButton{
+  background-color: #631033;
+  color: white;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 16px;
+  width: 16%;
+  height: 48%;
+  /* margin-left: 52%; */
+  /* margin-top: 5%; */
+}
+
+#carsTable{
+  margin-top: 2%;
 }
 
 #carsTable th{

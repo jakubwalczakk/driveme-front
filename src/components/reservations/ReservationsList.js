@@ -56,7 +56,7 @@ export default class Reservations extends Component {
               <th>Samochód</th>
               <th>Miasto</th>
               <th>Data rozpoczęcia</th>
-              <th>Data końcowa</th>
+              <th>Data zakończenia</th>
             </tr>
           </thead>
           <tbody>

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
-import {trimDate} from "utils/APIUtils";
 import "./Payments.css";
 
 const studentId = 10;
@@ -50,7 +49,7 @@ export default class Payments extends Component {
     const debt = 1000;
     return (
       <div id="paymentsContainer" >
-        <p id="paymentsHeader">Musisz zapłacić jeszcze: {debt} PLN. </p>
+        <p id="paymentsHeader">Musisz zapłacić jeszcze: {debt} zł</p>
         <h1 id="paymentsLabel">Lista Twoich wpłat</h1>
         <Table id="paymentsTable" responsive striped bordered condensed hover>
           <thead>
@@ -64,8 +63,8 @@ export default class Payments extends Component {
             {payments.map((payment, i = 0) => (
               <tr key={payment.id}>
                 <td>{++i}</td>
-                <td>{trimDate(payment.date)}</td>
-                <td>{payment.amount} PLN</td>
+                <td>{payment.date}</td>
+                <td>{payment.amount} zł</td>
               </tr>
             ))}
           </tbody>

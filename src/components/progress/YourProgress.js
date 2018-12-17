@@ -40,7 +40,7 @@ export default class YourProgress extends Component {
 
     var takenDrivingHours = course.takenDrivingHours;
     const amountOfCourseDrivingHours = 30;
-    var percentOfCourseCompletion = Math.round(takenDrivingHours * 100) / amountOfCourseDrivingHours;
+    var percentOfCourseCompletion = Math.round(takenDrivingHours * 100 / amountOfCourseDrivingHours);
 
     return (
       <div>
