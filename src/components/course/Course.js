@@ -17,7 +17,7 @@ export default class Course extends Component {
 
   componentDidMount() {
 
-    fetch(courseUrl + '/1')
+    fetch(courseUrl + '/2')
       .then(response => {
         if (response.ok) {
           return response.json();

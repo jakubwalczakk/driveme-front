@@ -81,3 +81,17 @@
   text-align: center;
   margin-top: 12%;
 }
+
+.add-car-btn{
+  background-color: #631033 ;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 8px 12px 8px 12px;
+}
+
+.logout-btn:hover{
+  background-color: #888282;
+  color: black;
+  font-weight: 600;
+}

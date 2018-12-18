@@ -1,14 +1,16 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
+import { trimDate } from "utils/APIUtils";
 import "./ProfileSettings.css";
 
-const profileUrl = API_BASE_URL + '/student';
+const studentUrl = API_BASE_URL + '/student';
 
 export default class ProfileSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: "",
       name: "",
       surname: "",
       registrationDate: [],
@@ -19,8 +21,9 @@ export default class ProfileSettings extends Component {
       city: "",
       zipCode: "",
       street: "",
-      houseNumber: ""
+      houseNo: ""
     }
+    this.handleSave = this.handleSave.bind(this);
   }
 
   handleChange = event => {
@@ -29,8 +32,40 @@ export default class ProfileSettings extends Component {
     });
   }
 
+  handleSave() {
+    console.log(this.state)
+    const updateRequest={
+      id: this.state.id,
+      password: this.state.password,
+      phoneNumber: this.state.phoneNumber,
+      address:{
+        city: this.state.city,
+        zipCode: this.state.zipCode,
+        street: this.state.street,
+        houseNo: this.state.houseNo
+      }
+    }
+    console.log(updateRequest)
+
+    fetch(studentUrl, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updateRequest)
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Coś poszło nie tak podczas aktualizacji danych studenta...');
+      }
+    });
+
+  }
+
   componentDidMount() {
-    fetch(profileUrl + '/11')
+    fetch(studentUrl + '/11')
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -38,14 +73,13 @@ export default class ProfileSettings extends Component {
           throw new Error('Coś poszło nie tak podczas pobierania danych użytkownika...');
         }
       }).then(data => this.setState({
-        name: data.name, surname: data.surname,
-        registrationDate: data.registrationDate,
-        pesel: data.pesel, email: data.email,
+        id: data.id, name: data.name, surname: data.surname,
+        registrationDate: trimDate(data.registrationDate),
+        pesel: data.pesel, email: data.email, password: data.password,
         phoneNumber: data.phoneNumber,
         city: data.address.city, zipCode: data.address.zipCode,
-        street: data.address.street, houseNumber: data.address.houseNo
+        street: data.address.street, houseNo: data.address.houseNo
       }))
-    // .then(data=>console.log(data));
   }
 
   render() {
@@ -144,15 +178,15 @@ export default class ProfileSettings extends Component {
               onChange={this.handleChange}
             />
           </FormGroup>
-          <FormGroup id="houseNumber-form">
+          <FormGroup id="houseNo-form">
             <ControlLabel>Nr domu</ControlLabel>
-            <FormControl id="houseNumber"
-              value={this.state.houseNumber}
+            <FormControl id="houseNo"
+              value={this.state.houseNo}
               onChange={this.handleChange}
             />
           </FormGroup>
         </div>
-        <Button id="saveSettingsBtn">Zapisz</Button>
+        <Button id="saveSettingsBtn" onClick={this.handleSave}>Zapisz</Button>
       </div>
     );
   }

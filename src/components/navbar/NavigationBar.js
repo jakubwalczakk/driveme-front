@@ -1,52 +1,92 @@
 import React, { Component } from "react";
-import { Nav, Navbar, NavItem, Image } from "react-bootstrap";
-import {getCurrentUser} from "../../utils/APIUtils";
+import { Nav, Navbar, NavItem, Image, Modal, Button } from "react-bootstrap";
+import { getCurrentUser } from "utils/APIUtils";
 import "./NavigationBar.css";
+
+const currentUserName = 'Jakub';
 
 export default class NavigationBar extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isLoggedIn: true,
+            showModal: false,
+        };
+
         this.handleLoginClick = this.handleLoginClick.bind(this);
-        this.handleLogoutClick = this.handleLogoutClick.bind(this);
-        this.state = { isLoggedIn: true };
+        this.handleShowLogoutModal = this.handleShowLogoutModal.bind(this);
+        this.handleCloseLogoutModal = this.handleCloseLogoutModal.bind(this);
+        this.handleLogoutButtonClick = this.handleLogoutButtonClick.bind(this);
+        this.prepareModalStructure = this.prepareModalStructure.bind(this);
     }
 
     handleLoginClick() {
         this.setState({ isLoggedIn: true });
     }
 
-    handleLogoutClick() {
-        this.setState({ isLoggedIn: false });
+    handleShowLogoutModal() {
+        this.setState({ showModal: true });
+    }
+
+    handleCloseLogoutModal() {
+        this.setState({ showModal: false });
+    }
+
+    handleLogoutButtonClick() {
+        console.log("WYLOGOWUJĘ CIĘ KOLEŻKO");
+        this.handleCloseLogoutModal();
+    }
+
+    prepareModalStructure() {
+        return (
+            <Modal show={this.state.showModal} onHide={this.handleCloseLogoutModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h1 id="logoutHeader">{`Hej ${currentUserName},`}</h1>
+                    <p id="logoutQuestion">czy na pewno chcesz się wylogować?</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button className="logout-btn" onClick={this.handleCloseLogoutModal}>Anuluj</Button>
+                    <Button className="logout-btn" onClick={this.handleLogoutButtonClick}>Wyloguj</Button>
+                </Modal.Footer>
+            </Modal>
+        );
     }
 
     render() {
-        const isLoggedIn = this.state.isLoggedIn;
+        var { isLoggedIn, showModal } = this.state;
         let loggingNavItem;
+        let logoutModal;
 
         if (isLoggedIn) {
             loggingNavItem =
                 <Nav pullRight>
                     <NavItem id="welcomeMsg" className="nav-bar-item-logged" href="/profile">
-                        Cześć Jakub!
+                        {`Cześć ${currentUserName}!`}
                     </NavItem>
-                    <NavItem id="logoutButton" className="material-icons nav-bar-item-logged" href="/logout">
+                    <NavItem id="logoutButton" className="material-icons nav-bar-item-logged" onClick={this.handleShowLogoutModal}>
                         power_settings_new
                     </NavItem>
                 </Nav>
         } else {
-            loggingNavItem =
-                <Nav pullRight>
-                    <NavItem className="nav-bar-item nav-bar-btn" href="/login">Zaloguj</NavItem>
-                    <NavItem className="nav-bar-item nav-bar-btn" href="/register">Zarejestruj</NavItem>
-                </Nav>
+            // loggingNavItem =<Nav pullRight>
+            //         <NavItem className="nav-bar-item nav-bar-btn" href="/login">Zaloguj</NavItem>
+            //         <NavItem className="nav-bar-item nav-bar-btn" href="/register">Zarejestruj</NavItem>
+            //     </Nav>
+        }
+
+        if (showModal) {
+            logoutModal = this.prepareModalStructure();
         }
 
         return (
-            <Navbar className="nav-bar" fixedTop responsive="true">
+            <Navbar className="nav-bar" fixedTop responsive="true" hidden={!isLoggedIn}>
                 <Navbar.Header responsive="true">
                     <a href="/">
                         <Image id="logoBrand" src="/logo.png" rounded responsive />
-                        {/* <Image id="logoBrand" src="/favicon.ico" rounded responsive /> */}
                     </a>
                     <Navbar.Toggle />
                 </Navbar.Header>
@@ -87,6 +127,7 @@ export default class NavigationBar extends Component {
                         </NavItem> */}
                     </Nav>
                     {loggingNavItem}
+                    {logoutModal}
                 </Navbar.Collapse>
             </Navbar>
         );

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Image, Button } from "react-bootstrap";
+import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
 import "./CarTable.css";
 
@@ -12,11 +12,68 @@ export default class CarTable extends Component {
             cars: [],
             isLoading: false,
             error: null,
+            showAddModal: false,
+            carBrands: [],
+            selectedCarBrand: '-',
         };
+        this.handleShowAddModal = this.handleShowAddModal.bind(this);
+        this.handleCloseAddModal = this.handleCloseAddModal.bind(this);
+        this.prepareAddModalStructure = this.prepareAddModalStructure.bind(this);
+    }
+
+    handleShowAddModal() {
+        this.setState({ showAddModal: true });
+    }
+
+    handleCloseAddModal() {
+        this.setState({ showAddModal: false });
+    }
+
+    prepareAddModalStructure() {
+
+        var { carBrands, selectedCarBrand } = this.state;
+
+        return (
+            <Modal show={this.state.showAddModal} onHide={this.handleCloseAddModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        Dodaj nowy samochód
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div id="selectBrandContainer">
+                        <p id="carBrandSelectLabel">Wybierz markę samochodu</p>
+                        <FormGroup id="carBrandSelectList">
+                            <ControlLabel>Marka</ControlLabel>
+                            <FormControl componentClass="select" onChange={this.handleSelectedCarBrandChange} value={selectedCarBrand}>
+                                <option>-</option>
+                                {carBrands.map(brand => (
+                                    <option key={brand}>{brand}</option>)
+                                )}
+                            </FormControl>
+                        </FormGroup>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button className="add-car-btn" onClick={this.handleCloseAddModal}>Anuluj</Button>
+                    <Button className="add-car-btn" onClick={this.handleLogoutButtonClick}>Dodaj</Button>
+                </Modal.Footer>
+            </Modal>
+        );
     }
 
     componentDidMount() {
         this.setState({ isLoading: true });
+
+        fetch(carUrl + '/brands')
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Coś poszło nie tak podczas pobierania listy marek samochodów...');
+                }
+            })
+            .then(data => this.setState({ carBrands: data }));
 
         fetch(carUrl)
             .then(response => {
@@ -32,7 +89,12 @@ export default class CarTable extends Component {
 
     render() {
 
-        var { cars, isLoading, error } = this.state;
+        var { cars, isLoading, error, showAddModal } = this.state;
+        let addModal;
+
+        if (showAddModal) {
+            addModal = this.prepareAddModalStructure();
+        }
 
         if (error) {
             return <p id="carsErrorLabel">{error.message}</p>
@@ -72,6 +134,8 @@ export default class CarTable extends Component {
                         ))}
                     </tbody>
                 </Table>
+                {/* <Button onClick={this.handleShowAddModal}>Dodaj samochód!</Button>
+                {addModal} */}
             </div>
         );
     }

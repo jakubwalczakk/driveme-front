@@ -69,7 +69,7 @@ export default class App extends Component {
 
   handleLogin() {
     this.loadCurrentUser();
-    this.props.history.push("/");;
+    this.props.history.push("/");
   }
 
   render() {

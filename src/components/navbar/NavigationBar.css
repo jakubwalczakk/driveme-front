@@ -43,3 +43,34 @@
 #welcomeMsg:hover, #logoutButton:hover{
   color:rgb(92, 92, 92);
 }
+
+#logoutHeader{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modal-dialog{
+  margin-top: 8%;
+  width: 30%;
+}
+
+#logoutQuestion{
+  margin-top: 5%;
+  font-size: 18px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.logout-btn{
+  background-color: #631033 ;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 8px 12px 8px 12px;
+}
+
+.logout-btn:hover{
+  background-color: #888282;
+  color: black;
+  font-weight: 600;
+}
