@@ -97,7 +97,7 @@ export default class Login extends Component {
                     {/* <Checkbox id="rememberMeCheckbox">
                         Zapamiętaj mnie
                     </Checkbox> */}
-                    <p id="registerQuestion">Nie masz konta?<a id="registerRedirect" href="/register"> Zarejestruj się!</a></p>
+                    {/* <p id="registerQuestion">Nie masz konta?<a id="registerRedirect" href="/register"> Zarejestruj się!</a></p> */}
                     <Button
                         id="login-button"
                         block

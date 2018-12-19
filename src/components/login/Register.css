@@ -1,12 +1,12 @@
 @media all and (min-width: 480px) {
     .registrationContainer {
       margin-top: 4%;
-      padding: 60px 0;
+      padding: 5% 0;
     }
 
     .registrationContainer form {
       margin: 0 auto;
-      max-width: 320px;
+      max-width: 22%;
     }
   }  
     
@@ -14,8 +14,12 @@
     border-color: #66233f;
   }
 
+  #userRoleSelectList{    
+    border-color: #66233f;
+  }
+
   #register-button{
-    margin-top: 24px;
+    margin-top: 8%;
     background-color: #631033;
     color:white;
     font-weight: 600;

@@ -104,6 +104,9 @@ export default class NavigationBar extends Component {
                         <NavItem className="nav-bar-item" eventKey={3} href="/students">
                             Kursanci
                         </NavItem>
+                        <NavItem className="nav-bar-item" eventKey={3} href="/register">
+                            Rejestruj
+                        </NavItem>
                         <NavItem className="nav-bar-item" eventKey={3} href="/exams">
                             Egzaminy
                         </NavItem>
