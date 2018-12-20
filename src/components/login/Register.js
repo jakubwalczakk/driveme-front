@@ -34,6 +34,18 @@ export default class Register extends Component {
                 value: ''
             },
             selectedUserRole: 'Kursant',
+            city: {
+                value: ''
+            },
+            zipCode: {
+                value: ''
+            },
+            street: {
+                value: ''
+            },
+            houseNo: {
+                value: ''
+            }
         };
 
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -43,6 +55,10 @@ export default class Register extends Component {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
         this.handleSelectedUserRoleChange = this.handleSelectedUserRoleChange.bind(this);
+        this.handleCityChange = this.handleCityChange.bind(this);
+        this.handleZipCodeChange = this.handleZipCodeChange.bind(this);
+        this.handleStreetChange = this.handleStreetChange.bind(this);
+        this.handleHouseNoChange = this.handleHouseNoChange.bind(this);
         this.isFormValid = this.isFormValid.bind(this);
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -149,6 +165,7 @@ export default class Register extends Component {
         this.setState({
             phoneNumber: {
                 value: inputValue,
+                ...validationFun(inputValue)
             }
         });
     }
@@ -158,32 +175,120 @@ export default class Register extends Component {
         console.log(this.state)
     }
 
+    handleCityChange(event, validationFun) {
+        const target = event.target;
+        const inputValue = target.value;
+
+        console.log("target = " + target)
+        console.log("inputValue = " + inputValue)
+
+        this.setState({
+            city: {
+                value: inputValue,
+                ...validationFun(inputValue)
+            }
+        });
+    }
+
+    handleZipCodeChange(event, validationFun) {
+        const target = event.target;
+        const inputValue = target.value;
+
+        console.log("target = " + target)
+        console.log("inputValue = " + inputValue)
+
+        this.setState({
+            zipCode: {
+                value: inputValue,
+                ...validationFun(inputValue)
+            }
+        });
+    }
+
+    handleStreetChange(event, validationFun) {
+        const target = event.target;
+        const inputValue = target.value;
+
+        console.log("target = " + target)
+        console.log("inputValue = " + inputValue)
+
+        this.setState({
+            street: {
+                value: inputValue,
+                ...validationFun(inputValue)
+            }
+        });
+    }
+
+    handleHouseNoChange(event, validationFun) {
+        const target = event.target;
+        const inputValue = target.value;
+
+        console.log("target = " + target)
+        console.log("inputValue = " + inputValue)
+
+        this.setState({
+            houseNo: {
+                value: inputValue,
+                ...validationFun(inputValue)
+            }
+        });
+    }
+
     handleSubmit(event) {
 
-        var { name, surname, email, phoneNumber, selectedUserRole } = this.state;
+        var { name, surname, pesel, email, phoneNumber, selectedUserRole, city, zipCode, street, houseNo } = this.state;
 
         event.preventDefault();
 
-        const signupRequest = {
-            name: name.value,
-            surname: surname.value,
-            email: email.value,
-            phoneNumber: phoneNumber.value,
-            role: selectedUserRole
-        };
+        let signupRequest;
+
+        if (selectedUserRole === 'Kursant') {
+            signupRequest = {
+                name: name.value,
+                surname: surname.value,
+                email: email.value,
+                phoneNumber: phoneNumber.value,
+                userRole: selectedUserRole,
+                pesel: pesel.value,
+                address: {
+                    city: city.value,
+                    zipCode: zipCode.value,
+                    street: street.value,
+                    houseNo: houseNo.value
+                }
+            };
+        } else if (selectedUserRole === "Instruktor") {
+            signupRequest = {
+                name: name.value,
+                surname: surname.value,
+                email: email.value,
+                phoneNumber: phoneNumber.value,
+                userRole: selectedUserRole,
+                workingHours: 20
+            };
+        } else {
+            signupRequest = {
+                name: name.value,
+                surname: surname.value,
+                email: email.value,
+                phoneNumber: phoneNumber.value,
+                userRole: selectedUserRole
+            };
+        }
         console.log("***SIGNUP REQUEST***")
         console.log(signupRequest)
 
-        // signup(signupRequest)
-        //     .then(response => {
-        //         console.log(response);
-        //         this.props.history.push("/login");
-        //     }).catch(error => {
-        //     });
+        signup(signupRequest)
+            .then(response => {
+                console.log(response);
+                // this.props.history.push("/login");
+            }).catch(error => {
+            });
     }
 
     isFormValid() {
-        var { name, surname, email, phoneNumber, selectedUserRole } = this.state;
+        var { name, surname, email, phoneNumber, selectedUserRole, city, zipCode, street, houseNo } = this.state;
         return (name.validateStatus === 'success' &&
             surname.validateStatus === 'success' &&
             email.validateStatus === 'success' //&&
@@ -193,7 +298,7 @@ export default class Register extends Component {
 
     render() {
 
-        var { name, surname, pesel, email, phoneNumber, selectedUserRole } = this.state;
+        var { name, surname, pesel, email, phoneNumber, selectedUserRole, city, zipCode, street, houseNo } = this.state;
 
         return (
             <div className="registrationContainer">
@@ -211,13 +316,6 @@ export default class Register extends Component {
                         <FormControl
                             value={surname.value}
                             onChange={(event) => this.handleSurnameChange(event, this.validateSurname)}
-                        />
-                    </FormGroup>
-                    <FormGroup controlId="pesel">
-                        <ControlLabel>PESEL</ControlLabel>
-                        <FormControl
-                            value={pesel.value}
-                            onChange={(event) => this.handlePeselChange(event, this.validatePesel)}
                         />
                     </FormGroup>
                     <FormGroup controlId="email">
@@ -271,6 +369,41 @@ export default class Register extends Component {
                             <option>Instruktor</option>
                             <option>Administrator</option>
                         </FormControl>
+                    </FormGroup>
+                    <FormGroup controlId="pesel" hidden={selectedUserRole !== 'Kursant'}>
+                        <ControlLabel>PESEL</ControlLabel>
+                        <FormControl
+                            value={pesel.value}
+                            onChange={(event) => this.handlePeselChange(event, this.validatePesel)}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="city" hidden={selectedUserRole !== 'Kursant'}>
+                        <ControlLabel>Miasto</ControlLabel>
+                        <FormControl
+                            value={city.value}
+                            onChange={(event) => this.handleCityChange(event, this.validateCity)}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="zipCode" hidden={selectedUserRole !== 'Kursant'}>
+                        <ControlLabel>Kod pocztowy</ControlLabel>
+                        <FormControl
+                            value={zipCode.value}
+                            onChange={(event) => this.handleZipCodeChange(event, this.validateZipCode)}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="street" hidden={selectedUserRole !== 'Kursant'}>
+                        <ControlLabel>Ulica</ControlLabel>
+                        <FormControl
+                            value={street.value}
+                            onChange={(event) => this.handlePeselChange(event, this.validateStreet)}
+                        />
+                    </FormGroup>
+                    <FormGroup controlId="houseNo" hidden={selectedUserRole !== 'Kursant'}>
+                        <ControlLabel>Nr domu</ControlLabel>
+                        <FormControl
+                            value={houseNo.value}
+                            onChange={(event) => this.handleHouseNoChange(event, this.validateHouseNo)}
+                        />
                     </FormGroup>
                     <Button
                         disabled={!this.isFormValid()}
@@ -471,6 +604,12 @@ export default class Register extends Component {
     }
 
     validatePhoneNumber = (phoneNumber) => {
+        if (!phoneNumber) {
+            return {
+                validateStatus: 'error',
+                message: 'Numer telefonu nie może byc pusty.'
+            }
+        }
         const PHONE_NUMBER_REGEX = RegExp("^\\d{3}-\\d{3}-\\d{3}$||^\\d{3} \\d{3} \\d{3}$||^\\d{9}$");
         if (PHONE_NUMBER_REGEX.test(phoneNumber)) {
             console.log("Numer ok!!!")
@@ -484,6 +623,82 @@ export default class Register extends Component {
                 validateStatus: 'error',
                 message: 'Numer telefonu nie jest zgodny z podanym formatem.'
             }
+        }
+    }
+
+    validateCity = (city) => {
+        if (city.lenght < 1) {
+            return {
+                validateStatus: 'error',
+                message: `Nazwa miasta jest zbyt krótka.`
+            }
+        } else if (city.lenght > 100) {
+            return {
+                validateStatus: 'error',
+                message: `Nazwa miasta jest zbyt długa.`
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                message: null,
+            };
+        }
+    }
+
+    validateZipCode = (zipCode) => {
+        if (zipCode.lenght < 1) {
+            return {
+                validateStatus: 'error',
+                message: `Kod pocztowy jest zbyt krótki.`
+            }
+        } else if (zipCode.lenght > 100) {
+            return {
+                validateStatus: 'error',
+                message: `Kod pocztowy jest zbyt długi.`
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                message: null,
+            };
+        }
+    }
+
+    validateStreet = (street) => {
+        if (street.lenght < 1) {
+            return {
+                validateStatus: 'error',
+                message: `Nazwa ulicy jest zbyt krótka.`
+            }
+        } else if (street.lenght > 100) {
+            return {
+                validateStatus: 'error',
+                message: `Nazwa ulicy jest zbyt długa.`
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                message: null,
+            };
+        }
+    }
+
+    validateHouseNo = (houseNo) => {
+        if (houseNo.lenght < 1) {
+            return {
+                validateStatus: 'error',
+                message: `Numer domu jest zbyt krótki.`
+            }
+        } else if (houseNo.lenght > 100) {
+            return {
+                validateStatus: 'error',
+                message: `Numer domu jest zbyt długi.`
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                message: null,
+            };
         }
     }
 }
