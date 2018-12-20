@@ -23,10 +23,18 @@
   padding: 8px;
 }
 
+#currentPaymentCol{
+  width: 10%;
+}
+
 #studentsLoadingLabel, #studentsErrorLabel{
   font-size: 32px;
   text-align: center;
   margin-top: 12%;
+}
+
+#activateButton{
+  width: 100%;
 }
 
 #deactivateButton{

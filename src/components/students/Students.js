@@ -228,10 +228,9 @@ export default class Students extends Component {
               <th>E-mail</th>
               <th>Data rejestracji</th>
               <th>Kurs</th>
-              <th>Zapłacona kwota</th>
+              <th id="currentPaymentCol">Zapłacona kwota</th>
               <th>Płatności</th>
-              <th>Aktywacja</th>
-              <th>Usuń</th>
+              <th>Aktywność</th>
             </tr>
           </thead>
           <tbody>
@@ -249,20 +248,19 @@ export default class Students extends Component {
                 <td >{student.course != null && student.course.currentPayment}</td>
                 <td>
                   {/* {student.course != null && student.course.currentPayment !== 1500 && */}
-                    {<Button onClick={this.handleShowPaymentsModal}>
-                      Dodaj płatność
+                  {<Button onClick={this.handleShowPaymentsModal}>
+                    Dodaj płatność
                   </Button>}
                 </td>
-                <td>{/*</td>{!student.active &&*/}
-                  {<Button onClick={this.handleShowActivateModal}>
+                <td>{!student.active &&
+                  <Button id="activateButton" onClick={this.handleShowActivateModal}>
                     Aktywuj
                   </Button>}
-                </td>
-                <td>
-                  <Button id="deactivateButton" className="material-icons" onClick={this.handleShowDeleteModal}>
-                    {/* remove_circle */}
-                    delete_forever
-                  </Button>
+                  {student.active &&
+                    <Button id="deactivateButton" className="material-icons" onClick={this.handleShowDeleteModal}>
+                      {/* remove_circle */}
+                      delete_forever
+                  </Button>}
                 </td>
               </tr>
             ))}

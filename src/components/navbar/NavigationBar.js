@@ -4,6 +4,7 @@ import { getCurrentUser } from "utils/APIUtils";
 import "./NavigationBar.css";
 
 const currentUserName = 'Jakub';
+const currentUser = getCurrentUser();
 
 export default class NavigationBar extends Component {
     constructor(props) {
@@ -34,6 +35,7 @@ export default class NavigationBar extends Component {
 
     handleLogoutButtonClick() {
         console.log("WYLOGOWUJĘ CIĘ KOLEŻKO");
+        this.props.history.push("/");
         this.handleCloseLogoutModal();
     }
 
@@ -84,6 +86,7 @@ export default class NavigationBar extends Component {
 
         return (
             <Navbar className="nav-bar" fixedTop responsive="true" hidden={!isLoggedIn}>
+            {/* <Navbar className="nav-bar" fixedTop responsive="true" hidden={true}> */}
                 <Navbar.Header responsive="true">
                     <a href="/">
                         <Image id="logoBrand" src="/logo.png" rounded responsive />
@@ -104,9 +107,15 @@ export default class NavigationBar extends Component {
                         <NavItem className="nav-bar-item" eventKey={3} href="/students">
                             Kursanci
                         </NavItem>
-                        <NavItem className="nav-bar-item" eventKey={3} href="/register">
+                        <NavItem disabled={!currentUser.role==='Administrator'} className="nav-bar-item" eventKey={3} href="/register">
                             Rejestruj
                         </NavItem>
+
+
+                        <NavItem className="nav-bar-item" href="/login">
+                            Zaloguj
+                        </NavItem>
+
                         <NavItem className="nav-bar-item" eventKey={3} href="/exams">
                             Egzaminy
                         </NavItem>
@@ -119,7 +128,7 @@ export default class NavigationBar extends Component {
                         <NavItem className="nav-bar-item" eventKey={3} href="/payments">
                             Płatności
                         </NavItem>
-                        {/* <NavItem className="nav-bar-item" eventKey={4} href="/instructors">
+                        <NavItem className="nav-bar-item" eventKey={4} href="/instructors">
                             Instruktorzy
                         </NavItem>
                         <NavItem className="nav-bar-item" eventKey={5} href="/cars">
@@ -127,7 +136,7 @@ export default class NavigationBar extends Component {
                         </NavItem>
                         <NavItem className="nav-bar-item" eventKey={6} href="/cities">
                             Miasta
-                        </NavItem> */}
+                        </NavItem>
                     </Nav>
                     {loggingNavItem}
                     {logoutModal}
@@ -136,3 +145,4 @@ export default class NavigationBar extends Component {
         );
     }
 }
+

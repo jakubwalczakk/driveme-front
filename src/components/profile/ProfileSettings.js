@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "constants/constants";
 import { trimDate } from "utils/APIUtils";
 import "./ProfileSettings.css";
 
@@ -10,58 +10,107 @@ export default class ProfileSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: "",
-      name: "",
-      surname: "",
-      registrationDate: [],
-      pesel: "",
-      email: "",
-      password: "",
-      phoneNumber: "",
-      city: "",
-      zipCode: "",
-      street: "",
-      houseNo: ""
+      id: {
+        value: ''
+      },
+      name: {
+        value: ''
+      },
+      surname: {
+        value: ''
+      },
+      registrationDate: {
+        value: ''
+      },
+      pesel: {
+        value: ''
+      },
+      email: {
+        value: ''
+      },
+      password: {
+        value: ''
+      },
+      phoneNumber: {
+        value: ''
+      },
+      city: {
+        value: ''
+      },
+      zipCode: {
+        value: ''
+      },
+      street: {
+        value: ''
+      },
+      houseNo: {
+        value: ''
+      }
     }
+    this.handleChange = this.handleChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
+    this.validateForm = this.validateForm.bind(this);
+    this.validatePassword = this.validatePassword.bind(this);
+    this.validatePhoneNumber = this.validatePhoneNumber.bind(this);
+    this.validateCity = this.validateCity.bind(this);
+    this.validateZipCode = this.validateZipCode.bind(this);
+    this.validateStreet = this.validateStreet.bind(this);
+    this.validateHouseNo = this.validateHouseNo.bind(this);
   }
 
-  handleChange = event => {
+  handleChange = (event, validationFun) => {
+    const target = event.target;
+    const inputValue = target.value;
+
+    console.log("target = " + target)
+    console.log("inputValue = " + inputValue)
+
     this.setState({
-      [event.target.id]: event.target.value
+      [event.target.id]: {
+        value: inputValue,
+        ...validationFun(inputValue)
+      }
     });
   }
 
   handleSave() {
-    console.log(this.state)
-    const updateRequest={
-      id: this.state.id,
-      password: this.state.password,
-      phoneNumber: this.state.phoneNumber,
-      address:{
-        city: this.state.city,
-        zipCode: this.state.zipCode,
-        street: this.state.street,
-        houseNo: this.state.houseNo
+
+    var { id, password, phoneNumber, city, zipCode, street, houseNo } = this.state;
+
+    if (password.validateStatus) {
+
+      console.log(this.state)
+      const updateRequest = {
+        id: id,
+        password: password,
+        phoneNumber: phoneNumber,
+        address: {
+          city: city,
+          zipCode: zipCode,
+          street: street,
+          houseNo: houseNo
+        }
       }
+      console.log(updateRequest)
+
+      fetch(studentUrl, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateRequest)
+      }).then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Coś poszło nie tak podczas aktualizacji danych studenta...');
+        }
+      });
     }
-    console.log(updateRequest)
-
-    fetch(studentUrl, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updateRequest)
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Coś poszło nie tak podczas aktualizacji danych studenta...');
-      }
-    });
-
+    else {
+      console.log("WIELKI BŁĄd")
+    }
   }
 
   componentDidMount() {
@@ -73,18 +122,27 @@ export default class ProfileSettings extends Component {
           throw new Error('Coś poszło nie tak podczas pobierania danych użytkownika...');
         }
       }).then(data => this.setState({
-        id: data.id, name: data.name, surname: data.surname,
-        registrationDate: trimDate(data.registrationDate),
-        pesel: data.pesel, email: data.email, password: data.password,
-        phoneNumber: data.phoneNumber,
-        city: data.address.city, zipCode: data.address.zipCode,
-        street: data.address.street, houseNo: data.address.houseNo
+        id: { value: data.id },
+        name: { value: data.name },
+        surname: { value: data.surname },
+        registrationDate: { value: trimDate(data.registrationDate) },
+        pesel: { value: data.pesel },
+        email: { value: data.email },
+        phoneNumber: { value: data.phoneNumber },
+        city: { value: data.address.city },
+        zipCode: { value: data.address.zipCode },
+        street: { value: data.address.street },
+        houseNo: { value: data.address.houseNo }
       }))
   }
 
   render() {
 
-    const tooltip = (
+    var { id, name, surname, registrationDate, pesel, email, password, phoneNumber, city, zipCode, street, houseNo } = this.state;
+
+    console.log(this.state)
+
+    const passwordTooltip = (
       <Tooltip id="password-tooltip">
         <strong>Tutaj możesz zmienić swoje hasło.</strong>
       </Tooltip>);
@@ -96,14 +154,14 @@ export default class ProfileSettings extends Component {
             <ControlLabel>Imię</ControlLabel>
             <FormControl id="name"
               disabled
-              value={this.state.name}
+              value={name.value}
             />
           </FormGroup>
           <FormGroup id="surname-form">
             <ControlLabel>Nazwisko</ControlLabel>
             <FormControl id="surname"
               disabled
-              value={this.state.surname}
+              value={surname.value}
             />
           </FormGroup>
         </div>
@@ -113,14 +171,14 @@ export default class ProfileSettings extends Component {
             <ControlLabel>Data rejestracji</ControlLabel>
             <FormControl id="registrationDate"
               disabled
-              value={this.state.registrationDate}
+              value={registrationDate.value}
             />
           </FormGroup>
           <FormGroup id="pesel-form">
             <ControlLabel>PESEL</ControlLabel>
             <FormControl id="pesel"
               disabled
-              value={this.state.pesel}
+              value={pesel.value}
             />
           </FormGroup>
         </div>
@@ -130,17 +188,17 @@ export default class ProfileSettings extends Component {
             <ControlLabel>E-mail</ControlLabel>
             <FormControl id="email"
               disabled
-              value={this.state.email}
+              value={email.value}
             />
           </FormGroup>
-          <OverlayTrigger placement="left" overlay={tooltip}>
+          <OverlayTrigger placement="left" overlay={passwordTooltip}>
             <FormGroup id="password-form">
               <ControlLabel>Hasło</ControlLabel>
               <FormControl id="password"
                 type="password"
                 minLength={8}
-                value={this.state.password}
-                onChange={this.handleChange}
+                value={password.value}
+                onChange={(event) => this.handleChange(event, this.validatePassword)}
               />
             </FormGroup>
           </OverlayTrigger>
@@ -148,8 +206,8 @@ export default class ProfileSettings extends Component {
             <ControlLabel>Nr telefonu</ControlLabel>
             <FormControl id="phoneNumber" type="text"
               pattern="^\d{3}-\d{3}-\d{3}$||^\d{3} \d{3} \d{3}$||^\d{9}$"
-              value={this.state.phoneNumber}
-              onChange={this.handleChange}
+              value={phoneNumber.value}
+              onChange={(event) => this.handleChange(event, this.validatePhoneNumber)}
             />
           </FormGroup>
         </div>
@@ -158,8 +216,8 @@ export default class ProfileSettings extends Component {
           <FormGroup id="city-form">
             <ControlLabel>Miasto</ControlLabel>
             <FormControl id="city"
-              value={this.state.city}
-              onChange={this.handleChange}
+              value={city.value}
+              onChange={(event) => this.handleChange(event, this.validateCity)}
             />
           </FormGroup>
           <FormGroup id="zipCode-form">
@@ -167,28 +225,162 @@ export default class ProfileSettings extends Component {
             <FormControl id="zipCode"
               type="text"
               pattern="^\d{2}-\d{3}$"
-              value={this.state.zipCode}
-              onChange={this.handleChange}
+              value={zipCode.value}
+              onChange={(event) => this.handleChange(event, this.validateZipCode)}
             />
           </FormGroup>
           <FormGroup id="street-form">
             <ControlLabel>Ulica</ControlLabel>
             <FormControl id="street"
-              value={this.state.street}
-              onChange={this.handleChange}
+              value={street.value}
+              onChange={(event) => this.handleChange(event, this.validateStreet)}
             />
           </FormGroup>
           <FormGroup id="houseNo-form">
             <ControlLabel>Nr domu</ControlLabel>
             <FormControl id="houseNo"
-              value={this.state.houseNo}
-              onChange={this.handleChange}
+              value={houseNo.value}
+              onChange={(event) => this.handleChange(event, this.validateHouseNo)}
             />
           </FormGroup>
         </div>
-        <Button id="saveSettingsBtn" onClick={this.handleSave}>Zapisz</Button>
+        <Button id="saveSettingsBtn" onClick={this.handleSave} disabled={!this.validateForm()}>Zapisz</Button>
       </div>
     );
   }
 
+  validateForm() {
+    var { password, phoneNumber, city, zipCode, street, houseNo } = this.state;
+
+    //FIXME
+    //FIXME
+    //FIXME
+    //FIXME
+    //FIXME
+    return password.validateStatus;
+    //  &&
+    //   phoneNumber.validateStatus &&
+    //   city.validateStatus &&
+    //   zipCode.validateStatus &&
+    //   street.validateStatus &&
+    //   houseNo.validateStatus;
+  }
+
+  validatePassword = (password) => {
+    if (password.length < PASSWORD_MIN_LENGTH) {
+      return {
+        validateStatus: false,
+        message: `Hasło jest zbyt krótkie (Hasło wymaga minimum ${PASSWORD_MIN_LENGTH} znaków).`
+      }
+    } else if (password.length > PASSWORD_MAX_LENGTH) {
+      return {
+        validateStatus: false,
+        message: `Hasło jest zbyt długie (Hasło może składać się z maksimum ${PASSWORD_MAX_LENGTH} znaków).`
+      }
+    } else {
+      return {
+        validateStatus: true,
+        message: null,
+      };
+    }
+  }
+
+  validatePhoneNumber = (phoneNumber) => {
+    if (!phoneNumber) {
+      return {
+        validateStatus: false,
+        message: 'Numer telefonu nie może byc pusty.'
+      }
+    }
+    const PHONE_NUMBER_REGEX = RegExp("^\\d{3}-\\d{3}-\\d{3}$||^\\d{3} \\d{3} \\d{3}$||^\\d{9}$");
+    if (PHONE_NUMBER_REGEX.test(phoneNumber)) {
+      console.log("Numer ok!!!")
+      return {
+        validateStatus: true,
+        message: null,
+      };
+    } else {
+      console.log("błędny numer!!!")
+      return {
+        validateStatus: false,
+        message: 'Numer telefonu nie jest zgodny z podanym formatem.'
+      }
+    }
+  }
+
+  validateCity = (city) => {
+    if (city.length < 1) {
+      return {
+        validateStatus: false,
+        message: `Nazwa miasta jest zbyt krótka.`
+      }
+    } else if (city.length > 100) {
+      return {
+        validateStatus: false,
+        message: `Nazwa miasta jest zbyt długa.`
+      }
+    } else {
+      return {
+        validateStatus: true,
+        message: null,
+      };
+    }
+  }
+
+  validateZipCode = (zipCode) => {
+    if (zipCode.length < 1) {
+      return {
+        validateStatus: false,
+        message: `Kod pocztowy jest zbyt krótki.`
+      }
+    } else if (zipCode.length > 100) {
+      return {
+        validateStatus: false,
+        message: `Kod pocztowy jest zbyt długi.`
+      }
+    } else {
+      return {
+        validateStatus: true,
+        message: null,
+      };
+    }
+  }
+
+  validateStreet = (street) => {
+    if (street.length < 1) {
+      return {
+        validateStatus: false,
+        message: `Nazwa ulicy jest zbyt krótka.`
+      }
+    } else if (street.length > 100) {
+      return {
+        validateStatus: false,
+        message: `Nazwa ulicy jest zbyt długa.`
+      }
+    } else {
+      return {
+        validateStatus: true,
+        message: null,
+      };
+    }
+  }
+
+  validateHouseNo = (houseNo) => {
+    if (houseNo.length < 1) {
+      return {
+        validateStatus: false,
+        message: `Numer domu jest zbyt krótki.`
+      }
+    } else if (houseNo.length > 100) {
+      return {
+        validateStatus: false,
+        message: `Numer domu jest zbyt długi.`
+      }
+    } else {
+      return {
+        validateStatus: true,
+        message: null,
+      };
+    }
+  }
 }

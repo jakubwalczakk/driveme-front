@@ -289,10 +289,10 @@ export default class Register extends Component {
 
     isFormValid() {
         var { name, surname, email, phoneNumber, selectedUserRole, city, zipCode, street, houseNo } = this.state;
-        return (name.validateStatus === 'success' &&
-            surname.validateStatus === 'success' &&
-            email.validateStatus === 'success' //&&
-            //this.state.phoneNumber.validateStatus === 'success' /
+        return (name.validateStatus &&
+            surname.validateStatus &&
+            email.validateStatus //&&
+            //phoneNumber.validateStatus;
         );
     }
 
@@ -421,23 +421,23 @@ export default class Register extends Component {
     validateName = (name) => {
         if (!name) {
             return {
-                validateStatus: 'error',
-                errorMsg: `Imię nie może być puste.)`
+                validateStatus: false,
+                errorMsg: `Imię nie może być puste.`
             }
         }
         else if (name.length < NAME_MIN_LENGTH) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 errorMsg: `Imię jest zbyt krótkie (Poprawnę imię zawiera co najmniej ${NAME_MIN_LENGTH} znaków.)`
             }
         } else if (name.length > NAME_MAX_LENGTH) {
             return {
-                validationStatus: 'error',
+                validationStatus: false,
                 errorMsg: `Imię jest zbyt długie (Poprawnę imię zawiera co najwyżej ${NAME_MAX_LENGTH} znaków.)`
             }
         } else {
             return {
-                validateStatus: 'success',
+                validateStatus: true,
                 errorMsg: null,
             };
         }
@@ -446,23 +446,23 @@ export default class Register extends Component {
     validateSurname = (surname) => {
         if (!surname) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 errorMsg: `Nazwisko nie może być puste.)`
             }
         }
         else if (surname.length < SURNAME_MIN_LENGTH) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 errorMsg: `Nazwisko jest zbyt krótkie (Poprawnę nazwisko zawiera co najmniej ${NAME_MIN_LENGTH} znaków.)`
             }
         } else if (surname.length > SURNAME_MAX_LENGTH) {
             return {
-                validationStatus: 'error',
+                validationStatus: false,
                 errorMsg: `Nazwisko jest zbyt długie (Poprawnę nazwisko zawiera co najwyżej ${NAME_MAX_LENGTH} znaków.)`
             }
         } else {
             return {
-                validateStatus: 'success',
+                validateStatus: true,
                 errorMsg: null,
             };
         }
@@ -471,25 +471,25 @@ export default class Register extends Component {
     validatePesel = (pesel) => {
         if (!pesel) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 errorMsg: `Numer PESEL nie może być pusty.)`
             }
         }
         else if (pesel.length !== PESEL_LENGTH) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 errorMsg: `PESEL nie składa się z 11 znaków, poprawny PESEL składa się z ${PESEL_LENGTH} znaków.)`
             }
         }
         const PESEL_REGEX = RegExp('^[0-9]{11}$');
         if (!PESEL_REGEX.test(pesel)) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: 'Podany numer PESEL nie jest poprawny.'
             }
         }
         return {
-            validateStatus: 'success',
+            validateStatus: true,
             errorMsg: null,
         };
     }
@@ -498,19 +498,19 @@ export default class Register extends Component {
     validateEmail = (email) => {
         if (!email) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: 'Email nie może byc pusty.'
             }
         }
         const EMAIL_REGEX = RegExp('[^@ ]+@[^@ ]+\\.[^@ ]+');
         if (!EMAIL_REGEX.test(email)) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: 'Podany email nie jest poprawny.'
             }
         }
         return {
-            validateStatus: 'success',
+            validateStatus: true,
             message: null
         }
     }
@@ -519,7 +519,7 @@ export default class Register extends Component {
         const emailValue = this.state.email;
         const emailValidation = this.validateEmail(emailValue);
 
-        if (emailValidation.validateStatus === 'error') {
+        if (!emailValidation.validateStatus) {
             this.setState({
                 email: emailValue,
                 ...emailValidation
@@ -538,13 +538,13 @@ export default class Register extends Component {
                 if (response.available) {
                     this.setState({
                         email: emailValue,
-                        validateStatus: 'success',
+                        validateStatus: true,
                         errorMsg: null
                     });
                 } else {
                     this.setState({
                         email: emailValue,
-                        validateStatus: 'error',
+                        validateStatus: false,
                         errorMsg: 'This Email is already registered'
                     });
                 }
@@ -552,51 +552,51 @@ export default class Register extends Component {
                 // Marking validateStatus as success, Form will be recchecked at server
                 this.setState({
                     email: emailValue,
-                    validateStatus: 'success',
+                    validateStatus: true,
                     errorMsg: null
                 });
             });
     }
 
     validatePassword = (password) => {
-        if (password.lenght < PASSWORD_MIN_LENGTH) {
+        if (password.length < PASSWORD_MIN_LENGTH) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Hasło jest zbyt krótkie (Hasło wymaga minimum ${PASSWORD_MIN_LENGTH} znaków).`
             }
-        } else if (password.lenght > PASSWORD_MAX_LENGTH) {
+        } else if (password.length > PASSWORD_MAX_LENGTH) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Hasło jest zbyt długie (Hasło może składać się z maksimum ${PASSWORD_MAX_LENGTH} znaków).`
             }
         } else {
             return {
-                validateStatus: 'success',
+                validateStatus: true,
                 message: null,
             };
         }
     }
 
     validatePasswordRepeat = (password) => {
-        if (password.lenght < PASSWORD_MIN_LENGTH) {
+        if (password.length < PASSWORD_MIN_LENGTH) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Hasło jest zbyt krótkie (Hasło wymaga minimum ${PASSWORD_MIN_LENGTH} znaków).`
             }
-        } else if (password.lenght > PASSWORD_MAX_LENGTH) {
+        } else if (password.length > PASSWORD_MAX_LENGTH) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Hasło jest zbyt długie (Hasło może składać się z maksimum ${PASSWORD_MAX_LENGTH} znaków).`
             }
         } else {
             if (password === this.state.password) {
                 return {
-                    validateStatus: 'success',
+                    validateStatus: true,
                     message: null,
                 };
             } else {
                 return {
-                    validateStatus: 'error',
+                    validateStatus: false,
                     message: `Podane hasła nie są ze sobą zgodne.`
                 }
             }
@@ -606,7 +606,7 @@ export default class Register extends Component {
     validatePhoneNumber = (phoneNumber) => {
         if (!phoneNumber) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: 'Numer telefonu nie może byc pusty.'
             }
         }
@@ -614,89 +614,89 @@ export default class Register extends Component {
         if (PHONE_NUMBER_REGEX.test(phoneNumber)) {
             console.log("Numer ok!!!")
             return {
-                validateStatus: 'success',
+                validateStatus: true,
                 message: null,
             };
         } else {
             console.log("błędny numer!!!")
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: 'Numer telefonu nie jest zgodny z podanym formatem.'
             }
         }
     }
 
     validateCity = (city) => {
-        if (city.lenght < 1) {
+        if (city.length < 1) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Nazwa miasta jest zbyt krótka.`
             }
-        } else if (city.lenght > 100) {
+        } else if (city.length > 100) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Nazwa miasta jest zbyt długa.`
             }
         } else {
             return {
-                validateStatus: 'success',
+                validateStatus: true,
                 message: null,
             };
         }
     }
 
     validateZipCode = (zipCode) => {
-        if (zipCode.lenght < 1) {
+        if (zipCode.length < 1) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Kod pocztowy jest zbyt krótki.`
             }
-        } else if (zipCode.lenght > 100) {
+        } else if (zipCode.length > 100) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Kod pocztowy jest zbyt długi.`
             }
         } else {
             return {
-                validateStatus: 'success',
+                validateStatus: true,
                 message: null,
             };
         }
     }
 
     validateStreet = (street) => {
-        if (street.lenght < 1) {
+        if (street.length < 1) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Nazwa ulicy jest zbyt krótka.`
             }
-        } else if (street.lenght > 100) {
+        } else if (street.length > 100) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Nazwa ulicy jest zbyt długa.`
             }
         } else {
             return {
-                validateStatus: 'success',
+                validateStatus: true,
                 message: null,
             };
         }
     }
 
     validateHouseNo = (houseNo) => {
-        if (houseNo.lenght < 1) {
+        if (houseNo.length < 1) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Numer domu jest zbyt krótki.`
             }
-        } else if (houseNo.lenght > 100) {
+        } else if (houseNo.length > 100) {
             return {
-                validateStatus: 'error',
+                validateStatus: false,
                 message: `Numer domu jest zbyt długi.`
             }
         } else {
             return {
-                validateStatus: 'success',
+                validateStatus: true,
                 message: null,
             };
         }

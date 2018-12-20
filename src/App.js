@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter, Route } from 'react-router-dom';
 import { ACCESS_TOKEN } from 'constants/constants';
 import { getCurrentUser } from './utils/APIUtils';
+import MainPage from "./components/mainpage/MainPage";
 import NavigationBar from "./components/navbar/NavigationBar";
 import Login from './components/login/Login';
 import Register from './components/login/Register';
@@ -76,7 +77,7 @@ export default class App extends Component {
     return (
       <div>
         <NavigationBar />
-        <Route exact path="/" component={Course} />
+        <Route exact path="/" component={MainPage} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/profile" component={ProfileSettings} />
