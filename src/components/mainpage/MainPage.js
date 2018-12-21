@@ -17,29 +17,24 @@ export default class MainPage extends Component {
   }
 
   componentDidMount() {
-    var options = {
-      url: API_BASE_URL + '/mainpage',
-      method: 'GET',
-    }
-    request(options)
-    .then(data=>{
-      this.setState({
-        mainPageData:data
-      })
-    })
+    // var options = {
+    //   url: API_BASE_URL + '/mainpage',
+    //   method: 'GET',
+    // }
+    // request(options)
+    // .then(data=>{
+    //   this.setState({
+    //     mainPageData:data
+    //   })
+    // })
     
   }
 
   render() {
 
-    var { mainPageData } = this.state;
-
-    console.log("Uwaga")
-    console.log(mainPageData);
     return (
       <div id="mainPageContainer">
-        DZIEŃ DOBRY, TUTAJ {mainPageData}
-
+        DZIEŃ DOBRY, TUTAJ 
 
       </div>
     );

@@ -1,10 +1,16 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger } from "react-bootstrap";
+import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger, Image } from "react-bootstrap";
+import ReactFileReader from 'react-file-reader';
 import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "constants/constants";
 import { trimDate } from "utils/APIUtils";
 import "./ProfileSettings.css";
 
 const studentUrl = API_BASE_URL + '/student';
+const instructorUrl = API_BASE_URL + '/instructor';
+
+const currentUser = {
+  role: 'ADMIN'
+}
 
 export default class ProfileSettings extends Component {
   constructor(props) {
@@ -45,10 +51,11 @@ export default class ProfileSettings extends Component {
       },
       houseNo: {
         value: ''
-      }
+      },
+      image: ''
     }
     this.handleChange = this.handleChange.bind(this);
-    this.handleSave = this.handleSave.bind(this);
+    this.handleSaveChanges = this.handleSaveChanges.bind(this);
     this.validateForm = this.validateForm.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.validatePhoneNumber = this.validatePhoneNumber.bind(this);
@@ -56,14 +63,11 @@ export default class ProfileSettings extends Component {
     this.validateZipCode = this.validateZipCode.bind(this);
     this.validateStreet = this.validateStreet.bind(this);
     this.validateHouseNo = this.validateHouseNo.bind(this);
+    this.handleChangePhoto = this.handleChangePhoto.bind(this);
   }
 
   handleChange = (event, validationFun) => {
-    const target = event.target;
-    const inputValue = target.value;
-
-    console.log("target = " + target)
-    console.log("inputValue = " + inputValue)
+    const inputValue = event.target.value;
 
     this.setState({
       [event.target.id]: {
@@ -73,11 +77,11 @@ export default class ProfileSettings extends Component {
     });
   }
 
-  handleSave() {
+  handleSaveChanges() {
 
     var { id, password, phoneNumber, city, zipCode, street, houseNo } = this.state;
 
-    if (password.validateStatus) {
+    if (this.validateForm()) {
 
       console.log(this.state)
       const updateRequest = {
@@ -113,6 +117,46 @@ export default class ProfileSettings extends Component {
     }
   }
 
+  handleChangePhoto = (files) => {
+
+    let photoString = files.base64;
+    let photo;
+
+    const jpegSubstring = "data:image/jpeg;base64,";
+    const pngSubstring = "data:image/png;base64,";
+
+    if (photoString.includes(jpegSubstring)) {
+      photo = photoString.replace(jpegSubstring, "")
+    } else if (photoString.includes(pngSubstring)) {
+      photo = photoString.replace(pngSubstring, "")
+    } else {
+      photo = null;
+    }
+
+    if (photo != null) {
+      const updateRequest = {
+        id: 7,
+        photo: photo
+      }
+
+      fetch(instructorUrl, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateRequest)
+      }).then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Coś poszło nie tak podczas aktualizacji danych instruktora...');
+        }
+      });
+      this.componentDidMount();
+    }
+  }
+
   componentDidMount() {
     fetch(studentUrl + '/11')
       .then(response => {
@@ -134,11 +178,28 @@ export default class ProfileSettings extends Component {
         street: { value: data.address.street },
         houseNo: { value: data.address.houseNo }
       }))
+
+
+    fetch(instructorUrl + '/7', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Coś poszło nie tak podczas pobierania danych instruktora...');
+      }
+    }).then(data => this.setState({
+      image: data.photo
+    }));
   }
 
   render() {
 
-    var { id, name, surname, registrationDate, pesel, email, password, phoneNumber, city, zipCode, street, houseNo } = this.state;
+    var { id, name, surname, registrationDate, pesel, email, password, phoneNumber, city, zipCode, street, houseNo, image } = this.state;
 
     console.log(this.state)
 
@@ -149,6 +210,15 @@ export default class ProfileSettings extends Component {
 
     return (
       <div id="profileSettingsContainer">
+        <div id="userPhotoContainer" hidden={currentUser.role !== 'Instruktor'}>
+          {/*src={"data:image/jpeg;base64," + image} src="/legoman.jpg"*/}
+          <Image id="userPhotoImage" src={"data:image/jpeg;base64," + image} rounded responsive />
+          <ReactFileReader fileTypes={[".jpg", ".png"]} base64={true} multipleFiles={false} handleFiles={this.handleChangePhoto}>
+            <Button id="userPhotoChangeButton" bsStyle="primary">
+              Zmień
+          </Button>
+          </ReactFileReader>
+        </div>
         <div id="nameContainer">
           <FormGroup id="name-form">
             <ControlLabel>Imię</ControlLabel>
@@ -244,7 +314,7 @@ export default class ProfileSettings extends Component {
             />
           </FormGroup>
         </div>
-        <Button id="saveSettingsBtn" onClick={this.handleSave} disabled={!this.validateForm()}>Zapisz</Button>
+        <Button id="saveSettingsBtn" onClick={this.handleSaveChanges} disabled={!this.validateForm()}>Zapisz</Button>
       </div>
     );
   }
@@ -257,9 +327,8 @@ export default class ProfileSettings extends Component {
     //FIXME
     //FIXME
     //FIXME
-    return password.validateStatus;
-    //  &&
-    //   phoneNumber.validateStatus &&
+    return password.validateStatus &&
+      phoneNumber.validateStatus;// &&
     //   city.validateStatus &&
     //   zipCode.validateStatus &&
     //   street.validateStatus &&

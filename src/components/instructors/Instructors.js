@@ -59,7 +59,7 @@ export default class Instructors extends Component {
             {instructors.map(instructor => (
               <tr key={instructor.id}>
                 <td>
-                  <Image id="instructorPhoto" src={"data:image/jpeg;base64," + instructor.instructorPhoto} rounded responsive />
+                  <Image id="instructorPhoto" src={"data:image/jpeg;base64," + instructor.photo} rounded responsive />
                 </td>
                 <td>{instructor.name}</td>
                 <td>{instructor.surname}</td>

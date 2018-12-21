@@ -6,7 +6,7 @@ export const request = (options) => {
   })
 
   if (localStorage.getItem(ACCESS_TOKEN)) {
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    headers.append('Authorization', 'Bearer ' + "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYWt1Yi53YWxjemFrQGRyaXZlbWUucGwiLCJzY29wZXMiOiJLdXJzYW50IiwiaWF0IjoxNTQ1NDA3NzUwLCJleHAiOjE1NDU0MTc3NTB9.DBln7yHnIfhzCj6GPYJEsQJ0quV3JiP78WEbiNF6mA_1ZIZqwlGG-ClNkPcXGwQNq5qeUhOzrNm3HACyAuB0qg");//localStorage.getItem(ACCESS_TOKEN))
   }
 
   const defaults = { headers: headers };

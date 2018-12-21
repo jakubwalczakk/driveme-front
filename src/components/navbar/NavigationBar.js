@@ -4,7 +4,7 @@ import { getCurrentUser } from "utils/APIUtils";
 import "./NavigationBar.css";
 
 const currentUserName = 'Jakub';
-const currentUser = getCurrentUser();
+// const currentUser = getCurrentUser();
 
 export default class NavigationBar extends Component {
     constructor(props) {
@@ -47,7 +47,7 @@ export default class NavigationBar extends Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h1 id="logoutHeader">{`Hej ${currentUserName},`}</h1>
+                    <h1 id="logoutHeader">{`Hej Jakub,`}</h1>
                     <p id="logoutQuestion">czy na pewno chcesz się wylogować?</p>
                 </Modal.Body>
                 <Modal.Footer>
@@ -67,7 +67,7 @@ export default class NavigationBar extends Component {
             loggingNavItem =
                 <Nav pullRight>
                     <NavItem id="welcomeMsg" className="nav-bar-item-logged" href="/profile">
-                        {`Cześć ${currentUserName}!`}
+                        {`Cześć Jakub!`}
                     </NavItem>
                     <NavItem id="logoutButton" className="material-icons nav-bar-item-logged" onClick={this.handleShowLogoutModal}>
                         power_settings_new
@@ -101,7 +101,7 @@ export default class NavigationBar extends Component {
                         <NavItem className="nav-bar-item" eventKey={2} href="/progress">
                             Twoje postępy
                         </NavItem>
-                        <NavItem className="nav-bar-item" eventKey={2} href="/rate">
+                        {/* <NavItem className="nav-bar-item" eventKey={2} href="/rate">
                             Oceń
                         </NavItem>
                         <NavItem className="nav-bar-item" eventKey={3} href="/students">
@@ -118,7 +118,7 @@ export default class NavigationBar extends Component {
 
                         <NavItem className="nav-bar-item" eventKey={3} href="/exams">
                             Egzaminy
-                        </NavItem>
+                        </NavItem> */}
                         <NavItem className="nav-bar-item" eventKey={3} href="/reservations">
                             Rezerwacje
                         </NavItem>

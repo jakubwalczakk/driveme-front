@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route } from 'react-router-dom';
-import { ACCESS_TOKEN } from 'constants/constants';
-import { getCurrentUser } from './utils/APIUtils';
+import { ACCESS_TOKEN, API_BASE_URL } from 'constants/constants';
+import { getCurrentUser, request } from './utils/APIUtils';
 import MainPage from "./components/mainpage/MainPage";
 import NavigationBar from "./components/navbar/NavigationBar";
 import Login from './components/login/Login';
@@ -25,36 +25,39 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // currentUser: null,
+      currentUser: '',
       isAuthenticated: false,
       isLoading: false
     }
 
     this.handleLogout = this.handleLogout.bind(this);
-    // this.loadCurrentUser = this.loadCurrentUser.bind(this);
+    this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
   }
 
-  // loadCurrentUser() {
-  //   this.setState({
-  //     isLoading: true
-  //   });
-  //   getCurrentUser()
-  //     .then(response => {
-  //       this.setState({
-  //         currentUser: response,
-  //         isAuthenticated: true,
-  //         isLoading: false
-  //       });
-  //     }).catch(error => {
-  //       this.setState({
-  //         isLoading: false
-  //       });
-  //     });
-  // }
+  loadCurrentUser() {
+    this.setState({
+      isLoading: true
+    });
+
+    getCurrentUser()
+      .then(response => {
+        this.setState({
+          currentUser: response,
+          isAuthenticated: true,
+          isLoading: false
+        });
+      }).catch(error => {
+        this.setState({
+          isLoading: false
+        });
+      });
+  }
 
   componentDidMount() {
-    // this.loadCurrentUser();
+    this.loadCurrentUser();
+    var{currentUser} = this.state;
+    console.log(currentUser)
   }
 
   handleLogout(redirectTo = "/") {
@@ -69,8 +72,8 @@ export default class App extends Component {
   }
 
   handleLogin() {
-    this.loadCurrentUser();
-    this.props.history.push("/");
+    // this.loadCurrentUser();
+    // this.props.history.push("/");
   }
 
   render() {

@@ -66,11 +66,7 @@ export default class Register extends Component {
     }
 
     handleNameChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
-
-        console.log("target = " + target)
-        console.log("inputValue = " + inputValue)
+        const inputValue = event.target.value;
 
         this.setState({
             name: {
@@ -81,11 +77,7 @@ export default class Register extends Component {
     }
 
     handleSurnameChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
-
-        console.log("target = " + target)
-        console.log("inputValue = " + inputValue)
+        const inputValue = event.target.value;
 
         this.setState({
             surname: {
@@ -96,10 +88,8 @@ export default class Register extends Component {
     }
 
     handlePeselChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
+        const inputValue = event.target.value;
 
-        console.log("target = " + target)
         console.log("inputValue = " + inputValue)
 
         this.setState({
@@ -111,10 +101,8 @@ export default class Register extends Component {
     }
 
     handleEmailChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
+        const inputValue = event.target.value;
 
-        console.log("target = " + target)
         console.log("inputValue = " + inputValue)
 
         this.setState({
@@ -126,10 +114,8 @@ export default class Register extends Component {
     }
 
     handlePasswordChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
+        const inputValue = event.target.value;
 
-        console.log("target = " + target)
         console.log("inputValue = " + inputValue)
 
         this.setState({
@@ -141,10 +127,8 @@ export default class Register extends Component {
     }
 
     handlePasswordRepeatChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
+        const inputValue = event.target.value;
 
-        console.log("target = " + target)
         console.log("inputValue = " + inputValue)
 
         this.setState({
@@ -156,10 +140,8 @@ export default class Register extends Component {
     }
 
     handlePhoneNumberChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
+        const inputValue = event.target.value;
 
-        console.log("target = " + target)
         console.log("inputValue = " + inputValue)
 
         this.setState({
@@ -176,10 +158,8 @@ export default class Register extends Component {
     }
 
     handleCityChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
+        const inputValue = event.target.value;
 
-        console.log("target = " + target)
         console.log("inputValue = " + inputValue)
 
         this.setState({
@@ -191,10 +171,8 @@ export default class Register extends Component {
     }
 
     handleZipCodeChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
+        const inputValue = event.target.value;
 
-        console.log("target = " + target)
         console.log("inputValue = " + inputValue)
 
         this.setState({
@@ -206,10 +184,8 @@ export default class Register extends Component {
     }
 
     handleStreetChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
+        const inputValue = event.target.value;
 
-        console.log("target = " + target)
         console.log("inputValue = " + inputValue)
 
         this.setState({
@@ -221,10 +197,8 @@ export default class Register extends Component {
     }
 
     handleHouseNoChange(event, validationFun) {
-        const target = event.target;
-        const inputValue = target.value;
+        const inputValue = event.target.value;
 
-        console.log("target = " + target)
         console.log("inputValue = " + inputValue)
 
         this.setState({

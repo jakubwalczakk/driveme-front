@@ -73,10 +73,6 @@ export default class Exams extends Component {
       return <p id="examsLoadingLabel">Loading...</p>
     }
 
-    console.log(practicalExam.dateOfExam);
-    console.log(theoreticalExams);
-    console.log(instructorPracticalExams)
-
     var passed = true;
 
     let statementToReturn;

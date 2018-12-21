@@ -19,6 +19,35 @@
   padding:15px;
 }
 
+#userPhotoContainer{
+  width: 20%;
+  margin-left: auto;
+  margin-right: auto; 
+}
+
+#userPhotoImage{
+  margin:0 0 15px 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#userPhotoChangeButton{
+  width: 100%;
+  background-color: #631033 ;
+  color: white;
+  border-radius: 6px;
+  font-size: 17px;
+  font-weight: 600;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+#userPhotoChangeButton:hover{
+  background-color: #888282;
+  color: black;
+  font-weight: 700;
+}
+
 #credentialsContainer{
   width: 50%;
   float: left;

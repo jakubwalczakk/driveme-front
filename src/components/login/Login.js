@@ -23,11 +23,7 @@ export default class Login extends Component {
     }
 
     handleEmailChange(event) {
-        const target = event.target;
-        const inputValue = target.value;
-
-        // console.log("target = " + target)
-        // console.log("inputValue = " + inputValue)
+        const inputValue = event.target.value;
 
         this.setState({
             email: {
@@ -37,11 +33,7 @@ export default class Login extends Component {
     }
 
     handlePasswordChange(event) {
-        const target = event.target;
-        const inputValue = target.value;
-
-        // console.log("target = " + target)
-        // console.log("inputValue = " + inputValue)
+        const inputValue = event.target.value;
 
         this.setState({
             password: {
