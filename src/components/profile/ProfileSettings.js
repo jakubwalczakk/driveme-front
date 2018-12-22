@@ -9,7 +9,7 @@ const studentUrl = API_BASE_URL + '/student';
 const instructorUrl = API_BASE_URL + '/instructor';
 
 const currentUser = {
-  role: 'ADMIN'
+  role: 'Instruktor'
 }
 
 export default class ProfileSettings extends Component {

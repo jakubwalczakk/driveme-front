@@ -1,4 +1,4 @@
-import { API_BASE_URL, POLL_LIST_SIZE, ACCESS_TOKEN } from 'constants/constants';
+import { API_BASE_URL, ACCESS_TOKEN } from 'constants/constants';
 
 export const request = (options) => {
   const headers = new Headers({
@@ -6,7 +6,7 @@ export const request = (options) => {
   })
 
   if (localStorage.getItem(ACCESS_TOKEN)) {
-    headers.append('Authorization', 'Bearer ' + "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYWt1Yi53YWxjemFrQGRyaXZlbWUucGwiLCJzY29wZXMiOiJLdXJzYW50IiwiaWF0IjoxNTQ1NDA3NzUwLCJleHAiOjE1NDU0MTc3NTB9.DBln7yHnIfhzCj6GPYJEsQJ0quV3JiP78WEbiNF6mA_1ZIZqwlGG-ClNkPcXGwQNq5qeUhOzrNm3HACyAuB0qg");//localStorage.getItem(ACCESS_TOKEN))
+    headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN));
   }
 
   const defaults = { headers: headers };
@@ -41,8 +41,8 @@ export function signup(signupRequest) {
 
 export function checkEmailAvailability(email) {
   return request({
-      url: API_BASE_URL + "/user/checkEmailAvailability?email=" + email,
-      method: 'GET'
+    url: API_BASE_URL + "/user/checkEmailAvailability?email=" + email,
+    method: 'GET'
   });
 }
 
@@ -57,7 +57,7 @@ export function getCurrentUser() {
   })
 }
 
-export function trimDate(date){
+export function trimDate(date) {
   var part1 = date.split("T")[0];
   var part2 = date.split("T")[1].split("Z")[0];
 
