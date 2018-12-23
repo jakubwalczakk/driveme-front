@@ -35,7 +35,7 @@ export default class NavigationBar extends Component {
 
     handleLogoutButtonClick() {
         console.log("WYLOGOWUJĘ CIĘ KOLEŻKO");
-        this.props.history.push("/");
+        // this.props.history.push("/");
         this.handleCloseLogoutModal();
     }
 
@@ -101,6 +101,9 @@ export default class NavigationBar extends Component {
                         <NavItem className="nav-bar-item" eventKey={2} href="/progress">
                             Twoje postępy
                         </NavItem>
+                        <NavItem className="nav-bar-item" eventKey={3} href="/students">
+                            Kursanci
+                        </NavItem>
                         {/* <NavItem className="nav-bar-item" eventKey={2} href="/rate">
                             Oceń
                         </NavItem>
@@ -122,9 +125,9 @@ export default class NavigationBar extends Component {
                         <NavItem className="nav-bar-item" eventKey={3} href="/reservations">
                             Rezerwacje
                         </NavItem>
-                        <NavItem className="nav-bar-item" eventKey={3} href="/book">
+                        {/* <NavItem className="nav-bar-item" eventKey={3} href="/book">
                             Book
-                        </NavItem>
+                        </NavItem> */}
                         <NavItem className="nav-bar-item" eventKey={3} href="/payments">
                             Płatności
                         </NavItem>

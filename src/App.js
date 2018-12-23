@@ -55,7 +55,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.loadCurrentUser();
+    // this.loadCurrentUser();
     var{currentUser} = this.state;
     console.log(currentUser)
   }

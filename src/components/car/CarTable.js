@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl, Thumbnail } from "react-bootstrap";
+import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
 import { API_BASE_URL } from "constants/constants";
 import "./CarTable.css";
@@ -15,37 +15,42 @@ export default class CarTable extends Component {
             error: null,
             showAddModal: false,
             carBrands: [],
-            newCarBrand: '',
+            newCarBrand: 'RENAULT',
             newCarModel: {
                 value: ''
             },
             newCarLicensePlate: {
                 value: ''
             },
-            newCarImage: ''
+            newCarImage: '',
+            newCarGasType: 'Benzyna'
         };
-        this.handleChange = this.handleChange.bind(this);
+        //this.handleChange = this.handleChange.bind(this);
+
         this.handleShowAddModal = this.handleShowAddModal.bind(this);
         this.handleCloseAddModal = this.handleCloseAddModal.bind(this);
         this.prepareAddModalStructure = this.prepareAddModalStructure.bind(this);
-        this.handleSubmitAddCar = this.handleSubmitAddCar.bind(this);
-        this.handleAddCarPhoto = this.handleAddCarPhoto.bind(this);
-        this.handleSelectedCarBrandChange = this.handleSelectedCarBrandChange.bind(this);
+
+        this.handleNewCarBrandChange = this.handleNewCarBrandChange.bind(this);
         this.handleNewCarModelChange = this.handleNewCarModelChange.bind(this);
         this.handleNewCarLicensePlateChange = this.handleNewCarLicensePlateChange.bind(this);
+        this.handleAddNewCarPhoto = this.handleAddNewCarPhoto.bind(this);
+        this.handleNewCarGasTypeChange = this.handleNewCarGasTypeChange.bind(this);
+
+        this.handleSubmitAddCar = this.handleSubmitAddCar.bind(this);
     }
 
-    handleChange = (event) => {
-        const inputValue = event.target.value;
+    // handleChange = (event) => {
+    //     const inputValue = event.target.value;
 
-        console.log(inputValue)
+    //     console.log(inputValue)
 
-        this.setState({
-            [event.target.id]: {
-                value: inputValue,
-            }
-        });
-    }
+    //     this.setState({
+    //         [event.target.id]: {
+    //             value: inputValue,
+    //         }
+    //     });
+    // }
 
     handleNewCarModelChange(event) {
         this.setState({
@@ -71,11 +76,11 @@ export default class CarTable extends Component {
         this.setState({ showAddModal: false });
     }
 
-    handleSelectedCarBrandChange = (event) => {
-        this.setState({ selectedCarBrand: event.target.value })
+    handleNewCarBrandChange = (event) => {
+        this.setState({ newCarBrand: event.target.value })
     }
 
-    handleAddCarPhoto = (files) => {
+    handleAddNewCarPhoto = (files) => {
 
         let photoString = files.base64;
         let photo;
@@ -97,39 +102,46 @@ export default class CarTable extends Component {
         })
     }
 
+    handleNewCarGasTypeChange(event) {
+        this.setState({ newCarGasType: event.target.value })
+        console.log(this.state)
+    }
+
     handleSubmitAddCar() {
 
-        var { newCarBrand, newCarModel, newCarLicensePlate, newCarImage } = this.state;
+        var { newCarBrand, newCarModel, newCarLicensePlate, newCarImage, newCarGasType } = this.state;
 
         const addCarRequest = {
             brand: newCarBrand,
             model: newCarModel.value,
-            gasType: 'Gaz',
             licensePlate: newCarLicensePlate.value,
-            photo: newCarImage
+            photo: newCarImage,
+            gasType: newCarGasType,
         }
 
         console.log(addCarRequest);
 
-        // fetch(carUrl, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(addCarRequest)
-        // }).then(response => {
-        //     if (response.ok) {
-        //         return response.json();
-        //     } else {
-        //         throw new Error('Coś poszło nie tak podczas dodawania nwoego samochodu...');
-        //     }
-        // });
+        fetch(carUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(addCarRequest)
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Coś poszło nie tak podczas dodawania nwoego samochodu...');
+            }
+        });
+        this.handleCloseAddModal();
+        this.componentDidMount();
     }
 
     prepareAddModalStructure() {
 
-        var { carBrands, newCarBrand: selectedCarBrand, showAddModal, newCarModel, newCarLicensePlate, newCarImage } = this.state;
+        var { carBrands, newCarBrand, showAddModal, newCarModel, newCarLicensePlate, newCarImage, newCarGasType } = this.state;
 
         return (
             <Modal show={showAddModal} onHide={this.handleCloseAddModal}>
@@ -140,11 +152,10 @@ export default class CarTable extends Component {
                 </Modal.Header>
                 <Modal.Body>
                     <div id="addCarModal">
-                        <div id="addCarModalBrand">
+                        <div id="addCarDataModal">
                             <FormGroup className="addCarForm">
                                 <ControlLabel>Marka</ControlLabel>
-                                <FormControl componentClass="select" onChange={this.handleSelectedCarBrandChange} value={selectedCarBrand}>
-                                    <option>-</option>
+                                <FormControl componentClass="select" onChange={this.handleNewCarBrandChange} value={newCarBrand}>
                                     {carBrands.map(brand => (
                                         <option key={brand}>{brand}</option>)
                                     )}
@@ -164,10 +175,18 @@ export default class CarTable extends Component {
                                     onChange={this.handleNewCarLicensePlateChange}
                                 />
                             </FormGroup>
+                            <FormGroup className="addCarForm">
+                                <ControlLabel>Silnik</ControlLabel>
+                                <FormControl componentClass="select" onChange={this.handleNewCarGasTypeChange} value={newCarGasType}>
+                                    <option>Benzyna</option>
+                                    <option>Ropa naftowa</option>
+                                    <option>Gaz</option>
+                                </FormControl>
+                            </FormGroup>
                         </div>
-                        <div id="addCarModalPhoto">
+                        <div id="addCarPhotoModal">
                             <Image id="newCarImage" src={"data:image/jpeg;base64," + newCarImage} rounded responsive />
-                            <ReactFileReader fileTypes={[".jpg", ".png"]} base64={true} multipleFiles={false} handleFiles={this.handleAddCarPhoto}>
+                            <ReactFileReader fileTypes={[".jpg", ".png"]} base64={true} multipleFiles={false} handleFiles={this.handleAddNewCarPhoto}>
                                 <div id="uploadCarPhotoButtonContainer">
                                     <Button id="uploadCarPhotoButton" bsStyle="primary">
                                         Dodaj zdjęcie
@@ -224,15 +243,15 @@ export default class CarTable extends Component {
         }
 
         if (isLoading) {
-            return <p id="carsLoadingLabel">Loading...</p>
+            return <p id="carsLoadingLabel">Pobieranie danych...</p>
         }
 
-        let currentUser = 'Adminisatrator';
+        let currentUser = 'XD';
 
         return (
             <div id="carsTableContainer">
                 <h1 id="carsHeader">Dostępne pojazdy</h1>
-                <Button id="addCarButton" hidden={currentUser === 'Administrator'} onClick={this.handleShowAddModal}>
+                <Button id="addCarButton" hidden={currentUser !== 'Administrator'} onClick={this.handleShowAddModal}>
                     Dodaj samochód
                 </Button>
                 <Table id="carsTable" responsive striped bordered condensed hover>
