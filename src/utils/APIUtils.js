@@ -21,7 +21,25 @@ export const request = (options) => {
         return json;
       })
     );
-};
+}
+// if (localStorage.getItem(ACCESS_TOKEN)) {
+//   fetch('http://localhost:8080/user/me', {
+//     method: 'GET',
+//     headers: {
+//       "Content-Type": "application/json",
+//       "Authorization": "Bearer " + localStorage.getItem(ACCESS_TOKEN)
+//     },
+//   }).then(response => {
+//     if (response.ok) {
+//       return response.json();
+//     } else {
+//       throw new Error('Coś poszło nie tak podczas pobierania zalogowanego użytkownika...');
+//     }
+//   });
+// } else {
+//   throw new Error("Nie można pobrać informacji na temat zalogowanego użytkownika");
+// }
+
 
 export function login(loginRequest) {
   return request({
@@ -47,14 +65,30 @@ export function checkEmailAvailability(email) {
 }
 
 export function getCurrentUser() {
-  if (!localStorage.getItem(ACCESS_TOKEN)) {
-    return Promise.reject("No access token set.");
-  }
+  if (localStorage.getItem(ACCESS_TOKEN)) {
 
-  return request({
-    url: API_BASE_URL + "/user/me",
-    method: 'GET'
-  })
+    let currentUser;
+
+    fetch('http://localhost:8080/user/me', {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem(ACCESS_TOKEN)
+      },
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Coś poszło nie tak podczas pobierania zalogowanego użytkownika...');
+      }
+    }).then(response => {
+      currentUser = response;
+    });
+    return currentUser;
+  } else {
+    console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
+    return null;
+  }
 }
 
 export function trimDate(date) {

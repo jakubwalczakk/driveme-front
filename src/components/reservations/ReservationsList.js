@@ -40,7 +40,7 @@ export default class Reservations extends Component {
     }
 
     if (isLoading) {
-      return <p id="reservationsLoadingLabel">Loading...</p>
+      return <p id="reservationsLoadingLabel">Pobieranie danych...</p>
     }
 
     return (

@@ -10,6 +10,12 @@
   margin-top: 8%;
 }
 
+.courseInfoLabel{
+  font-size: 32px;
+  text-align: center;
+  margin-top: 12%;
+}
+
 #drivingsHoursProgressBar{
   width: 30%;
   margin-left: auto;

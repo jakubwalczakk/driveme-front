@@ -56,8 +56,6 @@ export default class App extends Component {
 
   componentDidMount() {
     // this.loadCurrentUser();
-    var{currentUser} = this.state;
-    console.log(currentUser)
   }
 
   handleLogout(redirectTo = "/") {
@@ -80,16 +78,16 @@ export default class App extends Component {
     return (
       <div>
         <NavigationBar />
-        <Route exact path="/" component={MainPage} />
+        <Route exact path="/" component={Login} />        
+        <Route exact path="/main" component={MainPage} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/profile" component={ProfileSettings} />
         <Route path="/course" component={Course} />
         <Route path="/progress" component={YourProgress} />
-        <Route path="/rate" component={Ratings} />
+        <Route path="/drivings" component={Ratings} />
         <Route path="/students" component={Students} />
         <Route path="/reservations" component={ReservationList} />
-        <Route path="/drivings" component={Drivings} />
         <Route path="/book" component={Booking} />
         <Route path="/instructors" component={Instructors} />
         <Route path="/payments" component={Payments} />

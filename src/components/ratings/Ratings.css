@@ -10,20 +10,20 @@
   text-align: center;
 }
 
-#drivingsTable{
+#ratingsTable{
   margin-top: 12px;
 }
 
-#drivingsTable td, th{
+#ratingsTable td, th{
     text-align: center;
     vertical-align: middle; 
 }
 
-#drivingsTable th{
+#ratingsTable th{
   padding: 10px;
 }
 
-#drivingsLoadingLabel, #drivingsErrorLabel{
+.ratingsInfoLabel{
   font-size: 32px;
   text-align: center;
   margin-top: 12%;

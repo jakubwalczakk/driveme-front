@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import "./Exams.css";
 
 const studentId = 10;
@@ -18,6 +18,83 @@ export default class Exams extends Component {
       theoreticalExams: [],
       error: null,
       isLoading: false,
+    }
+    this.prepareTheContent = this.prepareTheContent.bind(this);
+  }
+
+  prepareTheContent() {
+    var { practicalExam, theoreticalExams, instructorPracticalExams } = this.state;
+    if (CURRENT_USER_ROLE === 'Instruktor') {
+      return (<div id="examsTableContainer">
+        <p id="examsLabel">Przeprowadzone egzaminy praktyczne</p>
+        <Table id="practicalExamsTable" responsive striped bordered condensed hover>
+          <thead>
+            <tr>
+              <th>Data egzaminu</th>
+              <th>Kursant</th>
+              <th>Auto</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {instructorPracticalExams.map(exam => (
+              <tr key={exam.id}>
+                <td>{exam.dateOfExam}</td>
+                <td>{exam.student.name}</td>
+                <td>{exam.car.brand}</td>
+                 <td>
+                  {exam.passed &&
+                    <i id="examPassed" className="material-icons">check_circle</i>}
+                  {!exam.passed &&
+                    <i id="examFailed" className="material-icons">cancel</i>}
+                  {exam.passed === null}{
+                    <Button>
+                      Oceń
+                </Button>}
+                </td> 
+                <td>{exam.scoredPoints}</td>
+                <td>{Math.round(exam.result * 100)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>);
+    } else if (CURRENT_USER_ROLE === 'Kursant') {
+      return (<div id="examsTableContainer">
+        <p id="examsLabel">Egzaminy teoretyczne</p>
+        <Table id="theoreticalExamsTable" responsive striped bordered condensed hover>
+          <thead>
+            <tr>
+              <th>Data egzaminu</th>
+              <th>Status</th>
+              <th>Zdobyte punkty</th>
+              <th>Wynik</th>
+            </tr>
+          </thead>
+          <tbody>
+            {theoreticalExams.map(exam => (
+              <tr key={exam.id}>
+                <td>{exam.dateOfExam}</td>
+                <td>
+                  {exam.passed &&
+                    <i id="examPassed" className="material-icons">check_circle</i>}
+                  {!exam.passed &&
+                    <i id="examFailed" className="material-icons">cancel</i>}
+                </td>
+                <td>{exam.scoredPoints}</td>
+                <td>{Math.round(exam.result * 100)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <p id="practicalExamLabel">Egzamin praktyczny</p>
+        <p>{practicalExam.dateOfExam} {practicalExam.passed}</p>
+        {/* <p>{practicalExam.car}</p> */}
+        {/* <p>{practicalExam.car.brand} {practicalExam.car.model} {practicalExam.car.licensePlate}</p> */}
+        {/* <p>{practicalExam.instructor.name} {practicalExam.instructor.surname}</p> */}
+      </div>);
+    } else {
+      return <p>Nie posiadasz dostępu do tego zasobu!</p>
     }
   }
 
@@ -63,96 +140,22 @@ export default class Exams extends Component {
 
   render() {
 
-    var { practicalExam, theoreticalExams, instructorPracticalExams, error, isLoading } = this.state;
+    var { error, isLoading } = this.state;
 
     if (error) {
       return <p id="examsErrorLabel">{error.message}</p>
     }
 
     if (isLoading) {
-      return <p id="examsLoadingLabel">Loading...</p>
+      return <p id="examsLoadingLabel">Pobieranie danych...</p>
     }
 
-    var passed = true;
-
-    let statementToReturn;
-    if (!true) {
-      statementToReturn =
-        (<div id="examsTableContainer">
-          <p id="examsLabel">Egzaminy teoretyczne</p>
-          <Table id="theoreticalExamsTable" responsive striped bordered condensed hover>
-            <thead>
-              <tr>
-                <th>Data egzaminu</th>
-                <th>Status</th>
-                <th>Zdobyte punkty</th>
-                <th>Wynik</th>
-              </tr>
-            </thead>
-            <tbody>
-              {theoreticalExams.map(exam => (
-                <tr key={exam.id}>
-                  <td>{exam.dateOfExam}</td>
-                  <td>
-                    {exam.passed &&
-                      <i id="examPassed" className="material-icons">check_circle</i>}
-                    {!exam.passed &&
-                      <i id="examFailed" className="material-icons">cancel</i>}
-                  </td>
-                  <td>{exam.scoredPoints}</td>
-                  <td>{Math.round(exam.result * 100)}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <p id="practicalExamLabel">Egzamin praktyczny</p>
-          <p>{practicalExam.dateOfExam} {practicalExam.passed}</p>
-          {/* <p>{practicalExam.car}</p> */}
-          {/* <p>{practicalExam.car.brand} {practicalExam.car.model} {practicalExam.car.licensePlate}</p> */}
-          {/* <p>{practicalExam.instructor.name} {practicalExam.instructor.surname}</p> */}
-        </div>);
-    } else {
-      //FIXME
-      statementToReturn =
-        (<div id="examsTableContainer">
-          <p id="examsLabel">Twoje egzaminy praktyczne</p>
-          <Table id="practicalExamsTable" responsive striped bordered condensed hover>
-            <thead>
-              <tr>
-                <th>Data egzaminu</th>
-                <th>Kursant</th>
-                <th>Auto</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {theoreticalExams.map(exam => (
-                <tr key={exam.id}>
-                  <td>{exam.dateOfExam}</td>
-                  <td>{exam.student.name}</td>
-                  <td>{exam.car.brand}</td>
-                  <td>
-                    {exam.passed &&
-                      <i id="examPassed" className="material-icons">check_circle</i>}
-                    {!exam.passed &&
-                      <i id="examFailed" className="material-icons">cancel</i>}
-                    {exam.passed === null}{
-                      <Button>
-                        Oceń
-                      </Button>
-                    }
-                  </td>
-                  <td>{exam.scoredPoints}</td>
-                  <td>{Math.round(exam.result * 100)}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>);
-    }
+    let content = this.prepareTheContent();
 
     return (
-      statementToReturn
+      <div>
+        {content}
+      </div>
     );
   }
 }

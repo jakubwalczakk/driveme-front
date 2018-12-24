@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import { trimDate } from "utils/APIUtils";
 import "./Students.css";
 
@@ -194,11 +194,11 @@ export default class Students extends Component {
     let deleteModal;
 
     if (error) {
-      return <p id="studentsErrorLabel">{error.message}</p>
+      return <p id="studentsInfoLabel">{error.message}</p>
     }
 
     if (isLoading) {
-      return <p id="studentsLoadingLabel">Loading...</p>
+      return <p id="studentsInfoLabel">Pobieranie danych...</p>
     }
 
     if (showCourseModal) {
@@ -217,59 +217,63 @@ export default class Students extends Component {
       deleteModal = this.prepareDeleteModalStructure();
     }
 
-    return (
-      <div id="studentsTableContainer">
-        <p id="studentsLabel">Lista obecnych kursantów</p>
-        <Table id="studentsTable" responsive striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th>Student</th>
-              <th>PESEL</th>
-              <th>E-mail</th>
-              <th>Data rejestracji</th>
-              <th>Kurs</th>
-              <th id="currentPaymentCol">Zapłacona kwota</th>
-              <th>Płatności</th>
-              <th>Aktywność</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map(student => (
-              <tr key={student.id}>
-                <td>{student.name} {student.surname}</td>
-                <td>{student.pesel}</td>
-                <td>{student.email}</td>
-                <td>{trimDate(student.registrationDate)}</td>
-                <td>
-                  <Button disabled={student.course == null} onClick={this.handleShowCourseModal}>
-                    Kurs
-                  </Button>
-                </td>
-                <td >{student.course != null && student.course.currentPayment}</td>
-                <td>
-                  {/* {student.course != null && student.course.currentPayment !== 1500 && */}
-                  {<Button onClick={this.handleShowPaymentsModal}>
-                    Dodaj płatność
-                  </Button>}
-                </td>
-                <td>{!student.active &&
-                  <Button id="activateButton" onClick={this.handleShowActivateModal}>
-                    Aktywuj
-                  </Button>}
-                  {student.active &&
-                    <Button id="deactivateButton" className="material-icons" onClick={this.handleShowDeleteModal}>
-                      {/* remove_circle */}
-                      delete_forever
-                  </Button>}
-                </td>
+    if (CURRENT_USER_ROLE !== 'Administrator') {
+      return <p id="studentsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
+    } else {
+      return (
+        <div id="studentsTableContainer">
+          <p id="studentsLabel">Lista obecnych kursantów</p>
+          <Table id="studentsTable" responsive striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>PESEL</th>
+                <th>E-mail</th>
+                <th>Data rejestracji</th>
+                <th>Kurs</th>
+                <th id="currentPaymentCol">Zapłacona kwota</th>
+                <th>Płatności</th>
+                <th>Aktywność</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-        {courseModal}
-        {paymentsModal}
-        {activateModal}
-        {deleteModal}
-      </div>);
+            </thead>
+            <tbody>
+              {students.map(student => (
+                <tr key={student.id}>
+                  <td>{student.name} {student.surname}</td>
+                  <td>{student.pesel}</td>
+                  <td>{student.email}</td>
+                  <td>{trimDate(student.registrationDate)}</td>
+                  <td>
+                    <Button disabled={student.course == null} onClick={this.handleShowCourseModal}>
+                      Kurs
+                  </Button>
+                  </td>
+                  <td >{student.course != null && student.course.currentPayment}</td>
+                  <td>
+                    {/* {student.course != null && student.course.currentPayment !== 1500 && */}
+                    {<Button onClick={this.handleShowPaymentsModal}>
+                      Dodaj płatność
+                  </Button>}
+                  </td>
+                  <td>{!student.active &&
+                    <Button id="activateButton" onClick={this.handleShowActivateModal}>
+                      Aktywuj
+                  </Button>}
+                    {student.active &&
+                      <Button id="deactivateButton" className="material-icons" onClick={this.handleShowDeleteModal}>
+                        {/* remove_circle */}
+                        delete_forever
+                  </Button>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          {courseModal}
+          {paymentsModal}
+          {activateModal}
+          {deleteModal}
+        </div>);
+    }
   }
 }

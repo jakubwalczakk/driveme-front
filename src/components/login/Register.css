@@ -24,4 +24,10 @@
     color:white;
     font-weight: 600;
   }
+
+  .registrationInfoLabel{
+    font-size: 32px;
+    text-align: center;
+    margin-top: 12%;
+  }
   

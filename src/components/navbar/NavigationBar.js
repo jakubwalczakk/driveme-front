@@ -1,19 +1,20 @@
 import React, { Component } from "react";
 import { Nav, Navbar, NavItem, Image, Modal, Button } from "react-bootstrap";
 import { getCurrentUser } from "utils/APIUtils";
+import { API_BASE_URL, ACCESS_TOKEN, CURRENT_USER_ROLE } from 'constants/constants';
 import "./NavigationBar.css";
-
-const currentUserName = 'Jakub';
-// const currentUser = getCurrentUser();
 
 export default class NavigationBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoggedIn: true,
+            isLoggedIn: false,
             showModal: false,
+            currentLoggedUser: ''
         };
 
+        this.loadCurrentLoggedUser = this.loadCurrentLoggedUser.bind(this);
+        this.prepareNavBarStructure = this.prepareNavBarStructure.bind(this);
         this.handleLoginClick = this.handleLoginClick.bind(this);
         this.handleShowLogoutModal = this.handleShowLogoutModal.bind(this);
         this.handleCloseLogoutModal = this.handleCloseLogoutModal.bind(this);
@@ -36,7 +37,9 @@ export default class NavigationBar extends Component {
     handleLogoutButtonClick() {
         console.log("WYLOGOWUJĘ CIĘ KOLEŻKO");
         // this.props.history.push("/");
+        localStorage.removeItem(ACCESS_TOKEN)
         this.handleCloseLogoutModal();
+        // this.props.history.push("/login")
     }
 
     prepareModalStructure() {
@@ -58,16 +61,96 @@ export default class NavigationBar extends Component {
         );
     }
 
+    loadCurrentLoggedUser() {
+        if (localStorage.getItem(ACCESS_TOKEN)) {
+
+            fetch('http://localhost:8080/user/me', {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem(ACCESS_TOKEN)
+                },
+            }).then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Coś poszło nie tak podczas pobierania zalogowanego użytkownika...');
+                }
+            }).then(response => {
+                this.setState({ currentLoggedUser: response, isLoggedIn: true })
+            });
+        } else {
+            console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
+        }
+    }
+
+    componentDidMount() {
+        this.loadCurrentLoggedUser();
+    }
+
+    prepareNavBarStructure() {
+        if (CURRENT_USER_ROLE === 'Kursant') {
+            return (<Nav>
+                <NavItem className="nav-bar-item" eventKey={1} href="/course">
+                    Kurs
+                </NavItem>
+                <NavItem className="nav-bar-item" eventKey={2} href="/progress">
+                    Twoje postępy
+                </NavItem>
+                <NavItem className="nav-bar-item" eventKey={3} href="/exams">
+                    Egzaminy
+                </NavItem>
+                <NavItem className="nav-bar-item" eventKey={3} href="/reservations">
+                    Rezerwacje
+                </NavItem>
+                {/* <NavItem className="nav-bar-item" eventKey={3} href="/book">
+                    Rezerwuj
+                </NavItem> */}
+                <NavItem className="nav-bar-item" eventKey={3} href="/payments">
+                    Płatności
+                </NavItem>
+            </Nav>);
+        } else if (CURRENT_USER_ROLE === 'Administrator') {
+            return (
+                <Nav>
+                    <NavItem className="nav-bar-item" eventKey={3} href="/register">
+                        Rejestruj
+                    </NavItem>
+                    <NavItem className="nav-bar-item" eventKey={3} href="/students">
+                        Kursanci
+                    </NavItem>
+                </Nav>);
+        } else if (CURRENT_USER_ROLE === 'Instruktor') {
+            return (
+                <Nav>
+                    <NavItem className="nav-bar-item" eventKey={3} href="/exams">
+                        Egzaminy
+                    </NavItem>
+                    <NavItem className="nav-bar-item" eventKey={3} href="/reservations">
+                        Rezerwacje
+                    </NavItem>
+                    <NavItem className="nav-bar-item" eventKey={2} href="/drivings">
+                        Jazdy
+                    </NavItem>
+                </Nav>
+            )
+        }
+    }
+
     render() {
-        var { isLoggedIn, showModal } = this.state;
+
+        var { isLoggedIn, showModal, currentLoggedUser } = this.state;
+
         let loggingNavItem;
         let logoutModal;
+
+        console.log("AUTH", currentLoggedUser.authorities);
 
         if (isLoggedIn) {
             loggingNavItem =
                 <Nav pullRight>
                     <NavItem id="welcomeMsg" className="nav-bar-item-logged" href="/profile">
-                        {`Cześć Jakub!`}
+                        {`Cześć ${currentLoggedUser.name}!`}
                     </NavItem>
                     <NavItem id="logoutButton" className="material-icons nav-bar-item-logged" onClick={this.handleShowLogoutModal}>
                         power_settings_new
@@ -84,53 +167,19 @@ export default class NavigationBar extends Component {
             logoutModal = this.prepareModalStructure();
         }
 
+        let navBarTypes = this.prepareNavBarStructure();
+
         return (
             <Navbar className="nav-bar" fixedTop responsive="true" hidden={!isLoggedIn}>
-            {/* <Navbar className="nav-bar" fixedTop responsive="true" hidden={true}> */}
                 <Navbar.Header responsive="true">
-                    <a href="/">
+                    <a href="/main">
                         <Image id="logoBrand" src="/logo.png" rounded responsive />
                     </a>
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
                     <Nav>
-                        <NavItem className="nav-bar-item" eventKey={1} href="/course">
-                            Kurs
-                        </NavItem>
-                        <NavItem className="nav-bar-item" eventKey={2} href="/progress">
-                            Twoje postępy
-                        </NavItem>
-                        <NavItem className="nav-bar-item" eventKey={3} href="/students">
-                            Kursanci
-                        </NavItem>
-                        {/* <NavItem className="nav-bar-item" eventKey={2} href="/rate">
-                            Oceń
-                        </NavItem>
-                        <NavItem className="nav-bar-item" eventKey={3} href="/students">
-                            Kursanci
-                        </NavItem>
-                        <NavItem disabled={!currentUser.role==='Administrator'} className="nav-bar-item" eventKey={3} href="/register">
-                            Rejestruj
-                        </NavItem>
-
-
-                        <NavItem className="nav-bar-item" href="/login">
-                            Zaloguj
-                        </NavItem>
-
-                        <NavItem className="nav-bar-item" eventKey={3} href="/exams">
-                            Egzaminy
-                        </NavItem> */}
-                        <NavItem className="nav-bar-item" eventKey={3} href="/reservations">
-                            Rezerwacje
-                        </NavItem>
-                        {/* <NavItem className="nav-bar-item" eventKey={3} href="/book">
-                            Book
-                        </NavItem> */}
-                        <NavItem className="nav-bar-item" eventKey={3} href="/payments">
-                            Płatności
-                        </NavItem>
+                        {navBarTypes}
                         <NavItem className="nav-bar-item" eventKey={4} href="/instructors">
                             Instruktorzy
                         </NavItem>

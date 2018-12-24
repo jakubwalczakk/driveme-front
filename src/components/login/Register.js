@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, EMAIL_MAX_LENGTH, NAME_MIN_LENGTH, NAME_MAX_LENGTH, SURNAME_MIN_LENGTH, SURNAME_MAX_LENGTH, PESEL_LENGTH } from "constants/constants";
+import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, CURRENT_USER_ROLE, NAME_MIN_LENGTH, NAME_MAX_LENGTH, SURNAME_MIN_LENGTH, SURNAME_MAX_LENGTH, PESEL_LENGTH } from "constants/constants";
 import { signup, checkEmailAvailability } from 'utils/APIUtils';
 import './Register.css';
 
@@ -274,33 +274,37 @@ export default class Register extends Component {
 
         var { name, surname, pesel, email, phoneNumber, selectedUserRole, city, zipCode, street, houseNo } = this.state;
 
-        return (
-            <div className="registrationContainer">
-                <form onSubmit={this.handleSubmit}>
-                    <FormGroup controlId="name">
-                        <ControlLabel>Imię</ControlLabel>
-                        <FormControl
-                            autoFocus
-                            value={name.value}
-                            onChange={(event) => this.handleNameChange(event, this.validateName)}
-                        />
-                    </FormGroup>
-                    <FormGroup controlId="surname">
-                        <ControlLabel>Nazwisko</ControlLabel>
-                        <FormControl
-                            value={surname.value}
-                            onChange={(event) => this.handleSurnameChange(event, this.validateSurname)}
-                        />
-                    </FormGroup>
-                    <FormGroup controlId="email">
-                        <ControlLabel>Email</ControlLabel>
-                        <FormControl
-                            type="email"
-                            value={email.value}
-                            onChange={(event) => this.handleEmailChange(event, this.validateEmail)}
-                        />
-                    </FormGroup>
-                    {/* <FormGroup controlId="password">
+        if (CURRENT_USER_ROLE !== 'Administrator') {
+            return <p className="registrationInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
+        } else {
+
+            return (
+                <div className="registrationContainer">
+                    <form onSubmit={this.handleSubmit}>
+                        <FormGroup controlId="name">
+                            <ControlLabel>Imię</ControlLabel>
+                            <FormControl
+                                autoFocus
+                                value={name.value}
+                                onChange={(event) => this.handleNameChange(event, this.validateName)}
+                            />
+                        </FormGroup>
+                        <FormGroup controlId="surname">
+                            <ControlLabel>Nazwisko</ControlLabel>
+                            <FormControl
+                                value={surname.value}
+                                onChange={(event) => this.handleSurnameChange(event, this.validateSurname)}
+                            />
+                        </FormGroup>
+                        <FormGroup controlId="email">
+                            <ControlLabel>Email</ControlLabel>
+                            <FormControl
+                                type="email"
+                                value={email.value}
+                                onChange={(event) => this.handleEmailChange(event, this.validateEmail)}
+                            />
+                        </FormGroup>
+                        {/* <FormGroup controlId="password">
                         <ControlLabel>Hasło</ControlLabel>
                         <FormControl
                             type="password"
@@ -318,16 +322,16 @@ export default class Register extends Component {
                             onChange={(event) => this.handlePasswordRepeatChange(event, this.validatePasswordRepeat)}
                         />
                     </FormGroup> */}
-                    <FormGroup controlId="phoneNumber">
-                        <ControlLabel>Numer telefonu</ControlLabel>
-                        <FormControl type="text"
-                            pattern="^\d{3}-\d{3}-\d{3}$||^\d{3} \d{3} \d{3}$||^\d{9}$"
-                            value={phoneNumber.value}
-                            onChange={(event) => this.handlePhoneNumberChange(event, this.validatePhoneNumber)}
+                        <FormGroup controlId="phoneNumber">
+                            <ControlLabel>Numer telefonu</ControlLabel>
+                            <FormControl type="text"
+                                pattern="^\d{3}-\d{3}-\d{3}$||^\d{3} \d{3} \d{3}$||^\d{9}$"
+                                value={phoneNumber.value}
+                                onChange={(event) => this.handlePhoneNumberChange(event, this.validatePhoneNumber)}
 
-                        />
-                    </FormGroup>
-                    {/* <FormGroup controlId="userRoleSelectList">
+                            />
+                        </FormGroup>
+                        {/* <FormGroup controlId="userRoleSelectList">
                         <ControlLabel>Rola</ControlLabel>
                         <FormControl componentClass="select" placeholder="select">
                             <option value="student">Student</option>
@@ -336,59 +340,60 @@ export default class Register extends Component {
                         </FormControl>
                     </FormGroup> */}
 
-                    <FormGroup id="userRoleSelectList">
-                        <ControlLabel>Instruktor</ControlLabel>
-                        <FormControl componentClass="select" onChange={this.handleSelectedUserRoleChange} value={selectedUserRole}>
-                            <option>Kursant</option>
-                            <option>Instruktor</option>
-                            <option>Administrator</option>
-                        </FormControl>
-                    </FormGroup>
-                    <FormGroup controlId="pesel" hidden={selectedUserRole !== 'Kursant'}>
-                        <ControlLabel>PESEL</ControlLabel>
-                        <FormControl
-                            value={pesel.value}
-                            onChange={(event) => this.handlePeselChange(event, this.validatePesel)}
-                        />
-                    </FormGroup>
-                    <FormGroup controlId="city" hidden={selectedUserRole !== 'Kursant'}>
-                        <ControlLabel>Miasto</ControlLabel>
-                        <FormControl
-                            value={city.value}
-                            onChange={(event) => this.handleCityChange(event, this.validateCity)}
-                        />
-                    </FormGroup>
-                    <FormGroup controlId="zipCode" hidden={selectedUserRole !== 'Kursant'}>
-                        <ControlLabel>Kod pocztowy</ControlLabel>
-                        <FormControl
-                            value={zipCode.value}
-                            onChange={(event) => this.handleZipCodeChange(event, this.validateZipCode)}
-                        />
-                    </FormGroup>
-                    <FormGroup controlId="street" hidden={selectedUserRole !== 'Kursant'}>
-                        <ControlLabel>Ulica</ControlLabel>
-                        <FormControl
-                            value={street.value}
-                            onChange={(event) => this.handlePeselChange(event, this.validateStreet)}
-                        />
-                    </FormGroup>
-                    <FormGroup controlId="houseNo" hidden={selectedUserRole !== 'Kursant'}>
-                        <ControlLabel>Nr domu</ControlLabel>
-                        <FormControl
-                            value={houseNo.value}
-                            onChange={(event) => this.handleHouseNoChange(event, this.validateHouseNo)}
-                        />
-                    </FormGroup>
-                    <Button
-                        disabled={!this.isFormValid()}
-                        id="register-button"
-                        block
-                        bsSize="large"
-                        type="submit">
-                        Zarejestruj
+                        <FormGroup id="userRoleSelectList">
+                            <ControlLabel>Instruktor</ControlLabel>
+                            <FormControl componentClass="select" onChange={this.handleSelectedUserRoleChange} value={selectedUserRole}>
+                                <option>Kursant</option>
+                                <option>Instruktor</option>
+                                <option>Administrator</option>
+                            </FormControl>
+                        </FormGroup>
+                        <FormGroup controlId="pesel" hidden={selectedUserRole !== 'Kursant'}>
+                            <ControlLabel>PESEL</ControlLabel>
+                            <FormControl
+                                value={pesel.value}
+                                onChange={(event) => this.handlePeselChange(event, this.validatePesel)}
+                            />
+                        </FormGroup>
+                        <FormGroup controlId="city" hidden={selectedUserRole !== 'Kursant'}>
+                            <ControlLabel>Miasto</ControlLabel>
+                            <FormControl
+                                value={city.value}
+                                onChange={(event) => this.handleCityChange(event, this.validateCity)}
+                            />
+                        </FormGroup>
+                        <FormGroup controlId="zipCode" hidden={selectedUserRole !== 'Kursant'}>
+                            <ControlLabel>Kod pocztowy</ControlLabel>
+                            <FormControl
+                                value={zipCode.value}
+                                onChange={(event) => this.handleZipCodeChange(event, this.validateZipCode)}
+                            />
+                        </FormGroup>
+                        <FormGroup controlId="street" hidden={selectedUserRole !== 'Kursant'}>
+                            <ControlLabel>Ulica</ControlLabel>
+                            <FormControl
+                                value={street.value}
+                                onChange={(event) => this.handlePeselChange(event, this.validateStreet)}
+                            />
+                        </FormGroup>
+                        <FormGroup controlId="houseNo" hidden={selectedUserRole !== 'Kursant'}>
+                            <ControlLabel>Nr domu</ControlLabel>
+                            <FormControl
+                                value={houseNo.value}
+                                onChange={(event) => this.handleHouseNoChange(event, this.validateHouseNo)}
+                            />
+                        </FormGroup>
+                        <Button
+                            disabled={!this.isFormValid()}
+                            id="register-button"
+                            block
+                            bsSize="large"
+                            type="submit">
+                            Zarejestruj
                     </Button>
-                </form>
-            </div>);
+                    </form>
+                </div>);
+        }
     }
 
     //validations functions

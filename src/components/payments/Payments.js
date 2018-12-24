@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import "./Payments.css";
 
 const studentId = 10;
@@ -39,37 +39,41 @@ export default class Payments extends Component {
     var { payments, isLoading, error } = this.state;
 
     if (error) {
-      return <p id="paymentsErrorLabel">{error.message}</p>
+      return <p id="paymentsInfoLabel">{error.message}</p>
     }
 
     if (isLoading) {
-      return <p id="paymentsLoadingLabel">Loading...</p>
+      return <p id="paymentsInfoLabel">Pobieranie danych...</p>
     }
 
-    const debt = 1000;
-    return (
-      <div id="paymentsContainer" >
-        <p id="paymentsHeader">Musisz zapłacić jeszcze: {debt} zł</p>
-        <h1 id="paymentsLabel">Lista Twoich wpłat</h1>
-        <Table id="paymentsTable" responsive striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th id="paymentNo">#</th>
-              <th id="paymentDateCol">Data wpłaty</th>
-              <th id="paymentAmountCol">Kwota</th>
-            </tr>
-          </thead>
-          <tbody>
-            {payments.map((payment, i = 0) => (
-              <tr key={payment.id}>
-                <td>{++i}</td>
-                <td>{payment.date}</td>
-                <td>{payment.amount} zł</td>
+    if (CURRENT_USER_ROLE !== 'Kursant') {
+      return <p id="paymentsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
+    } else {
+      const debt = 1000;
+      return (
+        <div id="paymentsContainer" >
+          <p id="paymentsHeader">Musisz zapłacić jeszcze: {debt} zł</p>
+          <h1 id="paymentsLabel">Lista Twoich wpłat</h1>
+          <Table id="paymentsTable" responsive striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th id="paymentNo">#</th>
+                <th id="paymentDateCol">Data wpłaty</th>
+                <th id="paymentAmountCol">Kwota</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
-    );
+            </thead>
+            <tbody>
+              {payments.map((payment, i = 0) => (
+                <tr key={payment.id}>
+                  <td>{++i}</td>
+                  <td>{payment.date}</td>
+                  <td>{payment.amount} zł</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      );
+    }
   }
 }

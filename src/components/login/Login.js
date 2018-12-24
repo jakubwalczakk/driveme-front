@@ -43,18 +43,23 @@ export default class Login extends Component {
     }
 
     handleSubmit = event => {
+
+        var { email, password } = this.state;
+
         event.preventDefault();
 
         const loginRequest = {
-            email: this.state.email.value,
-            password: this.state.password.value
+            email: email.value,
+            password: password.value
         };
 
         login(loginRequest)
             .then(response => {
+
+                console.log("LOGIN RESPONSE",response)
                 localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-                console.log(response)
-                this.props.history.push("/");
+
+                this.props.history.push("/main");
             }).catch(error => {
                 if (error.status === 401) {
                     console.log('Your Username or Password is incorrect. Please try again!')

@@ -89,8 +89,6 @@ export default class CityList extends Component {
             image: newCityImage
         }
 
-        console.log(addCityRequest);
-
         fetch(cityUrl, {
             method: 'POST',
             headers: {
@@ -178,7 +176,7 @@ export default class CityList extends Component {
         }
 
         if (isLoading) {
-            return <p id="citiesLoadingLabel">Loading...</p>
+            return <p id="citiesLoadingLabel">Pobieranie danych...</p>
         }
 
         if (showAddModal) {

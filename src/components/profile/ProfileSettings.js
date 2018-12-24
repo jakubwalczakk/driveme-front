@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger, Image } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
-import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "constants/constants";
+import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, ACCESS_TOKEN } from "constants/constants";
 import { trimDate } from "utils/APIUtils";
 import "./ProfileSettings.css";
 
@@ -52,7 +52,8 @@ export default class ProfileSettings extends Component {
       houseNo: {
         value: ''
       },
-      image: ''
+      image: '',
+      currentLoggedUser: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSaveChanges = this.handleSaveChanges.bind(this);
@@ -64,6 +65,29 @@ export default class ProfileSettings extends Component {
     this.validateStreet = this.validateStreet.bind(this);
     this.validateHouseNo = this.validateHouseNo.bind(this);
     this.handleChangePhoto = this.handleChangePhoto.bind(this);
+  }
+
+  loadCurrentLoggedUser() {
+    if (localStorage.getItem(ACCESS_TOKEN)) {
+
+      fetch('http://localhost:8080/user/me', {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem(ACCESS_TOKEN)
+        },
+      }).then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Coś poszło nie tak podczas pobierania zalogowanego użytkownika...');
+        }
+      }).then(response => {
+        this.setState({ currentLoggedUser: response })
+      });
+    } else {
+      console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
+    }
   }
 
   handleChange = (event, validationFun) => {
@@ -83,7 +107,6 @@ export default class ProfileSettings extends Component {
 
     if (this.validateForm()) {
 
-      console.log(this.state)
       const updateRequest = {
         id: id,
         password: password,
@@ -95,7 +118,6 @@ export default class ProfileSettings extends Component {
           houseNo: houseNo
         }
       }
-      console.log(updateRequest)
 
       fetch(studentUrl, {
         method: 'PUT',
@@ -119,6 +141,8 @@ export default class ProfileSettings extends Component {
 
   handleChangePhoto = (files) => {
 
+    var { currentLoggedUser } = this.state;
+
     let photoString = files.base64;
     let photo;
 
@@ -135,7 +159,7 @@ export default class ProfileSettings extends Component {
 
     if (photo != null) {
       const updateRequest = {
-        id: 7,
+        id: currentLoggedUser.id,
         photo: photo
       }
 
@@ -157,8 +181,11 @@ export default class ProfileSettings extends Component {
     }
   }
 
+
   componentDidMount() {
-    fetch(studentUrl + '/11')
+    var { currentLoggedUser } = this.state;
+
+    fetch(studentUrl + '/'+currentLoggedUser.id)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -173,10 +200,10 @@ export default class ProfileSettings extends Component {
         pesel: { value: data.pesel },
         email: { value: data.email },
         phoneNumber: { value: data.phoneNumber },
-        city: { value: data.address.city },
-        zipCode: { value: data.address.zipCode },
-        street: { value: data.address.street },
-        houseNo: { value: data.address.houseNo }
+        // city: { value: data.address.city },
+        // zipCode: { value: data.address.zipCode },
+        // street: { value: data.address.street },
+        // houseNo: { value: data.address.houseNo }
       }))
 
 
@@ -200,8 +227,6 @@ export default class ProfileSettings extends Component {
   render() {
 
     var { id, name, surname, registrationDate, pesel, email, password, phoneNumber, city, zipCode, street, houseNo, image } = this.state;
-
-    console.log(this.state)
 
     const passwordTooltip = (
       <Tooltip id="password-tooltip">

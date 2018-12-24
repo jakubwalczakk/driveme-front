@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ProgressBar } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import "./Course.css";
 
 const courseUrl = API_BASE_URL + '/course';
@@ -31,7 +31,7 @@ export default class Course extends Component {
 
   render() {
 
-    var { course } = this.state;
+    var { course, isLoading, error } = this.state;
     var currenPaymentOfCourse = course.currentPayment;
     const courseCost = 1500.0;
     var percentPaymentOfCourse = currenPaymentOfCourse * 100 / courseCost;
@@ -42,17 +42,29 @@ export default class Course extends Component {
     var percentOfCourseCompletion = takenDrivingHours * 100 / amountOfCourseDrivingHours;
     percentOfCourseCompletion = Math.round(percentOfCourseCompletion);
 
-    return (
-      <div id="courseContainer">
-        {/* <p id="courseLabel">Tutaj pojawią się informacje na temat Twojego kursu.</p> */}
-        <p>Data rozpoczęcia kursu: {course.startDate}</p>
-        <p>Wpłacona kwota: {percentPaymentOfCourse}% - {currenPaymentOfCourse}PLN
+    if (error) {
+      return <p className="courseInfoLabel">{error.message}</p>
+    }
+
+    if (isLoading) {
+      return <p className="courseInfoLabel">Pobieranie danych...</p>
+    }
+
+    if (CURRENT_USER_ROLE !== 'Kursant') {
+      return <p className="courseInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
+    } else {
+      return (
+        <div id="courseContainer">
+          {/* <p id="courseLabel">Tutaj pojawią się informacje na temat Twojego kursu.</p> */}
+          <p>Data rozpoczęcia kursu: {course.startDate}</p>
+          <p>Wpłacona kwota: {percentPaymentOfCourse}% - {currenPaymentOfCourse}PLN
                   {currenPaymentOfCourse === 1500.0 &&
-            <i id="paymentsAccepted" className="material-icons">check_circle</i>}</p>
-        <p>Liczba ukończonych godzin: {course.takenDrivingHours}h ({percentOfCourseCompletion}%)</p>
-        <ProgressBar id="drivingsHoursProgressBar" bsStyle="success" now={percentOfCourseCompletion} />
-        <p>Status: {course.status}</p>
-      </div>
-    );
+              <i id="paymentsAccepted" className="material-icons">check_circle</i>}</p>
+          <p>Liczba ukończonych godzin: {course.takenDrivingHours}h ({percentOfCourseCompletion}%)</p>
+          <ProgressBar id="drivingsHoursProgressBar" bsStyle="success" now={percentOfCourseCompletion} />
+          <p>Status: {course.status}</p>
+        </div>
+      );
+    }
   }
 }

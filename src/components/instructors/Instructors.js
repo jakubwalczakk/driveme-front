@@ -39,7 +39,7 @@ export default class Instructors extends Component {
     }
 
     if (isLoading) {
-      return <p id="instructorsLoadingLabel">Loading...</p>
+      return <p id="instructorsLoadingLabel">Pobieranie danych...</p>
     }
 
     return (

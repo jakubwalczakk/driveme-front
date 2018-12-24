@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Badge } from "react-bootstrap";
-import { API_BASE_URL,MINUTES_IN_MICROS } from "constants/constants";
+import { API_BASE_URL, MINUTE_IN_MICROS } from "constants/constants";
 import "./Drivings.css";
 
 const studentId = 11;
@@ -30,6 +30,11 @@ export default class Drivings extends Component {
       })
       .then(data => this.setState({ drivings: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
+
+  }
+
+  componentWillUnmount() {
+    this._mounted = false
   }
 
   render() {
@@ -41,7 +46,7 @@ export default class Drivings extends Component {
     }
 
     if (isLoading) {
-      return <p id="drivingsLoadingLabel">Loading...</p>
+      return <p id="drivingsLoadingLabel">Pobieranie danych...</p>
     }
 
     return (
@@ -68,7 +73,7 @@ export default class Drivings extends Component {
                 <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
                 <td>{driving.drivingCity}</td>
                 <td>{driving.startDate}</td>
-                <td>{(new Date(driving.finishDate) - new Date(driving.startDate)) / MINUTES_IN_MICROS}</td>
+                <td>{(new Date(driving.finishDate) - new Date(driving.startDate)) / MINUTE_IN_MICROS}</td>
                 <td>
                   <Badge>{driving.rating}</Badge>
                 </td>

@@ -104,7 +104,6 @@ export default class CarTable extends Component {
 
     handleNewCarGasTypeChange(event) {
         this.setState({ newCarGasType: event.target.value })
-        console.log(this.state)
     }
 
     handleSubmitAddCar() {
@@ -118,8 +117,6 @@ export default class CarTable extends Component {
             photo: newCarImage,
             gasType: newCarGasType,
         }
-
-        console.log(addCarRequest);
 
         fetch(carUrl, {
             method: 'POST',

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
-import { API_BASE_URL, MINUTES_IN_MICROS } from "constants/constants";
+import { API_BASE_URL, MINUTE_IN_MICROS, CURRENT_USER_ROLE } from "constants/constants";
 import "./Ratings.css";
 
 const courseUrl = API_BASE_URL + '/course';
@@ -34,7 +34,7 @@ export default class Rating extends Component {
     const rateRequest = {
       drivingId: 2, // wartości powinny zostać pobrane z okna modalnego!!!
       rating: "OK",
-      comment:"Super postępy"
+      comment: "Super postępy"
     }
 
     fetch(rateDrivingUrl, {
@@ -75,71 +75,75 @@ export default class Rating extends Component {
     var { drivings, isLoading, error } = this.state;
 
     if (error) {
-      return <p id="drivingsErrorLabel">{error.message}</p>
+      return <p className="ratingsInfoLabel">{error.message}</p>
     }
 
     if (isLoading) {
-      return <p id="drivingsLoadingLabel">Loading...</p>
+      return <p className="ratingsInfoLabel">Pobieranie danych...</p>
     }
 
+    if (CURRENT_USER_ROLE !== 'Instruktor') {
+      return <p className="ratingsInfoLabel">Nie masz dostępu do tego zasobu!</p>
+    } else {
 
-    return (
-      <div id="instructorDrivingsTableContainer">
-        <        p id="instructorDrivingsLabel">Lista przeprowadzonych przez Ciebie jazd szkoleniowych</p>
-        <Table id="drivingsTable" responsive striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th>Student</th>
-              <th>Tytuł</th>
-              <th>Samochód</th>
-              <th>Miasto</th>
-              <th>Data rozpoczęcia</th>
-              <th>Czas trwania (min.)</th>
-              <th>Ocena</th>
-            </tr>
-          </thead>
-          <tbody>
-            {drivings.map(driving => (
-              <tr key={driving.id}>
-                <td>{driving.student.name} {driving.student.surname}</td>
-                <td>{driving.title}</td>
-                <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
-                <td>{driving.drivingCity}</td>
-                <td>{driving.startDate}</td>
-                <td>{(new Date(driving.finishDate) - new Date(driving.startDate)) / MINUTES_IN_MICROS}</td>
-                <td>{driving.rating ?
-                  <Badge>{driving.rating}</Badge> :
-                  <Button id="rateButton" onClick={this.handleShow}>Oceń</Button>}
-                </td>
+      return (
+        <div id="instructorDrivingsTableContainer">
+          <        p id="instructorDrivingsLabel">Lista przeprowadzonych przez Ciebie jazd szkoleniowych</p>
+          <Table id="ratingsTable" responsive striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Tytuł</th>
+                <th>Samochód</th>
+                <th>Miasto</th>
+                <th>Data rozpoczęcia</th>
+                <th>Czas trwania (min.)</th>
+                <th>Ocena</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-        <Modal show={this.state.showModal} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Ocena zajęć</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <FormGroup>
-              <ControlLabel>Ocena</ControlLabel>
-              <br />
-              <Radio name="radioGroup" inline>Rozczarowująco</Radio>
-              <Radio name="radioGroup" inline>Przeciętnie</Radio>
-              <Radio name="radioGroup" inline>OK</Radio>
-              <Radio name="radioGroup" inline>Świetnie</Radio>
-              <Radio name="radioGroup" inline>Mistrzowsko</Radio>
-            </FormGroup>
-            <FormGroup>
-              <ControlLabel>Komentarz</ControlLabel>
-              <FormControl />
-            </FormGroup>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.handleClose}>Anuluj</Button>
-            <Button onClick={this.handleRated}>Zapisz</Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
-    );
+            </thead>
+            <tbody>
+              {drivings.map(driving => (
+                <tr key={driving.id}>
+                  <td>{driving.student.name} {driving.student.surname}</td>
+                  <td>{driving.title}</td>
+                  <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
+                  <td>{driving.drivingCity}</td>
+                  <td>{driving.startDate}</td>
+                  <td>{(new Date(driving.finishDate) - new Date(driving.startDate)) / MINUTE_IN_MICROS}</td>
+                  <td>{driving.rating ?
+                    <Badge>{driving.rating}</Badge> :
+                    <Button id="rateButton" onClick={this.handleShow}>Oceń</Button>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Modal show={this.state.showModal} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Ocena zajęć</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <FormGroup>
+                <ControlLabel>Ocena</ControlLabel>
+                <br />
+                <Radio name="radioGroup" inline>Rozczarowująco</Radio>
+                <Radio name="radioGroup" inline>Przeciętnie</Radio>
+                <Radio name="radioGroup" inline>OK</Radio>
+                <Radio name="radioGroup" inline>Świetnie</Radio>
+                <Radio name="radioGroup" inline>Mistrzowsko</Radio>
+              </FormGroup>
+              <FormGroup>
+                <ControlLabel>Komentarz</ControlLabel>
+                <FormControl />
+              </FormGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={this.handleClose}>Anuluj</Button>
+              <Button onClick={this.handleRated}>Zapisz</Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      );
+    }
   }
 }

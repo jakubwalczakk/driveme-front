@@ -16,4 +16,6 @@ export const EMAIL_MAX_LENGTH = 40;
 export const PASSWORD_MIN_LENGTH = 8;
 export const PASSWORD_MAX_LENGTH = 32;
 
-export const MINUTES_IN_MICROS = 1000 * 60;
+export const MINUTE_IN_MICROS = 1000 * 60;
+
+export const CURRENT_USER_ROLE = 'Kursant';
