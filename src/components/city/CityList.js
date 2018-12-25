@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
+import { request } from "utils/APIUtils";
 import { API_BASE_URL } from "constants/constants";
 import "./CityList.css";
 
@@ -89,20 +90,12 @@ export default class CityList extends Component {
             image: newCityImage
         }
 
-        fetch(cityUrl, {
+        request({
+            url: cityUrl,
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify(addCityRequest)
-        }).then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Coś poszło nie tak podczas dodawania nowego miasta...');
-            }
-        });
+        }).then(data => this.setState({ isLoading: false }))
+            .catch(error => this.setState({ error, isLoading: false }));
 
         this.handleCloseAddModal();
         this.componentDidMount();
@@ -154,15 +147,11 @@ export default class CityList extends Component {
     componentDidMount() {
         this.setState({ isLoading: true });
 
-        fetch(cityUrl)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Coś poszło nie tak podczas pobierania listy miast...');
-                }
-            })
-            .then(data => this.setState({ cities: data, isLoading: false }))
+
+        request({
+            url: cityUrl,
+            method: 'GET'
+        }).then(data => this.setState({ cities: data, isLoading: false }))
             .catch(error => this.setState({ error, isLoading: false }));
     }
 

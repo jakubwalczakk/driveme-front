@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Nav, Navbar, NavItem, Image, Modal, Button } from "react-bootstrap";
-import { getCurrentUser } from "utils/APIUtils";
+import { getCurrentUser, logout, request } from "utils/APIUtils";
 import { API_BASE_URL, ACCESS_TOKEN, CURRENT_USER_ROLE } from 'constants/constants';
 import "./NavigationBar.css";
 
@@ -35,10 +35,9 @@ export default class NavigationBar extends Component {
     }
 
     handleLogoutButtonClick() {
-        console.log("WYLOGOWUJĘ CIĘ KOLEŻKO");
-        // this.props.history.push("/");
-        localStorage.removeItem(ACCESS_TOKEN)
+        logout();
         this.handleCloseLogoutModal();
+        // this.props.history.push("/");
         // this.props.history.push("/login")
     }
 
@@ -64,23 +63,14 @@ export default class NavigationBar extends Component {
     loadCurrentLoggedUser() {
         if (localStorage.getItem(ACCESS_TOKEN)) {
 
-            fetch('http://localhost:8080/user/me', {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + localStorage.getItem(ACCESS_TOKEN)
-                },
-            }).then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Coś poszło nie tak podczas pobierania zalogowanego użytkownika...');
-                }
-            }).then(response => {
-                this.setState({ currentLoggedUser: response, isLoggedIn: true })
-            });
+            request({
+                url: 'http://localhost:8080/user/me',
+                method: 'GET'
+            }).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
+                .catch(error => this.setState({ error, isLoading: false }));
         } else {
             console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
+            throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
         }
     }
 

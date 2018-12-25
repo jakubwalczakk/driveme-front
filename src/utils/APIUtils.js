@@ -2,13 +2,13 @@ import { API_BASE_URL, ACCESS_TOKEN } from 'constants/constants';
 
 export const request = (options) => {
   const headers = new Headers({
+    'Accept': 'application/json',
     'Content-Type': 'application/json',
   })
 
   if (localStorage.getItem(ACCESS_TOKEN)) {
     headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN));
   }
-
   const defaults = { headers: headers };
   options = Object.assign({}, defaults, options);
 
@@ -22,23 +22,6 @@ export const request = (options) => {
       })
     );
 }
-// if (localStorage.getItem(ACCESS_TOKEN)) {
-//   fetch('http://localhost:8080/user/me', {
-//     method: 'GET',
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": "Bearer " + localStorage.getItem(ACCESS_TOKEN)
-//     },
-//   }).then(response => {
-//     if (response.ok) {
-//       return response.json();
-//     } else {
-//       throw new Error('Coś poszło nie tak podczas pobierania zalogowanego użytkownika...');
-//     }
-//   });
-// } else {
-//   throw new Error("Nie można pobrać informacji na temat zalogowanego użytkownika");
-// }
 
 
 export function login(loginRequest) {
@@ -64,30 +47,27 @@ export function checkEmailAvailability(email) {
   });
 }
 
+export function logout() {
+  if (localStorage.getItem(ACCESS_TOKEN)) {
+    localStorage.removeItem(ACCESS_TOKEN);
+    console.log("Zostałeś wylogowany z systemu!");
+  } else {
+    throw new Error("Wystąpił błąd podczas wylogowywania z systemu...")
+  }
+}
+
 export function getCurrentUser() {
   if (localStorage.getItem(ACCESS_TOKEN)) {
 
     let currentUser;
-
-    fetch('http://localhost:8080/user/me', {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem(ACCESS_TOKEN)
-      },
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Coś poszło nie tak podczas pobierania zalogowanego użytkownika...');
-      }
-    }).then(response => {
-      currentUser = response;
-    });
+    request({
+      url: 'http://localhost:8080/user/me',
+      method: 'GET'
+    }).then(data => currentUser = data);
     return currentUser;
   } else {
     console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
-    return null;
+    throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
   }
 }
 

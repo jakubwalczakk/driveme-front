@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { ProgressBar } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { request } from "utils/APIUtils";
 import "./Course.css";
 
 const courseUrl = API_BASE_URL + '/course';
@@ -17,15 +18,10 @@ export default class Course extends Component {
 
   componentDidMount() {
 
-    fetch(courseUrl + '/2')
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy miast...');
-        }
-      })
-      .then(data => this.setState({ course: data, isLoading: false }))
+    request({
+      url: courseUrl + '/2',
+      method: 'GET'
+    }).then(data => this.setState({ course: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

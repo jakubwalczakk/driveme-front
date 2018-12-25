@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
+import { request } from "utils/APIUtils";
 import { API_BASE_URL } from "constants/constants";
 import "./CarTable.css";
 
@@ -118,20 +119,13 @@ export default class CarTable extends Component {
             gasType: newCarGasType,
         }
 
-        fetch(carUrl, {
+        request({
+            url: carUrl,
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify(addCarRequest)
-        }).then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Coś poszło nie tak podczas dodawania nwoego samochodu...');
-            }
-        });
+        }).then(data => this.setState({ isLoading: false }))
+            .catch(error => this.setState({ error, isLoading: false }));
+
         this.handleCloseAddModal();
         this.componentDidMount();
     }
@@ -204,25 +198,16 @@ export default class CarTable extends Component {
     componentDidMount() {
         this.setState({ isLoading: true });
 
-        fetch(carUrl + '/brands')
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Coś poszło nie tak podczas pobierania listy marek samochodów...');
-                }
-            })
-            .then(data => this.setState({ carBrands: data }));
+        request({
+            url: carUrl + '/brands',
+            method: 'GET',
+        }).then(data => this.setState({ carBrands: data, isLoading: false }))
+            .catch(error => this.setState({ error, isLoading: false }));
 
-        fetch(carUrl)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Coś poszło nie tak podczas pobierania listy samochodów...');
-                }
-            })
-            .then(data => this.setState({ cars: data, isLoading: false }))
+        request({
+            url: carUrl,
+            method: 'GET'
+        }).then(data => this.setState({ cars: data, isLoading: false }))
             .catch(error => this.setState({ error, isLoading: false }));
     }
 

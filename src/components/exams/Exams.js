@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { request } from "utils/APIUtils";
 import "./Exams.css";
 
 const studentId = 10;
 const instructorId = 7;
 const practicalExamUrl = API_BASE_URL + '/practical_exam/student/' + studentId;
 const theoreticalExamUrl = API_BASE_URL + '/theoretical_exam/student/' + studentId;
-const instructorPracitcalExamsUrl = API_BASE_URL + '/practical_exam/instructor/' + instructorId;
+const instructorPracticalExamsUrl = API_BASE_URL + '/practical_exam/instructor/' + instructorId;
 
 export default class Exams extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ export default class Exams extends Component {
                 <td>{exam.dateOfExam}</td>
                 <td>{exam.student.name}</td>
                 <td>{exam.car.brand}</td>
-                 <td>
+                <td>
                   {exam.passed &&
                     <i id="examPassed" className="material-icons">check_circle</i>}
                   {!exam.passed &&
@@ -51,7 +52,7 @@ export default class Exams extends Component {
                     <Button>
                       Oceń
                 </Button>}
-                </td> 
+                </td>
                 <td>{exam.scoredPoints}</td>
                 <td>{Math.round(exam.result * 100)}%</td>
               </tr>
@@ -101,42 +102,29 @@ export default class Exams extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    if (!true) {
-      fetch(practicalExamUrl)
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Coś poszło nie tak podczas pobierania egzaminu praktycznego...');
-          }
-        })
-        .then(data => this.setState({ practicalExam: data, isLoading: false }))
+    if (CURRENT_USER_ROLE === 'Kursant') {
+
+      request({
+        url: practicalExamUrl,
+        method: 'GET'
+      }).then(data => this.setState({ practicalExam: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
 
-      fetch(theoreticalExamUrl)
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Coś poszło nie tak podczas pobierania listy egzaminów teoretycznych...');
-          }
-        })
-        .then(data => this.setState({ theoreticalExams: data, isLoading: false }))
+      request({
+        url: theoreticalExamUrl,
+        method: 'GET'
+      }).then(data => this.setState({ theoreticalExams: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
-    } else {
-      fetch(instructorPracitcalExamsUrl)
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Coś poszło nie tak podczas pobierania listy egzaminów praktycznych...');
-          }
-        })
-        .then(data => this.setState({ instructorPracitcalExamsUrl: data, isLoading: false }))
+
+    } else if (CURRENT_USER_ROLE === 'Instruktor') {
+      
+      request({
+        url: instructorPracticalExamsUrl,
+        method: 'GET'
+      }).then(data => this.setState({ instructorPracitcalExamsUrl: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
     }
   }
-
 
   render() {
 

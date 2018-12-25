@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
-import { trimDate } from "utils/APIUtils";
+import { trimDate, request } from "utils/APIUtils";
 import "./Students.css";
 
 const studentsUrl = API_BASE_URL + '/student';
@@ -163,14 +163,10 @@ export default class Students extends Component {
 
     this.setState({ isLoading: true });
 
-    fetch(studentsUrl)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy kursantów...');
-        }
-      })
+    request({
+      url: studentsUrl,
+      method: 'GET'
+    })
       .then(data => this.setState({ students: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }

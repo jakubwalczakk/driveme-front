@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL, MINUTE_IN_MICROS, CURRENT_USER_ROLE } from "constants/constants";
+import { request } from "utils/APIUtils";
 import "./Ratings.css";
 
 const courseUrl = API_BASE_URL + '/course';
@@ -37,20 +38,13 @@ export default class Rating extends Component {
       comment: "Super postępy"
     }
 
-    fetch(rateDrivingUrl, {
+    request({
+      url: rateDrivingUrl,
       method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify(rateRequest)
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Coś poszło nie tak podczas oceniania jazd...');
-      }
-    });
+    }).then(data => this.setState({ isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
+
     console.log("Zajęcia ocenione!");
     this.handleClose();
   }
@@ -58,15 +52,10 @@ export default class Rating extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    fetch(drivingUrl)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy jazd instruktora...');
-        }
-      })
-      .then(data => this.setState({ drivings: data, isLoading: false }))
+    request({
+      url: drivingUrl,
+      method: 'GET'
+    }).then(data => this.setState({ drivings: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

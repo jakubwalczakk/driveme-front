@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Badge } from "react-bootstrap";
 import { API_BASE_URL, MINUTE_IN_MICROS } from "constants/constants";
+import { request } from "utils/APIUtils";
 import "./Drivings.css";
 
 const studentId = 11;
@@ -20,15 +21,10 @@ export default class Drivings extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    fetch(drivingUrl)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy jazd...');
-        }
-      })
-      .then(data => this.setState({ drivings: data, isLoading: false }))
+    request({
+      url: drivingUrl,
+      method: 'GET'
+    }).then(data => this.setState({ drivings: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
   }

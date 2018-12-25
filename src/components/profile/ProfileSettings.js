@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger, Image } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
 import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, ACCESS_TOKEN } from "constants/constants";
-import { trimDate } from "utils/APIUtils";
+import { trimDate, request } from "utils/APIUtils";
 import "./ProfileSettings.css";
 
 const studentUrl = API_BASE_URL + '/student';
@@ -16,6 +16,8 @@ export default class ProfileSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
+      error: null,
       id: {
         value: ''
       },
@@ -70,23 +72,14 @@ export default class ProfileSettings extends Component {
   loadCurrentLoggedUser() {
     if (localStorage.getItem(ACCESS_TOKEN)) {
 
-      fetch('http://localhost:8080/user/me', {
-        method: 'GET',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem(ACCESS_TOKEN)
-        },
-      }).then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania zalogowanego użytkownika...');
-        }
-      }).then(response => {
-        this.setState({ currentLoggedUser: response })
-      });
+      request({
+        url: 'http://localhost:8080/user/me',
+        method: 'GET'
+      }).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
+        .catch(error => this.setState({ error, isLoading: false }));
     } else {
       console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
+      throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
     }
   }
 
@@ -119,20 +112,12 @@ export default class ProfileSettings extends Component {
         }
       }
 
-      fetch(studentUrl, {
+      request({
+        url: studentUrl,
         method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(updateRequest)
-      }).then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas aktualizacji danych studenta...');
-        }
-      });
+      }).then(data => this.setState({ isLoading: false }))
+        .catch(error => this.setState({ error, isLoading: false }));
     }
     else {
       console.log("WIELKI BŁĄd")
@@ -163,36 +148,24 @@ export default class ProfileSettings extends Component {
         photo: photo
       }
 
-      fetch(instructorUrl, {
+      request({
+        url: instructorUrl,
         method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(updateRequest)
-      }).then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas aktualizacji danych instruktora...');
-        }
-      });
+      }).then(data => this.setState({ isLoading: false }))
+        .catch(error => this.setState({ error, isLoading: false }));
+
       this.componentDidMount();
     }
   }
 
-
   componentDidMount() {
     var { currentLoggedUser } = this.state;
 
-    fetch(studentUrl + '/'+currentLoggedUser.id)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania danych użytkownika...');
-        }
-      }).then(data => this.setState({
+    request({
+      url: studentUrl + '/' + currentLoggedUser.id,
+      method: 'GET'
+    }).then(data => this.setState({
         id: { value: data.id },
         name: { value: data.name },
         surname: { value: data.surname },
@@ -204,22 +177,13 @@ export default class ProfileSettings extends Component {
         // zipCode: { value: data.address.zipCode },
         // street: { value: data.address.street },
         // houseNo: { value: data.address.houseNo }
-      }))
+      })).then(data => this.setState({ payments: data, isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
 
-
-    fetch(instructorUrl + '/7', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Coś poszło nie tak podczas pobierania danych instruktora...');
-      }
-    }).then(data => this.setState({
+      request({
+        url: instructorUrl + '/7',
+        method: 'GET'
+      }).then(data => this.setState({
       image: data.photo
     }));
   }

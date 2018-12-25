@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { request } from "utils/APIUtils";
 import "./Payments.css";
 
 const studentId = 10;
@@ -19,15 +20,10 @@ export default class Payments extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    fetch(paymentUrl)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy płatności...');
-        }
-      })
-      .then(data => this.setState({ payments: data, isLoading: false }))
+    request({
+      url: paymentUrl,
+      method: 'GET'
+    }).then(data => this.setState({ payments: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

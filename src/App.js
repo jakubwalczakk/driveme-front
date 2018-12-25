@@ -31,28 +31,28 @@ export default class App extends Component {
     }
 
     this.handleLogout = this.handleLogout.bind(this);
-    this.loadCurrentUser = this.loadCurrentUser.bind(this);
+    // this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
   }
 
-  loadCurrentUser() {
-    this.setState({
-      isLoading: true
-    });
+  // loadCurrentUser() {
+  //   this.setState({
+  //     isLoading: true
+  //   });
 
-    getCurrentUser()
-      .then(response => {
-        this.setState({
-          currentUser: response,
-          isAuthenticated: true,
-          isLoading: false
-        });
-      }).catch(error => {
-        this.setState({
-          isLoading: false
-        });
-      });
-  }
+  //   getCurrentUser()
+  //     .then(response => {
+  //       this.setState({
+  //         currentUser: response,
+  //         isAuthenticated: true,
+  //         isLoading: false
+  //       });
+  //     }).catch(error => {
+  //       this.setState({
+  //         isLoading: false
+  //       });
+  //     });
+  // }
 
   componentDidMount() {
     // this.loadCurrentUser();

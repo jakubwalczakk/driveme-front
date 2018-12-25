@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { ProgressBar } from "react-bootstrap";
 import Drivings from "components/drivings/Drivings";
 import { API_BASE_URL, ACCESS_TOKEN, CURRENT_USER_ROLE } from "constants/constants";
+import { request } from "utils/APIUtils";
 import "./YourProgress.css";
 
 const courseUrl = API_BASE_URL + '/course';
@@ -17,26 +18,17 @@ export default class YourProgress extends Component {
     }
   }
 
-  loadCurrentLoggedUser() {
+  loadCurrentLoggedUser() {    
     if (localStorage.getItem(ACCESS_TOKEN)) {
 
-      fetch('http://localhost:8080/user/me', {
-        method: 'GET',
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem(ACCESS_TOKEN)
-        },
-      }).then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania zalogowanego użytkownika...');
-        }
-      }).then(response => {
-        this.setState({ currentLoggedUser: response, isLoggedIn: true })
-      });
+      request({
+        url: 'http://localhost:8080/user/me',
+        method: 'GET'
+      }).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
+        .catch(error => this.setState({ error, isLoading: false }));
     } else {
       console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
+      throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
     }
   }
 
@@ -45,15 +37,10 @@ export default class YourProgress extends Component {
 
     let courseId = 1;
 
-    fetch(courseUrl + '/' + courseId)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania informacji na temat kursu...');
-        }
-      })
-      .then(data => this.setState({ course: data, isLoading: false }))
+    request({
+      url: courseUrl + '/' + courseId,
+      method: 'GET'
+    }).then(data => this.setState({ course: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

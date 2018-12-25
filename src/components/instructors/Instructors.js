@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Table, Image } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
+import { request } from "utils/APIUtils";
 import "./Instructors.css";
 
 const instructorUrl = API_BASE_URL + '/instructor';
@@ -18,15 +19,10 @@ export default class Instructors extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    fetch(instructorUrl)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy instruktorów...');
-        }
-      })
-      .then(data => this.setState({ instructors: data, isLoading: false }))
+    request({
+      url: instructorUrl,
+      method: 'GET'
+    }).then(data => this.setState({ instructors: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

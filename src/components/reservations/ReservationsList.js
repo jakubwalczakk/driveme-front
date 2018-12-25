@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Table, Button } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
+import { request } from "utils/APIUtils";
 import "./ReservationsList.css";
 
 const studentId = 11;
@@ -19,15 +20,10 @@ export default class Reservations extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    fetch(reservationUrl)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy rezerwacji...');
-        }
-      })
-      .then(data => this.setState({ reservations: data, isLoading: false }))
+    request({
+      url: reservationUrl,
+      method: 'GET'
+    }).then(data => this.setState({ reservations: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

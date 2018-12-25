@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { FormGroup, FormControl, ControlLabel, Table, Button } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { request } from "utils/APIUtils";
 import "./Booking.css";
 
 const carUrl = API_BASE_URL + '/car';
@@ -42,56 +43,36 @@ export default class Booking extends Component {
     console.log(searchRequest)
 
     if (searchRequest.instructorInfo !== '-' && searchRequest.carBrand !== '-') {
-      fetch(eventsSpecifiedUrl, {
+      request({
+        url: eventsSpecifiedUrl,
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(searchRequest)
-      }).then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy wydarzeń...');
-        }
       }).then(data => this.setState({ events: data, isLoading: false }))
-        .catch(error => this.setState({ error, isLoading: false }));;
+        .catch(error => this.setState({ error, isLoading: false }));
+
     } else {
       console.log("No niestety...")
-      fetch(eventsUrl)
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Coś poszło nie tak podczas pobierania listy wydarzeń...');
-          }
-        }).then(data => this.setState({ events: data, isLoading: false }))
+
+      request({
+        url: eventsUrl,
+        method: 'GET'
+      }).then(data => this.setState({ events: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
     }
   }
 
   componentDidMount() {
-    fetch(carUrl + '/brands')
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy marek samochodów...');
-        }
-      })
-      .then(data => this.setState({ carBrands: data, isLoading: false }))
+
+    request({
+      url: carUrl + '/brands',
+      method: 'GET'
+    }).then(data => this.setState({ carBrands: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
-    fetch(instructorUrl)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Coś poszło nie tak podczas pobierania listy instruktorów...');
-        }
-      })
-      .then(data => this.setState({ instructors: data, isLoading: false }))
+    request({
+      url: instructorUrl,
+      method: 'GET'
+    }).then(data => this.setState({ instructors: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 
