@@ -90,8 +90,6 @@ export default class Register extends Component {
     handlePeselChange(event, validationFun) {
         const inputValue = event.target.value;
 
-        console.log("inputValue = " + inputValue)
-
         this.setState({
             pesel: {
                 value: inputValue,
@@ -102,8 +100,6 @@ export default class Register extends Component {
 
     handleEmailChange(event, validationFun) {
         const inputValue = event.target.value;
-
-        console.log("inputValue = " + inputValue)
 
         this.setState({
             email: {
@@ -116,8 +112,6 @@ export default class Register extends Component {
     handlePasswordChange(event, validationFun) {
         const inputValue = event.target.value;
 
-        console.log("inputValue = " + inputValue)
-
         this.setState({
             password: {
                 value: inputValue,
@@ -129,8 +123,6 @@ export default class Register extends Component {
     handlePasswordRepeatChange(event, validationFun) {
         const inputValue = event.target.value;
 
-        console.log("inputValue = " + inputValue)
-
         this.setState({
             password2: {
                 value: inputValue,
@@ -141,8 +133,6 @@ export default class Register extends Component {
 
     handlePhoneNumberChange(event, validationFun) {
         const inputValue = event.target.value;
-
-        console.log("inputValue = " + inputValue)
 
         this.setState({
             phoneNumber: {
@@ -160,8 +150,6 @@ export default class Register extends Component {
     handleCityChange(event, validationFun) {
         const inputValue = event.target.value;
 
-        console.log("inputValue = " + inputValue)
-
         this.setState({
             city: {
                 value: inputValue,
@@ -172,8 +160,6 @@ export default class Register extends Component {
 
     handleZipCodeChange(event, validationFun) {
         const inputValue = event.target.value;
-
-        console.log("inputValue = " + inputValue)
 
         this.setState({
             zipCode: {
@@ -186,8 +172,6 @@ export default class Register extends Component {
     handleStreetChange(event, validationFun) {
         const inputValue = event.target.value;
 
-        console.log("inputValue = " + inputValue)
-
         this.setState({
             street: {
                 value: inputValue,
@@ -198,8 +182,6 @@ export default class Register extends Component {
 
     handleHouseNoChange(event, validationFun) {
         const inputValue = event.target.value;
-
-        console.log("inputValue = " + inputValue)
 
         this.setState({
             houseNo: {
@@ -373,7 +355,7 @@ export default class Register extends Component {
                             <ControlLabel>Ulica</ControlLabel>
                             <FormControl
                                 value={street.value}
-                                onChange={(event) => this.handlePeselChange(event, this.validateStreet)}
+                                onChange={(event) => this.handleStreetChange(event, this.validateStreet)}
                             />
                         </FormGroup>
                         <FormGroup controlId="houseNo" hidden={selectedUserRole !== 'Kursant'}>

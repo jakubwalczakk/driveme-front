@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import { request } from "utils/APIUtils";
+import PracticalExam from './PracticalExam';
+import TheoreticalExam from './TheoreticalExam';
 import "./Exams.css";
 
 const studentId = 10;
@@ -26,6 +28,10 @@ export default class Exams extends Component {
   prepareTheContent() {
     var { practicalExam, theoreticalExams, instructorPracticalExams } = this.state;
     if (CURRENT_USER_ROLE === 'Instruktor') {
+
+      const instructorExams = instructorPracticalExams.map(exam =>
+        <PracticalExam key={exam.id} exam={exam} />)
+
       return (<div id="examsTableContainer">
         <p id="examsLabel">Przeprowadzone egzaminy praktyczne</p>
         <Table id="practicalExamsTable" responsive striped bordered condensed hover>
@@ -38,29 +44,15 @@ export default class Exams extends Component {
             </tr>
           </thead>
           <tbody>
-            {instructorPracticalExams.map(exam => (
-              <tr key={exam.id}>
-                <td>{exam.startDate}</td>
-                <td>{exam.student.name}</td>
-                <td>{exam.car.brand}</td>
-                <td>
-                  {exam.passed &&
-                    <i id="examPassed" className="material-icons">check_circle</i>}
-                  {!exam.passed &&
-                    <i id="examFailed" className="material-icons">cancel</i>}
-                  {exam.passed === null}{
-                    <Button>
-                      Oceń
-                </Button>}
-                </td>
-                <td>{exam.scoredPoints}</td>
-                <td>{Math.round(exam.result * 100)}%</td>
-              </tr>
-            ))}
+            {instructorExams}
           </tbody>
         </Table>
       </div>);
     } else if (CURRENT_USER_ROLE === 'Kursant') {
+
+      const studentExams = theoreticalExams.map(exam =>
+        <TheoreticalExam key={exam.id} exam={exam} />)
+
       return (<div id="examsTableContainer">
         <p id="examsLabel">Egzaminy teoretyczne</p>
         <Table id="theoreticalExamsTable" responsive striped bordered condensed hover>
@@ -73,26 +65,12 @@ export default class Exams extends Component {
             </tr>
           </thead>
           <tbody>
-            {theoreticalExams.map(exam => (
-              <tr key={exam.id}>
-                <td>{exam.startDate}</td>
-                <td>
-                  {exam.passed &&
-                    <i id="examPassed" className="material-icons">check_circle</i>}
-                  {!exam.passed &&
-                    <i id="examFailed" className="material-icons">cancel</i>}
-                </td>
-                <td>{exam.scoredPoints}</td>
-                <td>{Math.round(exam.result * 100)}%</td>
-              </tr>
-            ))}
+            {studentExams}
           </tbody>
         </Table>
+        {/* TODO */}
         <p id="practicalExamLabel">Egzamin praktyczny</p>
-        <p>{practicalExam.dateOfExam} {practicalExam.passed}</p>
-        {/* <p>{practicalExam.car}</p> */}
-        {/* <p>{practicalExam.car.brand} {practicalExam.car.model} {practicalExam.car.licensePlate}</p> */}
-        {/* <p>{practicalExam.instructor.name} {practicalExam.instructor.surname}</p> */}
+        {/* TODO */}
       </div>);
     } else {
       return <p>Nie posiadasz dostępu do tego zasobu!</p>
@@ -117,7 +95,7 @@ export default class Exams extends Component {
         .catch(error => this.setState({ error, isLoading: false }));
 
     } else if (CURRENT_USER_ROLE === 'Instruktor') {
-      
+
       request({
         url: instructorPracticalExamsUrl,
         method: 'GET'

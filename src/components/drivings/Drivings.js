@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Table, Badge } from "react-bootstrap";
-import { API_BASE_URL, MINUTE_IN_MICROS } from "constants/constants";
+import { Table } from "react-bootstrap";
+import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import Driving from "./Driving";
 import "./Drivings.css";
 
-const studentId = 11;
-const drivingUrl = API_BASE_URL + '/driving/student/' + studentId;
+const drivingUrl = API_BASE_URL + '/driving/student';
 
 export default class Drivings extends Component {
 
@@ -40,6 +40,9 @@ export default class Drivings extends Component {
       return <p id="drivingsLoadingLabel">Pobieranie danych...</p>
     }
 
+    const drivingList = drivings.map(driving =>
+      <Driving key={driving.id} driving={driving} />)
+
     return (
 
       <div id="drivingsTableContainer">
@@ -52,24 +55,12 @@ export default class Drivings extends Component {
               <th>Samochód</th>
               <th>Miasto</th>
               <th>Data rozpoczęcia</th>
-              <th>Czas trwania (min.)</th>
+              <th id="drivingDurationCol">Czas trwania (min.)</th>
               <th>Ocena</th>
             </tr>
           </thead>
           <tbody>
-            {drivings.map(driving => (
-              <tr key={driving.id}>
-                <td>{driving.title}</td>
-                <td>{driving.instructor.name} {driving.instructor.surname}</td>
-                <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
-                <td>{driving.drivingCity}</td>
-                <td>{driving.startDate}</td>
-                <td>{(new Date(driving.finishDate) - new Date(driving.startDate)) / MINUTE_IN_MICROS}</td>
-                <td>
-                  <Badge>{driving.rating}</Badge>
-                </td>
-              </tr>
-            ))}
+            {drivingList}
           </tbody>
         </Table>
       </div>);

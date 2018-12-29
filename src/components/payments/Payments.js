@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import { request } from "utils/APIUtils";
+import Payment from './Payment';
 import "./Payments.css";
 
-const studentId = 10;
-const paymentUrl = API_BASE_URL + '/payment/student/' + studentId;
+const paymentUrl = API_BASE_URL + '/payment/student/';
 
 export default class Payments extends Component {
   constructor(props) {
@@ -27,8 +27,7 @@ export default class Payments extends Component {
       .catch(error => this.setState({ error, isLoading: false }));
   }
 
-  myFunc(date) {
-  }
+
 
   render() {
 
@@ -45,10 +44,19 @@ export default class Payments extends Component {
     if (CURRENT_USER_ROLE !== 'Kursant') {
       return <p id="paymentsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
     } else {
-      const debt = 1000;
+
+      const paymentList = payments.map(payment =>
+        <Payment key={payment.id} payment={payment} />)
+
+      var totalPayment = 0;
+
+      for (var i = 0; i < payments.length; i++) {
+        totalPayment += payments[i].amount;
+      }
+
       return (
         <div id="paymentsContainer" >
-          <p id="paymentsHeader">Musisz zapłacić jeszcze: {debt} zł</p>
+          <p id="paymentsHeader">Musisz zapłacić jeszcze: {1500 - totalPayment} zł</p>
           <h1 id="paymentsLabel">Lista Twoich wpłat</h1>
           <Table id="paymentsTable" responsive striped bordered condensed hover>
             <thead>
@@ -59,13 +67,7 @@ export default class Payments extends Component {
               </tr>
             </thead>
             <tbody>
-              {payments.map((payment, i = 0) => (
-                <tr key={payment.id}>
-                  <td>{++i}</td>
-                  <td>{payment.date}</td>
-                  <td>{payment.amount} zł</td>
-                </tr>
-              ))}
+              {paymentList}
             </tbody>
           </Table>
         </div>

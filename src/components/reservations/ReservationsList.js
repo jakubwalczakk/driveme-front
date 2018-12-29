@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { Table, Button } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import Reservation from './Reservation';
 import "./ReservationsList.css";
 
-const studentId = 11;
-const reservationUrl = API_BASE_URL + '/reservation/student/' + studentId;
+const reservationUrl = API_BASE_URL + '/reservation/student';
 
 export default class Reservations extends Component {
   constructor(props) {
@@ -39,6 +39,9 @@ export default class Reservations extends Component {
       return <p id="reservationsLoadingLabel">Pobieranie danych...</p>
     }
 
+    const reservationList = reservations.map(reservation=>
+      <Reservation key={reservation.id} reservation={reservation}/>)
+
     return (
       <div id="reservationsTableContainer">
         <Button id="bookButton" href="/book">
@@ -52,21 +55,11 @@ export default class Reservations extends Component {
               <th>Samochód</th>
               <th>Miasto</th>
               <th>Data rozpoczęcia</th>
-              <th>Data zakończenia</th>
+              <th id="reservationDurationCol">Czas trwania (min.)</th>
             </tr>
           </thead>
           <tbody>
-            {reservations.map(reservation => (
-              <tr key={reservation.id}>
-                <td>
-                  {reservation.instructor.name} {reservation.instructor.surname}
-                </td>
-                <td>{reservation.car.brand} {reservation.car.model} - {reservation.car.licensePlate} </td>
-                <td>{reservation.drivingCity}</td>
-                <td>{reservation.startDate}</td>
-                <td>{reservation.finishDate}</td>
-              </tr>
-            ))}
+           {reservationList}
           </tbody>
 
         </Table>

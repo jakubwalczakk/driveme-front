@@ -18,6 +18,6 @@ export const PASSWORD_MAX_LENGTH = 32;
 
 export const MINUTE_IN_MICROS = 1000 * 60;
 
-// export const CURRENT_USER_ROLE = 'Kursant';
-export const CURRENT_USER_ROLE = 'Administrator';
+export const CURRENT_USER_ROLE = 'Kursant';
+// export const CURRENT_USER_ROLE = 'Administrator';
 // export const CURRENT_USER_ROLE = 'Instruktor';

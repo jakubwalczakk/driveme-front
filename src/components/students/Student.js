@@ -31,7 +31,7 @@ export default class Car extends Component {
     this.handleCloseDeleteModal = this.handleCloseDeleteModal.bind(this);
     this.handleDeleteStudent = this.handleDeleteStudent.bind(this);
     this.prepareDeleteModalStructure = this.prepareDeleteModalStructure.bind(this);
-  } 
+  }
   handleCloseCourseModal() {
     this.setState({ showCourseModal: false });
   }
@@ -84,6 +84,7 @@ export default class Car extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          Dodawanie płatności dla użytkownika {this.props.student.name} {this.props.student.surname}
         </Modal.Body>
         <Modal.Footer>
         </Modal.Footer>
@@ -113,6 +114,7 @@ export default class Car extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          Czy na pewno chcesz aktywować użytkownika: {this.props.student.name} {this.props.student.surname}?
         </Modal.Body>
         <Modal.Footer>
         </Modal.Footer>
@@ -138,10 +140,11 @@ export default class Car extends Component {
       <Modal show={this.state.showDeleteModal} onHide={this.handleCloseDeleteModal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            USUWANIE
+            AKTYWACJA
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          Czy na pewno chcesz aktywować użytkownika: {this.props.student.name} {this.props.student.surname}
         </Modal.Body>
         <Modal.Footer>
         </Modal.Footer>
@@ -150,7 +153,7 @@ export default class Car extends Component {
   }
 
   render() {
-    var { 
+    var {
       showCourseModal,
       showPaymentsModal,
       showActivateModal,
@@ -210,6 +213,6 @@ export default class Car extends Component {
         {activateModal}
         {deleteModal}
       </tr>
-      )
+    )
   }
 }
