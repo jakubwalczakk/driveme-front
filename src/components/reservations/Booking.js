@@ -7,7 +7,6 @@ import "./Booking.css";
 const carUrl = API_BASE_URL + '/car';
 const instructorUrl = API_BASE_URL + '/instructor';
 const eventsUrl = API_BASE_URL + '/event';
-const eventsSpecifiedUrl = eventsUrl + '/events';
 
 export default class Booking extends Component {
 
@@ -18,7 +17,9 @@ export default class Booking extends Component {
       error: null,
       carBrands: [],
       instructors: [],
-      events: [],
+      drivings: [],
+      reservations: [],
+      exams: [],
       selectedInstructor: '-',
       selectedCarBrand: '-',
     }
@@ -36,27 +37,24 @@ export default class Booking extends Component {
   }
 
   handleSearchSubmit() {
-    const searchRequest = {
-      carBrand: this.state.selectedCarBrand,
-      instructorInfo: this.state.selectedInstructor
-    }
-    console.log(searchRequest)
 
-    if (searchRequest.instructorInfo !== '-' && searchRequest.carBrand !== '-') {
+    const carBrand = this.state.selectedCarBrand;
+    const instructorEmail = this.state.selectedInstructor.split(" - ")[1];
+
+    console.log(carBrand)
+    console.log(instructorEmail)
+
+    if (carBrand !== '-' && instructorEmail !== '-') {
       request({
-        url: eventsSpecifiedUrl,
-        method: 'POST',
-        body: JSON.stringify(searchRequest)
-      }).then(data => this.setState({ events: data, isLoading: false }))
-        .catch(error => this.setState({ error, isLoading: false }));
-
-    } else {
-      console.log("No niestety...")
-
-      request({
-        url: eventsUrl,
-        method: 'GET'
-      }).then(data => this.setState({ events: data, isLoading: false }))
+        // url: eventsUrl + `booking?instructor=${instructorEmail}&brand=${carBrand}`,
+        url: eventsUrl + `/booking?instructor=${instructorEmail}&brand=${carBrand}`,
+        method: 'GET',
+      }).then(data => this.setState({
+        reservations: data.reservations,
+        drivings: data.drivings,
+        exams: data.exams,
+        isLoading: false
+      }))
         .catch(error => this.setState({ error, isLoading: false }));
     }
   }
@@ -77,7 +75,7 @@ export default class Booking extends Component {
   }
 
   render() {
-    var { isLoading, error, carBrands, instructors, events, selectedCarBrand, selectedInstructor } = this.state;
+    var { isLoading, error, carBrands, instructors, reservations, drivings, exams, selectedCarBrand, selectedInstructor } = this.state;
 
     if (error) {
       return <p className="bookingsInfoLabel">{error.message}</p>
@@ -122,6 +120,7 @@ export default class Booking extends Component {
               <Button id="searchEventsButton" onClick={this.handleSearchSubmit}>Szukaj</Button>
             </div>
           </div>
+          <p>Rezerwacje</p>
           <Table id="reservationsTable" responsive striped bordered condensed hover>
             <thead>
               <tr>
@@ -129,17 +128,64 @@ export default class Booking extends Component {
                 <th>Samochód</th>
                 <th>Miasto</th>
                 <th>Data rozpoczęcia</th>
-                <th>Data końcowa</th>
+                <th>Czas trwania</th>
               </tr>
             </thead>
             <tbody>
-              {events.map(reservation => (
+              {reservations.map(reservation => (
                 <tr key={reservation.id}>
                   <td>{reservation.instructor.name} {reservation.instructor.surname}</td>
-                  <td>{reservation.car.brand} {reservation.car.model} - {reservation.car.licensePlate} </td>
+                  <td>{reservation.carBrand} </td>
                   <td>{reservation.drivingCity}</td>
                   <td>{reservation.startDate}</td>
-                  <td>{reservation.finishDate}</td>
+                  <td>{reservation.duration}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <p>Jazdy</p>
+          <Table id="reservationsTable" responsive striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>Instruktor</th>
+                <th>Samochód</th>
+                <th>Miasto</th>
+                <th>Data rozpoczęcia</th>
+                <th>Czas trwania</th>
+              </tr>
+            </thead>
+            <tbody>
+              {drivings.map(driving => (
+                <tr key={driving.id}>
+                  <td>{driving.instructor.name} {driving.instructor.surname}</td>
+                  <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
+                  <td>{driving.drivingCity}</td>
+                  <td>{driving.startDate}</td>
+                  <td>{driving.duration}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <p>Egzaminy</p>
+          <Table id="reservationsTable" responsive striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>Instruktor</th>
+                <th>Samochód</th>
+                <th>Miasto</th>
+                <th>Data rozpoczęcia</th>
+                <th>Czas trwania</th>
+              </tr>
+            </thead>
+            <tbody>
+              {exams.map(exam => (
+                <tr key={exam.id}>
+                  <td>{exam.instructor.name} {exam.instructor.surname}</td>
+                  <td>{exam.car.brand} {exam.car.model} - {exam.car.licensePlate} </td>
+                  <td>{exam.drivingCity}</td>
+                  <td>{exam.startDate}</td>
+                  <td>{exam.duration}</td>
+                  <td>{exam.passed}</td>
                 </tr>
               ))}
             </tbody>

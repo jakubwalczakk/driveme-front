@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 
-export default class InstructorReservation extends Component {
+export default class CalendarEvent extends Component {
   render() {
 
     const reservation = this.props.reservation;
@@ -9,7 +9,7 @@ export default class InstructorReservation extends Component {
     return (
       <tr key={reservation.id}>
         <td>
-          {reservation.student.name} {reservation.student.surname}
+          {reservation.instructor.name} {reservation.instructor.surname}
         </td>
         <td>{reservation.carBrand} </td>
         <td>{reservation.drivingCity}</td>

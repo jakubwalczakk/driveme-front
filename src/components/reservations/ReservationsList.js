@@ -35,7 +35,7 @@ export default class Reservations extends Component {
           <Table id="reservationsTable" responsive striped bordered condensed hover>
             <thead>
               <tr>
-                <th>Instruktor</th>
+                <th>Kursant</th>
                 <th>Samochód</th>
                 <th>Miasto</th>
                 <th>Data rozpoczęcia</th>
