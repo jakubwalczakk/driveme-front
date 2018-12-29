@@ -40,7 +40,7 @@ export default class Exams extends Component {
           <tbody>
             {instructorPracticalExams.map(exam => (
               <tr key={exam.id}>
-                <td>{exam.dateOfExam}</td>
+                <td>{exam.startDate}</td>
                 <td>{exam.student.name}</td>
                 <td>{exam.car.brand}</td>
                 <td>
@@ -75,7 +75,7 @@ export default class Exams extends Component {
           <tbody>
             {theoreticalExams.map(exam => (
               <tr key={exam.id}>
-                <td>{exam.dateOfExam}</td>
+                <td>{exam.startDate}</td>
                 <td>
                   {exam.passed &&
                     <i id="examPassed" className="material-icons">check_circle</i>}

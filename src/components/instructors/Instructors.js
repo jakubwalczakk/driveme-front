@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Table, Image } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import Instructor from "./Instructor";
 import "./Instructors.css";
 
 const instructorUrl = API_BASE_URL + '/instructor';
@@ -38,6 +39,10 @@ export default class Instructors extends Component {
       return <p id="instructorsLoadingLabel">Pobieranie danych...</p>
     }
 
+    const instructorList = instructors.map(
+      instructor => <Instructor key={instructor.id} instructor={instructor} />
+    )
+
     return (
       <div id="instructorsTableContainer">
         <h1 id="instructorsHeader">Nasi instruktorzy</h1>
@@ -52,17 +57,7 @@ export default class Instructors extends Component {
             </tr>
           </thead>
           <tbody>
-            {instructors.map(instructor => (
-              <tr key={instructor.id}>
-                <td>
-                  <Image id="instructorPhoto" src={"data:image/jpeg;base64," + instructor.photo} rounded responsive />
-                </td>
-                <td>{instructor.name}</td>
-                <td>{instructor.surname}</td>
-                <td>{instructor.email}</td>
-                <td>{instructor.phoneNumber}</td>
-              </tr>
-            ))}
+            {instructorList}
           </tbody>
         </Table>
       </div>

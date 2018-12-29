@@ -7,7 +7,7 @@ import NavigationBar from "./components/navbar/NavigationBar";
 import Login from './components/login/Login';
 import Register from './components/login/Register';
 import ProfileSettings from './components/profile/ProfileSettings';
-import CarTable from './components/car/CarTable';
+import Cars from './components/car/Cars';
 import CityList from './components/city/CityList';
 import Ratings from './components/ratings/Ratings';
 import Payments from "./components/payments/Payments";
@@ -91,7 +91,7 @@ export default class App extends Component {
         <Route path="/book" component={Booking} />
         <Route path="/instructors" component={Instructors} />
         <Route path="/payments" component={Payments} />
-        <Route path="/cars" component={CarTable} />
+        <Route path="/cars" component={Cars} />
         <Route path="/cities" component={CityList} />
         <Route path="/exams" component={Exams} />
       </div>

@@ -163,7 +163,7 @@ export default class ProfileSettings extends Component {
     var { currentLoggedUser } = this.state;
 
     request({
-      url: studentUrl + '/' + currentLoggedUser.id,
+      url: studentUrl + '/' + '11',//currentLoggedUser.id,
       method: 'GET'
     }).then(data => this.setState({
         id: { value: data.id },
@@ -173,10 +173,10 @@ export default class ProfileSettings extends Component {
         pesel: { value: data.pesel },
         email: { value: data.email },
         phoneNumber: { value: data.phoneNumber },
-        // city: { value: data.address.city },
-        // zipCode: { value: data.address.zipCode },
-        // street: { value: data.address.street },
-        // houseNo: { value: data.address.houseNo }
+        city: { value: data.address.city },
+        zipCode: { value: data.address.zipCode },
+        street: { value: data.address.street },
+        houseNo: { value: data.address.houseNo }
       })).then(data => this.setState({ payments: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 

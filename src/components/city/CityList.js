@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
 import { request } from "utils/APIUtils";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import City from "./City";
 import "./CityList.css";
 
 const cityUrl = API_BASE_URL + '/city';
@@ -177,33 +178,27 @@ export default class CityList extends Component {
         }
 
         if (isLoading) {
-            return <p id="citiessLoadingLabel">Pobieranie danych...</p>
+            return <p id="citiesLoadingLabel">Pobieranie danych...</p>
         }
 
-        let currentUser = 'Adminisatrator';
+        let buttonVisibility;
+        if (CURRENT_USER_ROLE === 'Administrator') {
+            buttonVisibility = (
+                <Button id="addCityButton" onClick={this.handleShowAddModal}>
+                    Dodaj miasto
+                </Button>);
+        }
+
+        const cityList = cities.map(city =>
+            <City key={city.id} city={city} />);
 
         return (
             <div id="drivingCitiesContainer" >
                 <h1 id="drivingCitiesHeader">Miasta w których jeździmy</h1>
-                <Button id="addCityButton" hidden={currentUser === 'Administrator'} onClick={this.handleShowAddModal}>
-                    Dodaj miasto
-                </Button>
+                {buttonVisibility}
                 <Table id="drivingCitiesTable" responsive striped bordered condensed hover>
-                    {/* <thead>
-                            <th id="drivingCityName">Miasto</th>
-                            <th id="drivingCityDesc">Opis</th>
-                            <th id="drivingCityPhoto">Photo</th>
-                        </thead> */}
                     <tbody>
-                        {cities.map(city => (
-                            <tr key={city.id}>
-                                {/* <td>{city.name}</td> */}
-                                <td>
-                                    {<Image id="drivingCityNamePhoto" src={"data:image/jpeg;base64," + city.image} responsive />}
-                                </td>
-                                <td>{city.description}</td>
-                            </tr>
-                        ))}
+                        {cityList}
                     </tbody>
                 </Table>
                 {addModal}

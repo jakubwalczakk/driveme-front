@@ -1,3 +1,4 @@
+import React from "react";
 import { API_BASE_URL, ACCESS_TOKEN } from 'constants/constants';
 
 export const request = (options) => {
@@ -51,6 +52,9 @@ export function logout() {
   if (localStorage.getItem(ACCESS_TOKEN)) {
     localStorage.removeItem(ACCESS_TOKEN);
     console.log("Zostałeś wylogowany z systemu!");
+    
+    localStorage.clear();
+    window.location.href = '/';
   } else {
     throw new Error("Wystąpił błąd podczas wylogowywania z systemu...")
   }

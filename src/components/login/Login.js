@@ -62,9 +62,9 @@ export default class Login extends Component {
                 this.props.history.push("/main");
             }).catch(error => {
                 if (error.status === 401) {
-                    console.log('Your Username or Password is incorrect. Please try again!')
+                    console.log('Twój e-mail lub hasło jest niepoprawne. Spróbuj ponownie!')
                 } else {
-                    console.log('Sorry! Something went wrong. Please try again!')
+                    console.log('Przepraszamy! Coś poszło nie tak :( Spróbuj ponownie.')
                 }
             });
     }

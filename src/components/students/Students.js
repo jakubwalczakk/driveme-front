@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
-import { trimDate, request } from "utils/APIUtils";
+import { request } from "utils/APIUtils";
+import Student from "./Student";
 import "./Students.css";
 
 const studentsUrl = API_BASE_URL + '/student';
@@ -13,150 +14,7 @@ export default class Students extends Component {
       students: [],
       isLoading: false,
       error: null,
-      showCourseButton: false,
-      showPaymentsButton: false,
-      showActivateButton: false,
-      showCourseModal: false,
-      showPaymentsModal: false,
-      showActivateModal: false,
-      showDeleteModal: false
     }
-
-    this.handleCloseCourseModal = this.handleCloseCourseModal.bind(this);
-    this.handleShowCourseModal = this.handleShowCourseModal.bind(this);
-    this.handleCourseInfo = this.handleCourseInfo.bind(this);
-    this.prepareCourseModalStructure = this.prepareCourseModalStructure.bind(this);
-
-    this.handleClosePaymentsModal = this.handleClosePaymentsModal.bind(this);
-    this.handleShowPaymentsModal = this.handleShowPaymentsModal.bind(this);
-    this.handleAddPayment = this.handleAddPayment.bind(this);
-    this.preparePaymentsModalStructure = this.preparePaymentsModalStructure.bind(this);
-
-    this.handleShowActivateModal = this.handleShowActivateModal.bind(this);
-    this.handleCloseActivateModal = this.handleCloseActivateModal.bind(this);
-    this.handleActivateStudent = this.handleActivateStudent.bind(this);
-    this.prepareActivateModalStructure = this.prepareActivateModalStructure.bind(this);
-
-    this.handleShowDeleteModal = this.handleShowDeleteModal.bind(this);
-    this.handleCloseDeleteModal = this.handleCloseDeleteModal.bind(this);
-    this.handleDeleteStudent = this.handleDeleteStudent.bind(this);
-    this.prepareDeleteModalStructure = this.prepareDeleteModalStructure.bind(this);
-  }
-
-  handleCloseCourseModal() {
-    this.setState({ showCourseModal: false });
-  }
-
-  handleShowCourseModal() {
-    this.setState({ showCourseModal: true });
-  }
-
-  handleCourseInfo() {
-    console.log("INFORMACJE NA TEMAT KURSU");
-    this.handleCloseCourseModal();
-  }
-
-  prepareCourseModalStructure() {
-    return (
-      <Modal show={this.state.showCourseModal} onHide={this.handleCloseCourseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            KURS
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        </Modal.Body>
-        <Modal.Footer>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-
-  handleClosePaymentsModal() {
-    this.setState({ showPaymentsModal: false });
-  }
-
-  handleShowPaymentsModal() {
-    this.setState({ showPaymentsModal: true });
-  }
-
-  handleAddPayment() {
-    console.log("PŁATNOŚĆ ZARAZ ZOSTANIE UTWORZONA");
-    this.handleClosePaymentsModal();
-  }
-
-  preparePaymentsModalStructure() {
-    return (
-      <Modal show={this.state.showPaymentsModal} onHide={this.handleClosePaymentsModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            PŁATNOŚCI
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        </Modal.Body>
-        <Modal.Footer>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-
-  handleCloseActivateModal() {
-    this.setState({ showActivateModal: false });
-  }
-
-  handleShowActivateModal() {
-    this.setState({ showActivateModal: true });
-  }
-
-  handleActivateStudent() {
-    console.log("STUDENT ZOSTAŁ POTWIERDZONY DO AKTYWACJI");
-    this.handleCloseActivateModal();
-  }
-
-  prepareActivateModalStructure() {
-    return (
-      <Modal show={this.state.showActivateModal} onHide={this.handleCloseActivateModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            AKTYWACJA
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        </Modal.Body>
-        <Modal.Footer>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-
-  handleCloseDeleteModal() {
-    this.setState({ showDeleteModal: false });
-  }
-
-  handleShowDeleteModal() {
-    this.setState({ showDeleteModal: true });
-  }
-
-  handleDeleteStudent() {
-    console.log("STUDENT ZOSTAŁ POTWIERDZONY DO USUNIĘCIA");
-    this.handleCloseDeleteModal();
-  }
-
-  prepareDeleteModalStructure() {
-    return (
-      <Modal show={this.state.showDeleteModal} onHide={this.handleCloseDeleteModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            USUWANIE
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        </Modal.Body>
-        <Modal.Footer>
-        </Modal.Footer>
-      </Modal>
-    );
   }
 
   componentDidMount() {
@@ -175,19 +33,7 @@ export default class Students extends Component {
 
     var { students,
       isLoading,
-      error,
-      showCourseButton,
-      showPaymentsButton,
-      showActivateButton,
-      showCourseModal,
-      showPaymentsModal,
-      showActivateModal,
-      showDeleteModal } = this.state;
-
-    let courseModal;
-    let paymentsModal;
-    let activateModal;
-    let deleteModal;
+      error } = this.state;
 
     if (error) {
       return <p id="studentsInfoLabel">{error.message}</p>
@@ -197,25 +43,12 @@ export default class Students extends Component {
       return <p id="studentsInfoLabel">Pobieranie danych...</p>
     }
 
-    if (showCourseModal) {
-      courseModal = this.prepareCourseModalStructure();
-    }
-
-    if (showPaymentsModal) {
-      paymentsModal = this.preparePaymentsModalStructure();
-    }
-
-    if (showActivateModal) {
-      activateModal = this.prepareActivateModalStructure();
-    }
-
-    if (showDeleteModal) {
-      deleteModal = this.prepareDeleteModalStructure();
-    }
-
     if (CURRENT_USER_ROLE !== 'Administrator') {
       return <p id="studentsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
     } else {
+
+      const studentList = students.map(student =>
+        <Student key={student.id} student={student} />)
       return (
         <div id="studentsTableContainer">
           <p id="studentsLabel">Lista obecnych kursantów</p>
@@ -233,42 +66,9 @@ export default class Students extends Component {
               </tr>
             </thead>
             <tbody>
-              {students.map(student => (
-                <tr key={student.id}>
-                  <td>{student.name} {student.surname}</td>
-                  <td>{student.pesel}</td>
-                  <td>{student.email}</td>
-                  <td>{trimDate(student.registrationDate)}</td>
-                  <td>
-                    <Button disabled={student.course == null} onClick={this.handleShowCourseModal}>
-                      Kurs
-                  </Button>
-                  </td>
-                  <td >{student.course != null && student.course.currentPayment}</td>
-                  <td>
-                    {/* {student.course != null && student.course.currentPayment !== 1500 && */}
-                    {<Button onClick={this.handleShowPaymentsModal}>
-                      Dodaj płatność
-                  </Button>}
-                  </td>
-                  <td>{!student.active &&
-                    <Button id="activateButton" onClick={this.handleShowActivateModal}>
-                      Aktywuj
-                  </Button>}
-                    {student.active &&
-                      <Button id="deactivateButton" className="material-icons" onClick={this.handleShowDeleteModal}>
-                        {/* remove_circle */}
-                        delete_forever
-                  </Button>}
-                  </td>
-                </tr>
-              ))}
+              {studentList}
             </tbody>
           </Table>
-          {courseModal}
-          {paymentsModal}
-          {activateModal}
-          {deleteModal}
         </div>);
     }
   }

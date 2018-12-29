@@ -26,11 +26,6 @@ export default class Drivings extends Component {
       method: 'GET'
     }).then(data => this.setState({ drivings: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
-
-  }
-
-  componentWillUnmount() {
-    this._mounted = false
   }
 
   render() {

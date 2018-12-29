@@ -16,17 +16,17 @@ export default class MainPage extends Component {
   }
 
   loadCurrentLoggedUser() {
-    if (localStorage.getItem(ACCESS_TOKEN)) {
+    // if (localStorage.getItem(ACCESS_TOKEN)) {
 
-      request({
-        url: 'http://localhost:8080/user/me',
-        method: 'GET'
-      }).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
-        .catch(error => this.setState({ error, isLoading: false }));
-    } else {
-      console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
-      throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
-    }
+    //   request({
+    //     url: 'http://localhost:8080/user/me',
+    //     method: 'GET'
+    //   }).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
+    //     .catch(error => this.setState({ error, isLoading: false }));
+    // } else {
+    //   console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
+    //   throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
+    // }
   }
 
   componentDidMount() {

@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
 import { request } from "utils/APIUtils";
-import { API_BASE_URL } from "constants/constants";
-import "./CarTable.css";
+import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+
+import Car from "./Car";
+import "./Cars.css";
 
 const carUrl = API_BASE_URL + '/car';
 
-export default class CarTable extends Component {
+export default class Cars extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -228,36 +230,32 @@ export default class CarTable extends Component {
             return <p id="carsLoadingLabel">Pobieranie danych...</p>
         }
 
-        let currentUser = 'XD';
+        let buttonVisibility;
+        if (CURRENT_USER_ROLE === 'Administrator') {
+            buttonVisibility = (
+                <Button id="addCarButton" onClick={this.handleShowAddModal}>
+                    Dodaj samochód
+                </Button>);
+        }
+
+        const carList = cars.map(car => <Car key={car.licensePlate} car={car} />);
 
         return (
             <div id="carsTableContainer">
                 <h1 id="carsHeader">Dostępne pojazdy</h1>
-                <Button id="addCarButton" hidden={currentUser !== 'Administrator'} onClick={this.handleShowAddModal}>
-                    Dodaj samochód
-                </Button>
+                {buttonVisibility}
                 <Table id="carsTable" responsive striped bordered condensed hover>
                     <thead>
                         <tr>
                             <th id="carBrandCol">Marka</th>
                             <th id="carModelCol">Model</th>
-                            {/* <th id="carLicensePlateCol">Numer rejestracji</th> */}
+                            <th id="carLicensePlateCol">Rejestracja</th>
                             <th id="carGasTypeCol">Typ paliwa</th>
                             <th id="carImgCol"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {cars.map(car => (
-                            <tr key={car.id}>
-                                <td>{car.brand}</td>
-                                <td>{car.model}</td>
-                                {/* <td>{car.licensePlate}</td> */}
-                                <td>{car.gasType}</td>
-                                <td>
-                                    <Image id="carImage" src={"data:image/jpeg;base64," + car.photo} rounded responsive />
-                                </td>
-                            </tr>
-                        ))}
+                        {carList}
                     </tbody>
                 </Table>
                 {addModal}

@@ -8,7 +8,7 @@ export default class NavigationBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoggedIn: false,
+            isLoggedIn: true,
             showModal: false,
             currentLoggedUser: ''
         };
@@ -61,17 +61,17 @@ export default class NavigationBar extends Component {
     }
 
     loadCurrentLoggedUser() {
-        if (localStorage.getItem(ACCESS_TOKEN)) {
+        // if (localStorage.getItem(ACCESS_TOKEN)) {
 
-            request({
-                url: 'http://localhost:8080/user/me',
-                method: 'GET'
-            }).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
-                .catch(error => this.setState({ error, isLoading: false }));
-        } else {
-            console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
-            throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
-        }
+        //     request({
+        //         url: 'http://localhost:8080/user/me',
+        //         method: 'GET'
+        //     }).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
+        //         .catch(error => this.setState({ error, isLoading: false }));
+        // } else {
+        //     console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
+        //     throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
+        // }
     }
 
     componentDidMount() {
@@ -160,7 +160,7 @@ export default class NavigationBar extends Component {
         let navBarTypes = this.prepareNavBarStructure();
 
         return (
-            <Navbar className="nav-bar" fixedTop responsive="true" hidden={!isLoggedIn}>
+            <Navbar className="nav-bar" fixedTop responsive="true" hidden={false}>
                 <Navbar.Header responsive="true">
                     <a href="/main">
                         <Image id="logoBrand" src="/logo.png" rounded responsive />
