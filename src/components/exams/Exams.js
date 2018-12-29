@@ -6,11 +6,9 @@ import PracticalExam from './PracticalExam';
 import TheoreticalExam from './TheoreticalExam';
 import "./Exams.css";
 
-const studentId = 10;
-const instructorId = 7;
-const practicalExamUrl = API_BASE_URL + '/practical_exam/student/' + studentId;
-const theoreticalExamUrl = API_BASE_URL + '/theoretical_exam/student/' + studentId;
-const instructorPracticalExamsUrl = API_BASE_URL + '/practical_exam/instructor/' + instructorId;
+const practicalExamUrl = API_BASE_URL + '/practical_exam/student';
+const theoreticalExamUrl = API_BASE_URL + '/theoretical_exam/student';
+const instructorPracticalExamsUrl = API_BASE_URL + '/practical_exam/instructor';
 
 export default class Exams extends Component {
   constructor(props) {
@@ -73,7 +71,9 @@ export default class Exams extends Component {
         {/* TODO */}
       </div>);
     } else {
-      return <p>Nie posiadasz dostępu do tego zasobu!</p>
+      return <div id="examsTableContainer">
+        <p>Nie posiadasz dostępu do tego zasobu!</p>
+      </div>
     }
   }
 

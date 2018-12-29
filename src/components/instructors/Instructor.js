@@ -3,15 +3,16 @@ import { Image } from "react-bootstrap";
 
 export default class Instructor extends Component {
   render() {
+    const instructor = this.props.instructor;
     return (
-      <tr key={this.props.instructor.id}>
+      <tr key={instructor.id}>
         <td>
-          <Image id="instructorPhoto" src={"data:image/jpeg;base64," + this.props.instructor.photo} rounded responsive />
+          <Image id="instructorPhoto" src={"data:image/jpeg;base64," + instructor.photo} rounded responsive />
         </td>
-        <td>{this.props.instructor.name}</td>
-        <td>{this.props.instructor.surname}</td>
-        <td>{this.props.instructor.email}</td>
-        <td>{this.props.instructor.phoneNumber}</td>
+        <td>{instructor.name}</td>
+        <td>{instructor.surname}</td>
+        <td>{instructor.email}</td>
+        <td>{instructor.phoneNumber}</td>
       </tr>)
   }
 }

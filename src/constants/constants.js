@@ -1,5 +1,4 @@
 export const API_BASE_URL = 'http://localhost:8080';
-// export const API_BASE_URL = 'http://localhost:5000/api';
 export const ACCESS_TOKEN = 'accessToken';
 
 export const NAME_MIN_LENGTH = 3;
@@ -18,6 +17,6 @@ export const PASSWORD_MAX_LENGTH = 32;
 
 export const MINUTE_IN_MICROS = 1000 * 60;
 
-export const CURRENT_USER_ROLE = 'Kursant';
+// export const CURRENT_USER_ROLE = 'Kursant';
 // export const CURRENT_USER_ROLE = 'Administrator';
-// export const CURRENT_USER_ROLE = 'Instruktor';
+export const CURRENT_USER_ROLE = 'Instruktor';

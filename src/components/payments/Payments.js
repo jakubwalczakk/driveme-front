@@ -5,7 +5,7 @@ import { request } from "utils/APIUtils";
 import Payment from './Payment';
 import "./Payments.css";
 
-const paymentUrl = API_BASE_URL + '/payment/student/';
+const paymentUrl = API_BASE_URL + '/payment/student';
 
 export default class Payments extends Component {
   constructor(props) {
@@ -61,7 +61,7 @@ export default class Payments extends Component {
           <Table id="paymentsTable" responsive striped bordered condensed hover>
             <thead>
               <tr>
-                <th id="paymentNo">#</th>
+                {/* <th id="paymentNo">#</th> */}
                 <th id="paymentDateCol">Data wpłaty</th>
                 <th id="paymentAmountCol">Kwota</th>
               </tr>

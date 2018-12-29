@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export default class Reservation extends Component {
+export default class StudentReservation extends Component {
   render() {
     console.log(this.props)
     return (

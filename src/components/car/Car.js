@@ -3,14 +3,15 @@ import { Image } from "react-bootstrap";
 
 export default class Car extends Component {
   render() {
+    const car = this.props.car;
     return (
       <tr>
-        <td>{this.props.car.brand}</td>
-        <td>{this.props.car.model}</td>
-        <td>{this.props.car.licensePlate}</td>
-        <td>{this.props.car.gasType}</td>
+        <td>{car.brand}</td>
+        <td>{car.model}</td>
+        <td>{car.licensePlate}</td>
+        <td>{car.gasType}</td>
         <td>
-          <Image id="carImage" src={"data:image/jpeg;base64," + this.props.car.photo} rounded responsive />
+          <Image id="carImage" src={"data:image/jpeg;base64," + car.photo} rounded responsive />
         </td>
       </tr>)
   }

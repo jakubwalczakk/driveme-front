@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
-import { API_BASE_URL, MINUTE_IN_MICROS, CURRENT_USER_ROLE } from "constants/constants";
+import { Table } from "react-bootstrap";
+import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import { request } from "utils/APIUtils";
+import DrivingInfo from './DrivingInfo';
 import "./Ratings.css";
 
-const courseUrl = API_BASE_URL + '/course';
-const drivingUrl = API_BASE_URL + '/driving/instructor/7';
-const rateDrivingUrl = API_BASE_URL + '/driving/rate';
+const drivingUrl = API_BASE_URL + '/driving';
 
 export default class Rating extends Component {
   constructor(props) {
@@ -14,46 +13,15 @@ export default class Rating extends Component {
     this.state = {
       drivings: [],
       isLoading: false,
-      error: null,
-      showModal: false,
+      error: null
     }
-    this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleRated = this.handleRated.bind(this);
-  }
-
-
-  handleClose() {
-    this.setState({ showModal: false });
-  }
-
-  handleShow() {
-    this.setState({ showModal: true });
-  }
-
-  handleRated() {
-    const rateRequest = {
-      drivingId: 2, // wartości powinny zostać pobrane z okna modalnego!!!
-      rating: "OK",
-      comment: "Super postępy"
-    }
-
-    request({
-      url: rateDrivingUrl,
-      method: 'PUT',
-      body: JSON.stringify(rateRequest)
-    }).then(data => this.setState({ isLoading: false }))
-      .catch(error => this.setState({ error, isLoading: false }));
-
-    console.log("Zajęcia ocenione!");
-    this.handleClose();
   }
 
   componentDidMount() {
     this.setState({ isLoading: true });
 
     request({
-      url: drivingUrl,
+      url: drivingUrl + '/instructor',
       method: 'GET'
     }).then(data => this.setState({ drivings: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
@@ -75,6 +43,9 @@ export default class Rating extends Component {
       return <p className="ratingsInfoLabel">Nie masz dostępu do tego zasobu!</p>
     } else {
 
+      const drivingsInfoList = drivings.map(driving =>
+        <DrivingInfo key={driving.id} driving={driving} />)
+
       return (
         <div id="instructorDrivingsTableContainer">
           <        p id="instructorDrivingsLabel">Lista przeprowadzonych przez Ciebie jazd szkoleniowych</p>
@@ -91,46 +62,9 @@ export default class Rating extends Component {
               </tr>
             </thead>
             <tbody>
-              {drivings.map(driving => (
-                <tr key={driving.id}>
-                  <td>{driving.student.name} {driving.student.surname}</td>
-                  <td>{driving.title}</td>
-                  <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
-                  <td>{driving.drivingCity}</td>
-                  <td>{driving.startDate}</td>
-                  <td>{(new Date(driving.finishDate) - new Date(driving.startDate)) / MINUTE_IN_MICROS}</td>
-                  <td>{driving.rating ?
-                    <Badge>{driving.rating}</Badge> :
-                    <Button id="rateButton" onClick={this.handleShow}>Oceń</Button>}
-                  </td>
-                </tr>
-              ))}
+              {drivingsInfoList}
             </tbody>
           </Table>
-          <Modal show={this.state.showModal} onHide={this.handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Ocena zajęć</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <FormGroup>
-                <ControlLabel>Ocena</ControlLabel>
-                <br />
-                <Radio name="radioGroup" inline>Rozczarowująco</Radio>
-                <Radio name="radioGroup" inline>Przeciętnie</Radio>
-                <Radio name="radioGroup" inline>OK</Radio>
-                <Radio name="radioGroup" inline>Świetnie</Radio>
-                <Radio name="radioGroup" inline>Mistrzowsko</Radio>
-              </FormGroup>
-              <FormGroup>
-                <ControlLabel>Komentarz</ControlLabel>
-                <FormControl />
-              </FormGroup>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={this.handleClose}>Anuluj</Button>
-              <Button onClick={this.handleRated}>Zapisz</Button>
-            </Modal.Footer>
-          </Modal>
         </div>
       );
     }
