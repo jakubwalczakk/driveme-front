@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { FormGroup, FormControl, ControlLabel, Table, Button } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import { request } from "utils/APIUtils";
+import Calendar from './../calendar/Calendar';
 import "./Booking.css";
 
 const carUrl = API_BASE_URL + '/car';
@@ -120,6 +121,8 @@ export default class Booking extends Component {
               <Button id="searchEventsButton" onClick={this.handleSearchSubmit}>Szukaj</Button>
             </div>
           </div>
+          <Calendar reservations={reservations} drivings={drivings} exams={exams} />
+          {/* 
           <p>Rezerwacje</p>
           <Table id="reservationsTable" responsive striped bordered condensed hover>
             <thead>
@@ -189,7 +192,7 @@ export default class Booking extends Component {
                 </tr>
               ))}
             </tbody>
-          </Table>
+          </Table> */}
         </div>);
     }
   }

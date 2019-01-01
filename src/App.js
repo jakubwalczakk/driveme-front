@@ -19,7 +19,6 @@ import Course from "./components/course/Course";
 import YourProgress from "./components/progress/YourProgress";
 import Students from "./components/students/Students";
 import Exams from "./components/exams/Exams";
-// import DownBar from "./components/navbar/DownBar";
 
 export default class App extends Component {
   constructor(props) {
@@ -78,7 +77,7 @@ export default class App extends Component {
     return (
       <div>
         <NavigationBar />
-        <Route exact path="/" component={Login} />        
+        <Route exact path="/" component={Login} />
         <Route exact path="/main" component={MainPage} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
@@ -95,7 +94,6 @@ export default class App extends Component {
         <Route path="/cities" component={CityList} />
         <Route path="/exams" component={Exams} />
       </div>
-
     );
   }
 }
