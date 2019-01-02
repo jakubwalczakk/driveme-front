@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AvailableTimes from 'react-available-times';
 import Timeline from 'react-time-line'
+import './Calendar.css';
 
 export default class Calendar extends Component {
 
@@ -31,7 +32,7 @@ export default class Calendar extends Component {
     var drivings = this.props.drivings;
     var exams = this.props.exams;
 
-    var selections = reservations.concat(drivings).concat(exams);
+    var selections = drivings.concat(exams); //what about reservations??
 
     var initial = [];
 

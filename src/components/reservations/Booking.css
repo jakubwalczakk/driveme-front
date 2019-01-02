@@ -60,9 +60,23 @@
   background-color: #631033;
   color: white;
   border-radius: 6px;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 500;
   margin-left: auto;
   margin-right: auto;
   margin-top: 20%;
+}
+
+
+#reservationButton{
+  width: 20%;
+  height: 48px;
+  border-radius: 6px;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 50px;
+  margin-bottom: 100px;
+  background-color: #631033;
+  margin-left: 40%;
 }

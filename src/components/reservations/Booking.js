@@ -1,13 +1,25 @@
 import React, { Component } from "react";
-import { FormGroup, FormControl, ControlLabel, Table, Button } from "react-bootstrap";
+import { FormGroup, FormControl, ControlLabel, Button, Modal } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import { request } from "utils/APIUtils";
+import DatePicker from 'react-datepicker';
 import Calendar from './../calendar/Calendar';
+// import { pl } from 'date-fns/locale';
 import "./Booking.css";
+
+require('react-datepicker/dist/react-datepicker.css');
 
 const carUrl = API_BASE_URL + '/car';
 const instructorUrl = API_BASE_URL + '/instructor';
+const cityUrl = API_BASE_URL + '/city';
 const eventsUrl = API_BASE_URL + '/event';
+const reservationUrl = API_BASE_URL + '/reservation';
+
+Date.prototype.addDays = function (days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+}
 
 export default class Booking extends Component {
 
@@ -18,16 +30,38 @@ export default class Booking extends Component {
       error: null,
       carBrands: [],
       instructors: [],
+      cities: [],
       drivings: [],
       reservations: [],
       exams: [],
       selectedInstructor: '-',
       selectedCarBrand: '-',
+      reservationInstructor: '-',
+      reservationCarBrand: '-',
+      reservationStartDate: null,
+      reservationDuration: '1h',
+      reservationCity: 'Katowice',
+      showReservationModal: false,
     }
     this.handleSelectedCarBrandChange = this.handleSelectedCarBrandChange.bind(this);
     this.handleSelectedInstructorChange = this.handleSelectedInstructorChange.bind(this);
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
+
+    this.handleReservationModalShow = this.handleReservationModalShow.bind(this);
+    this.handleReservationModalClose = this.handleReservationModalClose.bind(this);
+    this.prepareCourseModalStructure = this.prepareCourseModalStructure.bind(this);
+
+    this.handleReservationInstructorChange = this.handleReservationInstructorChange.bind(this);
+    this.handleReservationCarBrandChange = this.handleReservationCarBrandChange.bind(this);
+    this.handleReservationStartDateChange = this.handleReservationStartDateChange.bind(this);
+    this.handleReservationDurationChange = this.handleReservationDurationChange.bind(this);
+    this.handleReservationCityChange = this.handleReservationCityChange.bind(this);
+
+    this.validateReservationForm = this.validateReservationForm.bind(this);
+    this.handleReservationSubmit = this.handleReservationSubmit.bind(this);
   }
+
+
 
   handleSelectedCarBrandChange(event) {
     this.setState({ selectedCarBrand: event.target.value })
@@ -60,7 +94,156 @@ export default class Booking extends Component {
     }
   }
 
+  handleReservationModalClose() {
+    this.setState({ showReservationModal: false })
+  }
+
+  handleReservationModalShow() {
+    this.setState({ showReservationModal: true })
+  }
+
+  prepareCourseModalStructure() {
+    var { carBrands, instructors, cities, reservationCarBrand, reservationInstructor,
+      reservationStartDate, reservationDuration, reservationCity } = this.state;
+
+    return (
+      <Modal show={this.state.showReservationModal} onHide={this.handleReservationModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            REZERWACJA
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup>
+            <ControlLabel>Marka</ControlLabel>
+            <FormControl componentClass="select" onChange={this.handleReservationCarBrandChange} value={reservationCarBrand}>
+              <option>-</option>
+              {carBrands.map(brand => (
+                <option key={brand}>{brand}</option>)
+              )}
+            </FormControl>
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Instruktor</ControlLabel>
+            <FormControl componentClass="select" onChange={this.handleReservationInstructorChange} value={reservationInstructor}>
+              <option>-</option>
+              {instructors.map(instructor => (
+                <option key={instructor.id}>{instructor.name} {instructor.surname} - {instructor.email}</option>)
+              )}
+            </FormControl>
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Miasto</ControlLabel>
+            <FormControl componentClass="select" onChange={this.handleReservationCityChange} value={reservationCity}>
+              {cities.map(city => (
+                <option key={city.name}>{city.name}</option>)
+              )}
+            </FormControl>
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Data rozpoczęcia</ControlLabel>
+            <DatePicker
+              selected={reservationStartDate}
+              onChange={this.handleReservationStartDateChange}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="MMMM d, yyyy h:mm"
+              timeCaption="czas"
+              minDate={(new Date().addDays(3))}
+              minTime={new Date(2019, 0, 1, 8)}
+              maxTime={new Date(2019, 0, 1, 18)}
+              // locale={'pl'}
+              isClearable={true}
+              showMonthDropdown
+              showWeekNumbers
+            />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Czas trwania</ControlLabel>
+            <FormControl componentClass="select" onChange={this.handleReservationDurationChange} value={reservationDuration}>
+              <option key={'1h'}>{'1h'}</option>
+              <option key={'1.5h'}>{'1.5h'}</option>
+              <option key={'2h'}>{'2h'}</option>
+              <option key={'2.5h'}>{'2.5h'}</option>
+              <option key={'3h'}>{'3h'}</option>
+              <option key={'3.5h'}>{'3.5h'}</option>
+              <option key={'4h'}>{'4h'}</option>
+            </FormControl>
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={this.handleReservationModalClose}>Anuluj</Button>
+          <Button onClick={this.handleReservationSubmit} disabled={this.validateReservationForm()}>Dodaj</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
+  validateReservationForm() {
+    return false;
+  }
+
+  handleReservationInstructorChange(event) {
+    this.setState({ reservationInstructor: event.target.value })
+  }
+
+  handleReservationCarBrandChange(event) {
+    this.setState({ reservationCarBrand: event.target.value })
+  }
+
+  handleReservationCityChange(event) {
+    this.setState({ reservationCity: event.target.value })
+  }
+
+  handleReservationStartDateChange(event) {
+    console.log(event)
+    this.setState({ reservationStartDate: event })
+  }
+
+  handleReservationDurationChange(event) {
+    this.setState({ reservationDuration: event.target.value })
+  }
+
+  handleReservationSubmit() {
+
+    var { reservationCarBrand, reservationInstructor, reservationCity, reservationStartDate, reservationDuration } = this.state;
+
+    const instructorEmail = reservationInstructor.split(" - ")[1];
+    const duration = parseFloat(reservationDuration.slice(0, -1)) * 60;
+
+    console.log(duration)
+
+    const reservationRequest = {
+      startDate: new Date(),
+      duration: duration,
+      instructor: { email: instructorEmail },
+      carBrand: reservationCarBrand,
+      drivingCity: reservationCity
+    }
+
+    request({
+      url: reservationUrl,
+      method: 'POST',
+      body: JSON.stringify(reservationRequest)
+    }).then(data => this.setState({ isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
+
+    console.log("REZERWACJA ZOSTAŁA WYSŁANA DO SERWERA!!! | " + instructorEmail + " | " + reservationCarBrand
+      + " | " + reservationStartDate + " | " + reservationDuration + " | " + reservationCity)
+
+    this.handleReservationModalClose();
+  }
+
   componentDidMount() {
+
+    this.setState({ isLoading: true });
+
+    request({
+      url: cityUrl,
+      method: 'GET'
+    }).then(data => this.setState({ cities: data, isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
 
     request({
       url: carUrl + '/brands',
@@ -76,7 +259,8 @@ export default class Booking extends Component {
   }
 
   render() {
-    var { isLoading, error, carBrands, instructors, reservations, drivings, exams, events, selectedCarBrand, selectedInstructor } = this.state;
+    var { isLoading, error, carBrands, instructors, reservations, drivings, exams, events,
+      selectedCarBrand, selectedInstructor } = this.state;
 
 
     if (error) {
@@ -90,6 +274,9 @@ export default class Booking extends Component {
     if (CURRENT_USER_ROLE !== 'Kursant') {
       return <p className="bookingsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
     } else {
+
+      let reservationModal = this.prepareCourseModalStructure();
+
       return (
         <div id="bookingContainer">
           <p id="bookingLabel">Tutaj możesz dokonać rezerwacji</p>
@@ -123,77 +310,10 @@ export default class Booking extends Component {
             </div>
           </div>
           <Calendar reservations={reservations} drivings={drivings} exams={exams} />
-          {/* 
-          <p>Rezerwacje</p>
-          <Table id="reservationsTable" responsive striped bordered condensed hover>
-            <thead>
-              <tr>
-                <th>Instruktor</th>
-                <th>Samochód</th>
-                <th>Miasto</th>
-                <th>Data rozpoczęcia</th>
-                <th>Czas trwania</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reservations.map(reservation => (
-                <tr key={reservation.id}>
-                  <td>{reservation.instructor.name} {reservation.instructor.surname}</td>
-                  <td>{reservation.carBrand} </td>
-                  <td>{reservation.drivingCity}</td>
-                  <td>{reservation.startDate}</td>
-                  <td>{reservation.duration}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <p>Jazdy</p>
-          <Table id="reservationsTable" responsive striped bordered condensed hover>
-            <thead>
-              <tr>
-                <th>Instruktor</th>
-                <th>Samochód</th>
-                <th>Miasto</th>
-                <th>Data rozpoczęcia</th>
-                <th>Czas trwania</th>
-              </tr>
-            </thead>
-            <tbody>
-              {drivings.map(driving => (
-                <tr key={driving.id}>
-                  <td>{driving.instructor.name} {driving.instructor.surname}</td>
-                  <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
-                  <td>{driving.drivingCity}</td>
-                  <td>{driving.startDate}</td>
-                  <td>{driving.duration}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <p>Egzaminy</p>
-          <Table id="reservationsTable" responsive striped bordered condensed hover>
-            <thead>
-              <tr>
-                <th>Instruktor</th>
-                <th>Samochód</th>
-                <th>Miasto</th>
-                <th>Data rozpoczęcia</th>
-                <th>Czas trwania</th>
-              </tr>
-            </thead>
-            <tbody>
-              {exams.map(exam => (
-                <tr key={exam.id}>
-                  <td>{exam.instructor.name} {exam.instructor.surname}</td>
-                  <td>{exam.car.brand} {exam.car.model} - {exam.car.licensePlate} </td>
-                  <td>{exam.drivingCity}</td>
-                  <td>{exam.startDate}</td>
-                  <td>{exam.duration}</td>
-                  <td>{exam.passed}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table> */}
+          <Button id="reservationButton" onClick={this.handleReservationModalShow}>
+            Rezerwuj
+          </Button>
+          {reservationModal}
         </div>);
     }
   }
