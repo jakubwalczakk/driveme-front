@@ -76,7 +76,8 @@ export default class Booking extends Component {
   }
 
   render() {
-    var { isLoading, error, carBrands, instructors, reservations, drivings, exams, selectedCarBrand, selectedInstructor } = this.state;
+    var { isLoading, error, carBrands, instructors, reservations, drivings, exams, events, selectedCarBrand, selectedInstructor } = this.state;
+
 
     if (error) {
       return <p className="bookingsInfoLabel">{error.message}</p>
