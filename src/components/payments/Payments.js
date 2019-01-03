@@ -27,8 +27,6 @@ export default class Payments extends Component {
       .catch(error => this.setState({ error, isLoading: false }));
   }
 
-
-
   render() {
 
     var { payments, isLoading, error } = this.state;

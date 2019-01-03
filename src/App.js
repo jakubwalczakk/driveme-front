@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route } from 'react-router-dom';
-import { ACCESS_TOKEN, API_BASE_URL } from 'constants/constants';
-import { getCurrentUser, request } from './utils/APIUtils';
+import { Route } from 'react-router-dom';
 import MainPage from "./components/mainpage/MainPage";
 import NavigationBar from "./components/navbar/NavigationBar";
 import Login from './components/login/Login';
@@ -13,7 +11,6 @@ import Ratings from './components/ratings/Ratings';
 import Payments from "./components/payments/Payments";
 import Instructors from "./components/instructors/Instructors";
 import ReservationList from "./components/reservations/ReservationsList";
-import Drivings from "./components/drivings/Drivings";
 import Booking from "./components/reservations/Booking";
 import Course from "./components/course/Course";
 import YourProgress from "./components/progress/YourProgress";
@@ -28,49 +25,6 @@ export default class App extends Component {
       isAuthenticated: false,
       isLoading: false
     }
-
-    this.handleLogout = this.handleLogout.bind(this);
-    // this.loadCurrentUser = this.loadCurrentUser.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
-  }
-
-  // loadCurrentUser() {
-  //   this.setState({
-  //     isLoading: true
-  //   });
-
-  //   getCurrentUser()
-  //     .then(response => {
-  //       this.setState({
-  //         currentUser: response,
-  //         isAuthenticated: true,
-  //         isLoading: false
-  //       });
-  //     }).catch(error => {
-  //       this.setState({
-  //         isLoading: false
-  //       });
-  //     });
-  // }
-
-  componentDidMount() {
-    // this.loadCurrentUser();
-  }
-
-  handleLogout(redirectTo = "/") {
-    localStorage.removeItem(ACCESS_TOKEN);
-
-    this.setState({
-      currentUser: null,
-      isAuthenticated: false
-    });
-
-    this.props.history.push(redirectTo);
-  }
-
-  handleLogin() {
-    // this.loadCurrentUser();
-    // this.props.history.push("/");
   }
 
   render() {

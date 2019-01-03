@@ -3,12 +3,13 @@ import { Image } from "react-bootstrap";
 
 export default class Car extends Component {
   render() {
+    var city = this.props.city;
     return (
       <tr>
         <td>
-          {<Image id="drivingCityNamePhoto" src={"data:image/jpeg;base64," + this.props.city.image} responsive />}
+          {<Image id="drivingCityNamePhoto" src={"data:image/jpeg;base64," + city.image} responsive />}
         </td>
-        <td>{this.props.city.description}</td>
+        <td>{city.description}</td>
       </tr>
     );
   }

@@ -19,7 +19,7 @@ export default class Course extends Component {
   componentDidMount() {
 
     request({
-      url: courseUrl + '/2',
+      url: courseUrl + '/student',
       method: 'GET'
     }).then(data => this.setState({ course: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));

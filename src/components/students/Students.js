@@ -18,7 +18,6 @@ export default class Students extends Component {
   }
 
   componentDidMount() {
-
     this.setState({ isLoading: true });
 
     request({

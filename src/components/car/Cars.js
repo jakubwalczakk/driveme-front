@@ -3,7 +3,6 @@ import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } fro
 import ReactFileReader from 'react-file-reader';
 import { request } from "utils/APIUtils";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
-
 import Car from "./Car";
 import "./Cars.css";
 
@@ -19,16 +18,11 @@ export default class Cars extends Component {
             showAddModal: false,
             carBrands: [],
             newCarBrand: 'RENAULT',
-            newCarModel: {
-                value: ''
-            },
-            newCarLicensePlate: {
-                value: ''
-            },
+            newCarModel: '',
+            newCarLicensePlate: '',
             newCarImage: '',
             newCarGasType: 'Benzyna'
         };
-        //this.handleChange = this.handleChange.bind(this);
 
         this.handleShowAddModal = this.handleShowAddModal.bind(this);
         this.handleCloseAddModal = this.handleCloseAddModal.bind(this);
@@ -43,31 +37,15 @@ export default class Cars extends Component {
         this.handleSubmitAddCar = this.handleSubmitAddCar.bind(this);
     }
 
-    // handleChange = (event) => {
-    //     const inputValue = event.target.value;
-
-    //     console.log(inputValue)
-
-    //     this.setState({
-    //         [event.target.id]: {
-    //             value: inputValue,
-    //         }
-    //     });
-    // }
-
     handleNewCarModelChange(event) {
         this.setState({
-            newCarModel: {
-                value: event.target.value
-            }
+            newCarModel: event.target.value
         });
     }
 
     handleNewCarLicensePlateChange(event) {
         this.setState({
-            newCarLicensePlate: {
-                value: event.target.value
-            }
+            newCarLicensePlate: event.target.value
         });
     }
 
@@ -79,7 +57,7 @@ export default class Cars extends Component {
         this.setState({ showAddModal: false });
     }
 
-    handleNewCarBrandChange = (event) => {
+    handleNewCarBrandChange(event) {
         this.setState({ newCarBrand: event.target.value })
     }
 
@@ -115,11 +93,13 @@ export default class Cars extends Component {
 
         const addCarRequest = {
             brand: newCarBrand,
-            model: newCarModel.value,
-            licensePlate: newCarLicensePlate.value,
+            model: newCarModel,
+            licensePlate: newCarLicensePlate,
             photo: newCarImage,
             gasType: newCarGasType,
         }
+
+        console.log(addCarRequest)
 
         request({
             url: carUrl,
@@ -129,7 +109,6 @@ export default class Cars extends Component {
             .catch(error => this.setState({ error, isLoading: false }));
 
         this.handleCloseAddModal();
-        this.componentDidMount();
     }
 
     prepareAddModalStructure() {
@@ -157,14 +136,14 @@ export default class Cars extends Component {
                             <FormGroup id="car-model-form" className="addCarForm">
                                 <ControlLabel>Model</ControlLabel>
                                 <FormControl id="carModel" type="text"
-                                    value={newCarModel.value}
+                                    value={newCarModel}
                                     onChange={this.handleNewCarModelChange}
                                 />
                             </FormGroup>
                             <FormGroup id="car-licensePlate-form" className="addCarForm">
                                 <ControlLabel>Tablica rejestracyjna</ControlLabel>
                                 <FormControl id="carLicensePlate" type="text"
-                                    value={newCarLicensePlate.value}
+                                    value={newCarLicensePlate}
                                     onChange={this.handleNewCarLicensePlateChange}
                                 />
                             </FormGroup>
@@ -178,10 +157,10 @@ export default class Cars extends Component {
                             </FormGroup>
                         </div>
                         <div id="addCarPhotoModal">
-                            <Image id="newCarImage" src={newCarImage!==''&&"data:image/jpeg;base64," + newCarImage} rounded responsive />
+                            <Image id="newCarImage" src={"data:image/jpeg;base64," + newCarImage} rounded responsive />
                             <ReactFileReader fileTypes={[".jpg", ".png"]} base64={true} multipleFiles={false} handleFiles={this.handleAddNewCarPhoto}>
                                 <div id="uploadCarPhotoButtonContainer">
-                                    <Button id="uploadCarPhotoButton" bsStyle="primary" disabled={newCarImage!==''}>
+                                    <Button id="uploadCarPhotoButton" bsStyle="primary" disabled={newCarImage !== ''}>
                                         Dodaj zdjęcie
                                     </Button>
                                 </div>

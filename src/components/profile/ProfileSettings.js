@@ -69,6 +69,7 @@ export default class ProfileSettings extends Component {
     this.handleChangePhoto = this.handleChangePhoto.bind(this);
   }
 
+  //TODO
   loadCurrentLoggedUser() {
     if (localStorage.getItem(ACCESS_TOKEN)) {
 
@@ -160,37 +161,29 @@ export default class ProfileSettings extends Component {
   }
 
   componentDidMount() {
-    var { currentLoggedUser } = this.state;
 
     request({
-      url: studentUrl + '/' + '11',//currentLoggedUser.id,
+      url: 'http://localhost:8080/user/me',//currentLoggedUser.id,
       method: 'GET'
-    }).then(data => this.setState({
-        id: { value: data.id },
-        name: { value: data.name },
-        surname: { value: data.surname },
-        registrationDate: { value: trimDate(data.registrationDate) },
-        pesel: { value: data.pesel },
-        email: { value: data.email },
-        phoneNumber: { value: data.phoneNumber },
-        city: { value: data.address.city },
-        zipCode: { value: data.address.zipCode },
-        street: { value: data.address.street },
-        houseNo: { value: data.address.houseNo }
+    })
+      .then(data => this.setState({
+        currentLoggedUser: data
       })).then(data => this.setState({ payments: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
-      request({
-        url: instructorUrl + '/7',
-        method: 'GET'
-      }).then(data => this.setState({
+    request({
+      url: instructorUrl + '/7',
+      method: 'GET'
+    }).then(data => this.setState({
       image: data.photo
     }));
   }
 
   render() {
 
-    var { id, name, surname, registrationDate, pesel, email, password, phoneNumber, city, zipCode, street, houseNo, image } = this.state;
+    var { currentLoggedUser, id, name, surname, registrationDate, pesel, email, password, phoneNumber, city, zipCode, street, houseNo, image } = this.state;
+
+    console.log("Current logged user = " + currentLoggedUser.name);
 
     const passwordTooltip = (
       <Tooltip id="password-tooltip">
@@ -213,14 +206,14 @@ export default class ProfileSettings extends Component {
             <ControlLabel>Imię</ControlLabel>
             <FormControl id="name"
               disabled
-              value={name.value}
+              value={currentLoggedUser.name}
             />
           </FormGroup>
           <FormGroup id="surname-form">
             <ControlLabel>Nazwisko</ControlLabel>
             <FormControl id="surname"
               disabled
-              value={surname.value}
+              value={currentLoggedUser.surname}
             />
           </FormGroup>
         </div>
@@ -230,7 +223,7 @@ export default class ProfileSettings extends Component {
             <ControlLabel>Data rejestracji</ControlLabel>
             <FormControl id="registrationDate"
               disabled
-              value={registrationDate.value}
+              value={currentLoggedUser.surname}
             />
           </FormGroup>
           <FormGroup id="pesel-form">
@@ -247,7 +240,7 @@ export default class ProfileSettings extends Component {
             <ControlLabel>E-mail</ControlLabel>
             <FormControl id="email"
               disabled
-              value={email.value}
+              value={currentLoggedUser.email}
             />
           </FormGroup>
           <OverlayTrigger placement="left" overlay={passwordTooltip}>

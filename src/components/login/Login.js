@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel, Checkbox } from "react-bootstrap";
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { ACCESS_TOKEN } from "constants/constants";
 import { login } from 'utils/APIUtils';
 import "./Login.css";
@@ -13,50 +13,35 @@ export default class Login extends Component {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
 
         this.state = {
-            email: {
-                value: ''
-            },
-            password: {
-                value: ''
-            }
+            email: '',
+            password: ''
         };
     }
 
     handleEmailChange(event) {
-        const inputValue = event.target.value;
-
         this.setState({
-            email: {
-                value: inputValue,
-            }
+            email: event.target.value
         });
     }
 
     handlePasswordChange(event) {
-        const inputValue = event.target.value;
-
         this.setState({
-            password: {
-                value: inputValue,
-            }
+            password: event.target.value
         });
     }
 
-    handleSubmit = event => {
-
+    handleSubmit(event) {
         var { email, password } = this.state;
 
         event.preventDefault();
 
         const loginRequest = {
-            email: email.value,
-            password: password.value
+            email: email,
+            password: password
         };
 
         login(loginRequest)
             .then(response => {
-
-                console.log("LOGIN RESPONSE",response)
                 localStorage.setItem(ACCESS_TOKEN, response.accessToken);
 
                 this.props.history.push("/main");
@@ -78,7 +63,7 @@ export default class Login extends Component {
                         <FormControl
                             autoFocus
                             type="email"
-                            value={this.state.email.value}
+                            value={this.state.email}
                             onChange={this.handleEmailChange}
                         />
                     </FormGroup>
@@ -87,14 +72,10 @@ export default class Login extends Component {
                         <FormControl
                             type="password"
                             minLength="8"
-                            value={this.state.password.value}
+                            value={this.state.password}
                             onChange={this.handlePasswordChange}
                         />
                     </FormGroup>
-                    {/* <Checkbox id="rememberMeCheckbox">
-                        Zapamiętaj mnie
-                    </Checkbox> */}
-                    {/* <p id="registerQuestion">Nie masz konta?<a id="registerRedirect" href="/register"> Zarejestruj się!</a></p> */}
                     <Button
                         id="login-button"
                         block

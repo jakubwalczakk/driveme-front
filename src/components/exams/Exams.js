@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import { request } from "utils/APIUtils";
 import PracticalExam from './PracticalExam';

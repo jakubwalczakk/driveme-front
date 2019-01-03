@@ -62,8 +62,6 @@ export default class Booking extends Component {
     this.handleReservationSubmit = this.handleReservationSubmit.bind(this);
   }
 
-
-
   handleSelectedCarBrandChange(event) {
     this.setState({ selectedCarBrand: event.target.value })
   }
@@ -82,7 +80,6 @@ export default class Booking extends Component {
 
     if (carBrand !== '-' && instructorEmail !== '-') {
       request({
-        // url: eventsUrl + `booking?instructor=${instructorEmail}&brand=${carBrand}`,
         url: eventsUrl + `/booking?instructor=${instructorEmail}&brand=${carBrand}`,
         method: 'GET',
       }).then(data => this.setState({
@@ -286,7 +283,6 @@ export default class Booking extends Component {
     var { isLoading, error, carBrands, instructors, reservations, drivings, exams, events,
       selectedCarBrand, selectedInstructor } = this.state;
 
-
     if (error) {
       return <p className="bookingsInfoLabel">{error.message}</p>
     }
@@ -330,7 +326,9 @@ export default class Booking extends Component {
               </FormGroup>
             </div>
             <div id="searchButtonContainer">
-              <Button id="searchEventsButton" onClick={this.handleSearchSubmit}>Szukaj</Button>
+              <Button id="searchEventsButton" onClick={this.handleSearchSubmit}>
+                Szukaj
+              </Button>
             </div>
           </div>
           <Calendar reservations={reservations} drivings={drivings} exams={exams} />

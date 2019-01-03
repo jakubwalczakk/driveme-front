@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ProgressBar } from "react-bootstrap";
 import Drivings from "components/drivings/Drivings";
-import { API_BASE_URL, ACCESS_TOKEN, CURRENT_USER_ROLE } from "constants/constants";
+import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
 import { request } from "utils/APIUtils";
 import "./YourProgress.css";
 
@@ -18,27 +18,11 @@ export default class YourProgress extends Component {
     }
   }
 
-  loadCurrentLoggedUser() {    
-    if (localStorage.getItem(ACCESS_TOKEN)) {
-
-      request({
-        url: 'http://localhost:8080/user/me',
-        method: 'GET'
-      }).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
-        .catch(error => this.setState({ error, isLoading: false }));
-    } else {
-      console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
-      throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
-    }
-  }
-
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    let courseId = 1;
-
     request({
-      url: courseUrl + '/' + courseId,
+      url: courseUrl + '/student',
       method: 'GET'
     }).then(data => this.setState({ course: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
@@ -46,7 +30,7 @@ export default class YourProgress extends Component {
 
   render() {
 
-    var { course, isLoading, error, currentLoggedUser } = this.state;
+    var { course, isLoading, error } = this.state;
 
     var takenDrivingHours = course.takenDrivingHours;
     const amountOfCourseDrivingHours = 30;
