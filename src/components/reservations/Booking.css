@@ -80,3 +80,15 @@
   background-color: #631033;
   margin-left: 40%;
 }
+
+.add-reservation-btn{  
+  background-color: #631033 ;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 8px 12px 8px 12px;
+}
+
+.control-label{
+  width: 100%;
+}

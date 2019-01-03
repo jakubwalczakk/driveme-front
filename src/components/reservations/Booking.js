@@ -40,8 +40,9 @@ export default class Booking extends Component {
       reservationCarBrand: '-',
       reservationStartDate: null,
       reservationDuration: '1h',
-      reservationCity: 'Katowice',
+      reservationCity: '-',
       showReservationModal: false,
+      requestResponse: false
     }
     this.handleSelectedCarBrandChange = this.handleSelectedCarBrandChange.bind(this);
     this.handleSelectedInstructorChange = this.handleSelectedInstructorChange.bind(this);
@@ -135,6 +136,7 @@ export default class Booking extends Component {
           <FormGroup>
             <ControlLabel>Miasto</ControlLabel>
             <FormControl componentClass="select" onChange={this.handleReservationCityChange} value={reservationCity}>
+              <option>-</option>
               {cities.map(city => (
                 <option key={city.name}>{city.name}</option>)
               )}
@@ -173,15 +175,22 @@ export default class Booking extends Component {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.handleReservationModalClose}>Anuluj</Button>
-          <Button onClick={this.handleReservationSubmit} disabled={this.validateReservationForm()}>Dodaj</Button>
+          <Button className="add-reservation-btn" onClick={this.handleReservationModalClose}>Anuluj</Button>
+          <Button className="add-reservation-btn" disabled={!this.validateReservationForm()} onClick={this.handleReservationSubmit}>
+            Dodaj
+          </Button>
         </Modal.Footer>
       </Modal>
     );
   }
 
   validateReservationForm() {
-    return false;
+    var { reservationCarBrand, reservationInstructor, reservationCity, reservationStartDate } = this.state;
+
+    return (reservationCarBrand !== '-' &&
+      reservationInstructor !== '-' &&
+      reservationCity !== '-' &&
+      reservationStartDate !== null);
   }
 
   handleReservationInstructorChange(event) {
@@ -197,7 +206,6 @@ export default class Booking extends Component {
   }
 
   handleReservationStartDateChange(event) {
-    console.log(event)
     this.setState({ reservationStartDate: event })
   }
 
@@ -207,32 +215,48 @@ export default class Booking extends Component {
 
   handleReservationSubmit() {
 
-    var { reservationCarBrand, reservationInstructor, reservationCity, reservationStartDate, reservationDuration } = this.state;
+    var { reservationCarBrand, reservationInstructor, reservationCity, reservationStartDate, reservationDuration, requestResponse } = this.state;
 
     const instructorEmail = reservationInstructor.split(" - ")[1];
     const duration = parseFloat(reservationDuration.slice(0, -1)) * 60;
 
-    console.log(duration)
-
-    const reservationRequest = {
-      startDate: new Date(),
-      duration: duration,
-      instructor: { email: instructorEmail },
-      carBrand: reservationCarBrand,
-      drivingCity: reservationCity
-    }
+    var data = reservationStartDate.toISOString();
+    console.log(data);
 
     request({
-      url: reservationUrl,
-      method: 'POST',
-      body: JSON.stringify(reservationRequest)
-    }).then(data => this.setState({ isLoading: false }))
+      url: eventsUrl + `/term_availability?instructor=${instructorEmail}&brand=${reservationCarBrand}
+      &startDate=${data}&duration=${duration}`,
+      method: 'GET'
+    }).then(response => this.setState({ requestResponse: response, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
-    console.log("REZERWACJA ZOSTAŁA WYSŁANA DO SERWERA!!! | " + instructorEmail + " | " + reservationCarBrand
-      + " | " + reservationStartDate + " | " + reservationDuration + " | " + reservationCity)
+    console.log("Rezultat = " + requestResponse);
 
-    this.handleReservationModalClose();
+    if (requestResponse) {
+      const reservationRequest = {
+        startDate: reservationStartDate.toISOString(),
+        duration: duration,
+        instructor: { email: instructorEmail },
+        carBrand: reservationCarBrand,
+        drivingCity: reservationCity
+      }
+
+      request({
+        url: reservationUrl,
+        method: 'POST',
+        body: JSON.stringify(reservationRequest)
+      }).then(data => this.setState({ isLoading: false }))
+        .catch(error => this.setState({ error, isLoading: false }));
+
+      console.log("REZERWACJA ZOSTAŁA WYSŁANA DO SERWERA!!! | " + instructorEmail + " | " + reservationCarBrand
+        + " | " + reservationStartDate + " | " + reservationDuration + " | " + reservationCity)
+      this.handleReservationModalClose();
+    } else {
+      console.log("REZERWACJA NISTETY NIE ZOSTAŁA WYSŁANA DO SERWERA!!! | " + instructorEmail + " | " + reservationCarBrand
+        + " | " + reservationStartDate + " | " + reservationDuration + " | " + reservationCity)
+      alert(`Niestety, rezerwacja nie została zaakceptowana. 
+      Podany termin rezerwacji nie jest dostępny!`);
+    }
   }
 
   componentDidMount() {
