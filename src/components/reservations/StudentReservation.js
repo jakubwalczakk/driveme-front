@@ -1,17 +1,25 @@
 import React, { Component } from "react";
+import './ReservationsList.css';
 
 export default class StudentReservation extends Component {
   render() {
-    console.log(this.props)
+    var reservation = this.props.reservation;
     return (
-      <tr key={this.props.reservation.id}>
+      <tr key={reservation.id}>
         <td>
-          {this.props.reservation.instructor.name} {this.props.reservation.instructor.surname}
+          {reservation.instructor.name} {reservation.instructor.surname}
         </td>
-        <td>{this.props.reservation.carBrand} </td>
-        <td>{this.props.reservation.drivingCity}</td>
-        <td>{this.props.reservation.startDate}</td>
-        <td>{this.props.reservation.duration}</td>
+        <td>{reservation.carBrand} </td>
+        <td>{reservation.drivingCity}</td>
+        <td>{reservation.startDate}</td>
+        <td>{reservation.duration}</td>
+        <td>
+          {reservation.accepted === true &&
+            <i id="reservationAccepted" className="material-icons">check_circle</i>}
+          {reservation.accepted === false &&
+            <i id="reservationDenied" className="material-icons">cancel</i>}
+          {reservation.accepted === null &&
+            <i id="reservationUndefined" className="material-icons">help</i>}</td>
       </tr>
     )
   }

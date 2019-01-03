@@ -178,10 +178,10 @@ export default class Cars extends Component {
                             </FormGroup>
                         </div>
                         <div id="addCarPhotoModal">
-                            <Image id="newCarImage" src={"data:image/jpeg;base64," + newCarImage} rounded responsive />
+                            <Image id="newCarImage" src={newCarImage!==''&&"data:image/jpeg;base64," + newCarImage} rounded responsive />
                             <ReactFileReader fileTypes={[".jpg", ".png"]} base64={true} multipleFiles={false} handleFiles={this.handleAddNewCarPhoto}>
                                 <div id="uploadCarPhotoButtonContainer">
-                                    <Button id="uploadCarPhotoButton" bsStyle="primary">
+                                    <Button id="uploadCarPhotoButton" bsStyle="primary" disabled={newCarImage!==''}>
                                         Dodaj zdjęcie
                                     </Button>
                                 </div>

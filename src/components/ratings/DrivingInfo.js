@@ -12,40 +12,73 @@ export default class DrivingInfo extends Component {
     this.state = {
       isLoading: false,
       error: null,
-      showRateModal: false
+      showRateModal: false,
+      drivingTitle: '',
+      drivingComment: '',
+      //FIXME!!!
+      drivingRating: 'Świetnie'
     }
     this.prepareRateModal = this.prepareRateModal.bind(this);
     this.handleCloseRateModal = this.handleCloseRateModal.bind(this);
     this.handleShowRateModal = this.handleShowRateModal.bind(this);
+    this.handleDrivingTitleChange = this.handleDrivingTitleChange.bind(this);
+    this.handleDrivingRatingChange = this.handleDrivingRatingChange.bind(this);
+    this.handleDrivinCommentChange = this.handleDrivinCommentChange.bind(this);
     this.handleRated = this.handleRated.bind(this);
   }
 
+  handleDrivingTitleChange(event) {
+    this.setState({
+      drivingTitle: event.target.value
+    })
+  }
+
+  handleDrivingRatingChange(event) {
+    this.setState({
+      drivingRating: event.target.value
+    })
+  }
+
+  handleDrivinCommentChange(event) {
+    this.setState({
+      drivingComment: event.target.value
+    })
+    console.log(event)
+  }
+
   prepareRateModal() {
+
+    var { showRateModal, drivingTitle, drivingComment, drivingRating } = this.state;
+
     return (
-      <Modal show={this.state.showRateModal} onHide={this.handleCloseRateModal}>
+      <Modal show={showRateModal} onHide={this.handleCloseRateModal}>
         <Modal.Header closeButton>
           <Modal.Title>Ocena zajęć</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormGroup>
-            <ControlLabel>Ocena</ControlLabel>
-            <br />
-            <Radio name="radioGroup" inline>Rozczarowująco</Radio>
-            <Radio name="radioGroup" inline>Przeciętnie</Radio>
-            <Radio name="radioGroup" inline>OK</Radio>
-            <Radio name="radioGroup" inline>Świetnie</Radio>
-            <Radio name="radioGroup" inline>Mistrzowsko</Radio>
+            <ControlLabel>Tytuł</ControlLabel>
+            <FormControl type="text"
+              value={drivingTitle} onChange={this.handleDrivingTitleChange} />
           </FormGroup>
           <FormGroup>
-            <ControlLabel>Komentarz</ControlLabel>
-            <FormControl />
+            <ControlLabel>Ocena</ControlLabel>
+            <Radio name="radioGroup" inline >Rozczarowująco</Radio>
+            <Radio name="radioGroup" inline >Przeciętnie</Radio>
+            <Radio name="radioGroup" inline >OK</Radio>
+            <Radio name="radioGroup" inline >Świetnie</Radio>
+            <Radio name="radioGroup" inline >Mistrzowsko</Radio></FormGroup>
+          <ControlLabel>Komentarz</ControlLabel>
+          <FormGroup>
+            <FormControl type="text"
+              value={drivingComment} onChange={this.handleDrivinCommentChange} />
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.handleCloseRateModal}>Anuluj</Button>
           <Button onClick={this.handleRated}>Zapisz</Button>
         </Modal.Footer>
-      </Modal>
+      </Modal >
     );
   }
 
@@ -55,17 +88,16 @@ export default class DrivingInfo extends Component {
 
   handleShowRateModal() {
     this.setState({ showRateModal: true });
-    console.log("CLIDKED")
   }
 
   handleRated() {
-    // const drivingId = { driving.id };
+    var { drivingTitle, drivingRating, drivingComment } = this.state;
     const drivingId = this.props.driving.id;
     const rateRequest = {
-      // wartości powinny zostać pobrane z okna modalnego!!!
-      drivingId: drivingId,//{ driving.id },
-      rating: "Mistrzowsko",
-      comment: "Super postępy"
+      drivingId: drivingId,
+      title: drivingTitle,
+      rating: drivingRating,
+      comment: drivingComment
     }
 
     request({
@@ -97,7 +129,7 @@ export default class DrivingInfo extends Component {
         <td>{driving.drivingCity}</td>
         <td>{driving.startDate}</td>
         <td>{driving.duration}</td>
-        {<td>{!driving.rating ?
+        {<td>{driving.rating ?
           <Badge>{driving.rating}</Badge> :
           <Button id="rateButton" onClick={this.handleShowRateModal}>Oceń</Button>}
         </td>}

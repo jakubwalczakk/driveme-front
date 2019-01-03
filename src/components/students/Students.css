@@ -41,3 +41,11 @@
   width: 100%;
   color: rgb(175, 0, 0);
 }
+
+.modals-button{  
+  background-color: #631033 ;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 8px 12px 8px 12px;
+}

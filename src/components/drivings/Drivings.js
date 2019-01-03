@@ -46,7 +46,7 @@ export default class Drivings extends Component {
     return (
 
       <div id="drivingsTableContainer">
-        <p id="drivingsLabel">Lista ukończonych przez Ciebie jazd szkoleniowych</p>
+        <p id="drivingsLabel">Lista Twoich jazd szkoleniowych</p>
         <Table id="drivingsTable" responsive striped bordered condensed hover>
           <thead>
             <tr>

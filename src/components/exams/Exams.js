@@ -69,6 +69,10 @@ export default class Exams extends Component {
         {/* TODO */}
         <p id="practicalExamLabel">Egzamin praktyczny</p>
         {/* TODO */}
+        <p>{practicalExam.id}</p>
+        <p>{practicalExam.startDate}</p>
+        <p>{practicalExam.duration}</p>
+        <p>{practicalExam.finishDate}</p>
       </div>);
     } else {
       return <div id="examsTableContainer">

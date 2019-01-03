@@ -56,7 +56,7 @@ export default class Course extends Component {
           <p>Wpłacona kwota: {percentPaymentOfCourse}% - {currenPaymentOfCourse}PLN
                   {currenPaymentOfCourse === 1500.0 &&
               <i id="paymentsAccepted" className="material-icons">check_circle</i>}</p>
-          <p>Liczba ukończonych godzin: {course.takenDrivingHours}h ({percentOfCourseCompletion}%)</p>
+          <p>Ukończonych godzin: {course.takenDrivingHours}h ({percentOfCourseCompletion}%)</p>
           <ProgressBar id="drivingsHoursProgressBar" bsStyle="success" now={percentOfCourseCompletion} />
           <p>Status: {course.status}</p>
         </div>

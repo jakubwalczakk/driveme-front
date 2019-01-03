@@ -4,23 +4,24 @@ import "./Exams.css";
 
 export default class PracticalExam extends Component {
   render() {
+    var exam = this.props.exam;
     return (
-      <tr key={this.props.exam.id}>
-        <td>{this.props.exam.startDate}</td>
-        <td>{this.props.exam.student.name}</td>
-        <td>{this.props.exam.car.brand}</td>
+      <tr key={exam.id}>
+        <td>{exam.startDate}</td>
+        <td>{exam.student.name}</td>
+        <td>{exam.car.brand}</td>
         <td>
-          {this.props.exam.passed &&
+          {exam.passed &&
             <i id="examPassed" className="material-icons">check_circle</i>}
-          {this.props.exam.passed &&
+          {exam.passed &&
             <i id="examFailed" className="material-icons">cancel</i>}
-          {this.props.passed === null}{
+          {exam.passed === null}{
             <Button>
               Oceń
           </Button>}
         </td>
-        <td>{this.props.scoredPoints}</td>
-        <td>{Math.round(this.props.exam.result * 100)}%</td>
+        <td>{exam.scoredPoints}</td>
+        <td>{Math.round(exam.result * 100)}%</td>
       </tr>
     )
   }

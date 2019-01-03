@@ -66,6 +66,7 @@ export default class Reservations extends Component {
               <th>Miasto</th>
               <th>Data rozpoczęcia</th>
               <th id="reservationDurationCol">Czas trwania (min.)</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
