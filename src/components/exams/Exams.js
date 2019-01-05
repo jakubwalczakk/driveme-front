@@ -52,7 +52,7 @@ export default class Exams extends Component {
         <TheoreticalExam key={exam.id} exam={exam} />)
 
       return (<div id="examsTableContainer">
-        <p id="examsLabel">Egzaminy teoretyczne</p>
+        {/* <p id="examsLabel">Egzaminy teoretyczne</p>
         <Table id="theoreticalExamsTable" responsive striped bordered condensed hover>
           <thead>
             <tr>
@@ -65,7 +65,7 @@ export default class Exams extends Component {
           <tbody>
             {studentExams}
           </tbody>
-        </Table>
+        </Table> */}
         {/* TODO */}
         <p id="practicalExamLabel">Egzamin praktyczny</p>
         {/* TODO */}

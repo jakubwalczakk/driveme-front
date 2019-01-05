@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Nav, Navbar, NavItem, Image, Modal, Button } from "react-bootstrap";
 import { logout } from "utils/APIUtils";
-import { CURRENT_USER_ROLE } from 'constants/constants';
+import { CURRENT_USER_ROLE, ACCESS_TOKEN, User_role } from 'constants/constants';
 import "./NavigationBar.css";
 
 export default class NavigationBar extends Component {
@@ -18,6 +18,7 @@ export default class NavigationBar extends Component {
         this.handleCloseLogoutModal = this.handleCloseLogoutModal.bind(this);
         this.handleLogoutButtonClick = this.handleLogoutButtonClick.bind(this);
         this.prepareModalStructure = this.prepareModalStructure.bind(this);
+        this.parseJwt=this.parseJwt.bind(this);
     }
 
     handleLoginClick() {
@@ -107,7 +108,26 @@ export default class NavigationBar extends Component {
         }
     }
 
+    //FIXME
+     parseJwt (token) {
+        // var base64Url = token.split('.')[1];
+        // // var base64 = base64Url.replace('-', '+').replace('_', '/');
+        // var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        // return JSON.parse(window.atob(base64));
+        
+    return JSON.parse(atob(token.split('.')[1]));
+    };
+
     render() {
+
+        // if(localStorage.getItem(ACCESS_TOKEN)){
+        //     var token = localStorage.getItem(ACCESS_TOKEN);
+        //     var decodedToken = this.parseJwt(token);
+        //     // console.log("TOKEN = " , decodedToken);
+        // }
+
+        console.log("USER_ROLE = " + User_role)
+
         var { isLoggedIn, showModal } = this.state;
 
         let loggingNavItem;
@@ -132,7 +152,7 @@ export default class NavigationBar extends Component {
         let navBarTypes = this.prepareNavBarStructure();
 
         return (
-            <Navbar className="nav-bar" fixedTop responsive="true" hidden={false}>
+            <Navbar className="nav-bar" fixedTop responsive="true" hidden={!localStorage.getItem(ACCESS_TOKEN)}>
                 <Navbar.Header responsive="true">
                     <a href="/main">
                         <Image id="logoBrand" src="/logo.png" rounded responsive />
