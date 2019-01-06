@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import { withRouter } from "react-router-dom";
 import Payment from './Payment';
 import "./Payments.css";
 
 const paymentUrl = API_BASE_URL + '/payment/student';
 
-export default class Payments extends Component {
+class Payments extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,7 +40,7 @@ export default class Payments extends Component {
       return <p id="paymentsInfoLabel">Pobieranie danych...</p>
     }
 
-    if (CURRENT_USER_ROLE !== 'Kursant') {
+    if ('Instruktor' !== 'Kursant') {
       return <p id="paymentsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
     } else {
 
@@ -73,3 +74,5 @@ export default class Payments extends Component {
     }
   }
 }
+
+export default withRouter(Payments);

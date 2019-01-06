@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import { withRouter } from "react-router-dom";
 import Instructor from "./Instructor";
 import "./Instructors.css";
 
 const instructorUrl = API_BASE_URL + '/instructor';
 
-export default class Instructors extends Component {
+class Instructors extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,3 +65,5 @@ export default class Instructors extends Component {
     );
   }
 }
+
+export default withRouter(Instructors);

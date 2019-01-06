@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import { withRouter } from 'react-router-dom';
 import DrivingInfo from './DrivingInfo';
 import "./Ratings.css";
 
 const drivingUrl = API_BASE_URL + '/driving';
 
-export default class Rating extends Component {
+class Ratings extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,7 +40,7 @@ export default class Rating extends Component {
       return <p className="ratingsInfoLabel">Pobieranie danych...</p>
     }
 
-    if (CURRENT_USER_ROLE !== 'Instruktor') {
+    if ('Instruktor' !== 'Instruktor') {
       return <p className="ratingsInfoLabel">Nie masz dostępu do tego zasobu!</p>
     } else {
 
@@ -70,3 +71,5 @@ export default class Rating extends Component {
     }
   }
 }
+
+export default withRouter(Ratings);

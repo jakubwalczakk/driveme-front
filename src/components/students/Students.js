@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import { withRouter } from 'react-router-dom';
 import Student from "./Student";
 import "./Students.css";
 
 const studentsUrl = API_BASE_URL + '/student';
 
-export default class Students extends Component {
+class Students extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,7 +43,7 @@ export default class Students extends Component {
       return <p id="studentsInfoLabel">Pobieranie danych...</p>
     }
 
-    if (CURRENT_USER_ROLE !== 'Administrator') {
+    if ('Instruktor' !== 'Administrator') {
       return <p id="studentsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
     } else {
 
@@ -72,3 +73,5 @@ export default class Students extends Component {
     }
   }
 }
+
+export default withRouter(Students);

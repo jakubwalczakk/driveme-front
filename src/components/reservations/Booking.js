@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { FormGroup, FormControl, ControlLabel, Button, Modal } from "react-bootstrap";
-import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
 import DatePicker from 'react-datepicker';
 import Calendar from './../calendar/Calendar';
+import { withRouter } from "react-router-dom";
 // import { pl } from 'date-fns/locale';
 import "./Booking.css";
 
@@ -21,7 +22,7 @@ Date.prototype.addDays = function (days) {
   return date;
 }
 
-export default class Booking extends Component {
+class Booking extends Component {
 
   constructor(props) {
     super(props);
@@ -75,8 +76,8 @@ export default class Booking extends Component {
     const carBrand = this.state.selectedCarBrand;
     const instructorEmail = this.state.selectedInstructor.split(" - ")[1];
 
-    console.log(carBrand)
-    console.log(instructorEmail)
+    // console.log(carBrand)
+    // console.log(instructorEmail)
 
     if (carBrand !== '-' && instructorEmail !== '-') {
       request({
@@ -218,7 +219,7 @@ export default class Booking extends Component {
     const duration = parseFloat(reservationDuration.slice(0, -1)) * 60;
 
     var data = reservationStartDate.toISOString();
-    console.log(data);
+    // console.log(data);
 
     request({
       url: eventsUrl + `/term_availability?instructor=${instructorEmail}&brand=${reservationCarBrand}
@@ -227,7 +228,7 @@ export default class Booking extends Component {
     }).then(response => this.setState({ requestResponse: response, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
-    console.log("Rezultat = " + requestResponse);
+    // console.log("Rezultat = " + requestResponse);
 
     if (requestResponse) {
       const reservationRequest = {
@@ -291,7 +292,7 @@ export default class Booking extends Component {
       return <p className="bookingsInfoLabel">Pobieranie danych...</p>
     }
 
-    if (CURRENT_USER_ROLE !== 'Kursant') {
+    if ('Instruktor' !== 'Kursant') {
       return <p className="bookingsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
     } else {
 
@@ -340,3 +341,5 @@ export default class Booking extends Component {
     }
   }
 }
+
+export default withRouter(Booking);

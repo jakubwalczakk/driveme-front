@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
 import { request } from "utils/APIUtils";
-import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { API_BASE_URL } from "constants/constants";
+import { withRouter } from "react-router-dom";
 import City from "./City";
 import "./CityList.css";
 
 const cityUrl = API_BASE_URL + '/city';
 
-export default class CityList extends Component {
+class CityList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -182,7 +183,7 @@ export default class CityList extends Component {
         }
 
         let buttonVisibility;
-        if (CURRENT_USER_ROLE === 'Administrator') {
+        if ('Instruktor' === 'Administrator') {
             buttonVisibility = (
                 <Button id="addCityButton" onClick={this.handleShowAddModal}>
                     Dodaj miasto
@@ -206,3 +207,5 @@ export default class CityList extends Component {
         );
     }
 }
+
+export default withRouter(CityList);

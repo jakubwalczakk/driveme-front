@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { ACCESS_TOKEN } from "constants/constants";
 import { login } from 'utils/APIUtils';
+import { withRouter } from "react-router-dom";
 import "./Login.css";
 
-export default class Login extends Component {
+class Login extends Component {
     constructor(props) {
         super(props);
 
@@ -30,28 +31,25 @@ export default class Login extends Component {
         });
     }
 
-    handleSubmit(event) {
+    async  handleSubmit(event) {
         var { email, password } = this.state;
-
         event.preventDefault();
-
         const loginRequest = {
             email: email,
             password: password
         };
 
-        login(loginRequest)
+        await login(loginRequest)
             .then(response => {
                 localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-
-                this.props.history.push("/main");
             }).catch(error => {
                 if (error.status === 401) {
-                    console.log('Twój e-mail lub hasło jest niepoprawne. Spróbuj ponownie!')
+                    alert('Twój e-mail lub hasło jest niepoprawne. Spróbuj ponownie!')
                 } else {
-                    console.log('Przepraszamy! Coś poszło nie tak :( Spróbuj ponownie.')
+                    alert('Przepraszamy! Coś poszło nie tak :( Spróbuj ponownie.')
                 }
             });
+        this.props.onLogin();
     }
 
     render() {
@@ -88,3 +86,5 @@ export default class Login extends Component {
         );
     }
 }
+
+export default withRouter(Login);

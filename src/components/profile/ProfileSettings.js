@@ -3,6 +3,7 @@ import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger, 
 import ReactFileReader from 'react-file-reader';
 import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, ACCESS_TOKEN } from "constants/constants";
 import { trimDate, request } from "utils/APIUtils";
+import { withRouter } from 'react-router-dom';
 import "./ProfileSettings.css";
 
 const studentUrl = API_BASE_URL + '/student';
@@ -12,7 +13,7 @@ const currentUser = {
   role: 'Instruktor'
 }
 
-export default class ProfileSettings extends Component {
+class ProfileSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -79,7 +80,7 @@ export default class ProfileSettings extends Component {
       }).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
     } else {
-      console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
+      // console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
       throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
     }
   }
@@ -121,7 +122,7 @@ export default class ProfileSettings extends Component {
         .catch(error => this.setState({ error, isLoading: false }));
     }
     else {
-      console.log("WIELKI BŁĄd")
+      // console.log("WIELKI BŁĄd")
     }
   }
 
@@ -183,7 +184,7 @@ export default class ProfileSettings extends Component {
 
     var { currentLoggedUser, id, name, surname, registrationDate, pesel, email, password, phoneNumber, city, zipCode, street, houseNo, image } = this.state;
 
-    console.log("Current logged user = " + currentLoggedUser.name);
+    // console.log("Current/ logged user = " + currentLoggedUser.name);
 
     const passwordTooltip = (
       <Tooltip id="password-tooltip">
@@ -192,7 +193,7 @@ export default class ProfileSettings extends Component {
 
     return (
       <div id="profileSettingsContainer">
-        <div id="userPhotoContainer" hidden={currentUser.role !== 'Instruktor'}>
+        <div id="userPhotoContainer" hidden={true}>
           {/*src={"data:image/jpeg;base64," + image} src="/legoman.jpg"*/}
           <Image id="userPhotoImage" src={"data:image/jpeg;base64," + image} rounded responsive />
           <ReactFileReader fileTypes={[".jpg", ".png"]} base64={true} multipleFiles={false} handleFiles={this.handleChangePhoto}>
@@ -218,7 +219,7 @@ export default class ProfileSettings extends Component {
           </FormGroup>
         </div>
 
-        <div id="basicInfoContainer">
+        <div id="basicInfoContainer" hidden={true}>
           <FormGroup id="registrationDate-form">
             <ControlLabel>Data rejestracji</ControlLabel>
             <FormControl id="registrationDate"
@@ -264,7 +265,7 @@ export default class ProfileSettings extends Component {
           </FormGroup>
         </div>
 
-        <div id="addressInfoContainer">
+        <div id="addressInfoContainer" hidden={true}>
           <FormGroup id="city-form">
             <ControlLabel>Miasto</ControlLabel>
             <FormControl id="city"
@@ -345,13 +346,13 @@ export default class ProfileSettings extends Component {
     }
     const PHONE_NUMBER_REGEX = RegExp("^\\d{3}-\\d{3}-\\d{3}$||^\\d{3} \\d{3} \\d{3}$||^\\d{9}$");
     if (PHONE_NUMBER_REGEX.test(phoneNumber)) {
-      console.log("Numer ok!!!")
+      // console.log("Numer ok!!!")
       return {
         validateStatus: true,
         message: null,
       };
     } else {
-      console.log("błędny numer!!!")
+      // console.log("błędny numer!!!")
       return {
         validateStatus: false,
         message: 'Numer telefonu nie jest zgodny z podanym formatem.'
@@ -435,3 +436,5 @@ export default class ProfileSettings extends Component {
     }
   }
 }
+
+export default withRouter(ProfileSettings);

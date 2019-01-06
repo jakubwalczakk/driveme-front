@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
-import { request } from "utils/APIUtils";
+import { request, trimDate } from "utils/APIUtils";
 
 const rateDrivingUrl = API_BASE_URL + '/driving/rate';
 
@@ -43,7 +43,7 @@ export default class DrivingInfo extends Component {
     this.setState({
       drivingComment: event.target.value
     })
-    console.log(event)
+    // console.log(event)
   }
 
   prepareRateModal() {
@@ -107,7 +107,7 @@ export default class DrivingInfo extends Component {
     }).then(data => this.setState({ isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
-    console.log("Zajęcia ocenione!");
+    // console.log("Zajęcia ocenione!");
     this.handleCloseRateModal();
   }
 
@@ -121,13 +121,15 @@ export default class DrivingInfo extends Component {
     }
 
     const driving = this.props.driving;
+    var date = "2019-01-09 19:27";//trimDate((new Date()).toISOString());
     return (
       <tr key={driving.id}>
         <td>{driving.student.name} {driving.student.surname}</td>
         <td>{driving.title}</td>
         <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
         <td>{driving.drivingCity}</td>
-        <td>{driving.startDate}</td>
+        <td>{(driving.startDate > date && "PRAWDA") ||
+          (driving.startDate < date && "FAŁSZ")}</td>
         <td>{driving.duration}</td>
         {<td>{driving.rating ?
           <Badge>{driving.rating}</Badge> :

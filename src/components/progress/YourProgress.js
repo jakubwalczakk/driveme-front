@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { ProgressBar } from "react-bootstrap";
 import Drivings from "components/drivings/Drivings";
-import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import { withRouter } from 'react-router-dom';
 import "./YourProgress.css";
 
 const courseUrl = API_BASE_URL + '/course';
 
-export default class YourProgress extends Component {
+class YourProgress extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,7 +45,7 @@ export default class YourProgress extends Component {
       return <p className="yourProgressInfoLabel">Pobieranie danych...</p>
     }
 
-    if (CURRENT_USER_ROLE !== 'Kursant') {
+    if ('Instruktor' !== 'Kursant') {
       return <p className="yourProgressInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
     } else {
       return (
@@ -56,3 +57,5 @@ export default class YourProgress extends Component {
     }
   }
 }
+
+export default withRouter(YourProgress);

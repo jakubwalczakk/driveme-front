@@ -41,40 +41,6 @@ export function signup(signupRequest) {
   });
 }
 
-export function checkEmailAvailability(email) {
-  return request({
-    url: API_BASE_URL + "/user/checkEmailAvailability?email=" + email,
-    method: 'GET'
-  });
-}
-
-export function logout() {
-  if (localStorage.getItem(ACCESS_TOKEN)) {
-    localStorage.removeItem(ACCESS_TOKEN);
-    console.log("Zostałeś wylogowany z systemu!");
-    
-    localStorage.clear();
-    window.location.href = '/';
-  } else {
-    throw new Error("Wystąpił błąd podczas wylogowywania z systemu...")
-  }
-}
-
-export function getCurrentUser() {
-  if (localStorage.getItem(ACCESS_TOKEN)) {
-
-    let currentUser;
-    request({
-      url: 'http://localhost:8080/user/me',
-      method: 'GET'
-    }).then(data => currentUser = data);
-    return currentUser;
-  } else {
-    console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
-    throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
-  }
-}
-
 export function trimDate(date) {
   var part1 = date.split("T")[0];
   var part2 = date.split("T")[1].split("Z")[0];

@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
 import { request } from "utils/APIUtils";
-import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { API_BASE_URL } from "constants/constants";
+import { withRouter } from "react-router-dom";
 import Car from "./Car";
 import "./Cars.css";
 
 const carUrl = API_BASE_URL + '/car';
 
-export default class Cars extends Component {
+class Cars extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -99,7 +100,7 @@ export default class Cars extends Component {
             gasType: newCarGasType,
         }
 
-        console.log(addCarRequest)
+        // console.log(addCarRequest)
 
         request({
             url: carUrl,
@@ -210,7 +211,7 @@ export default class Cars extends Component {
         }
 
         let buttonVisibility;
-        if (CURRENT_USER_ROLE === 'Administrator') {
+        if ('Administrator' === 'Administrator') {
             buttonVisibility = (
                 <Button id="addCarButton" onClick={this.handleShowAddModal}>
                     Dodaj samochód
@@ -242,3 +243,5 @@ export default class Cars extends Component {
         );
     }
 }
+
+export default withRouter(Cars);

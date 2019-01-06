@@ -1,7 +1,8 @@
 import React, { Component } from "react";
+import { withRouter } from 'react-router-dom';
 import "./MainPage.css";
 
-export default class MainPage extends Component {
+class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,13 +14,16 @@ export default class MainPage extends Component {
 
   render() {
 
+    var currentUser = this.props.currentUser && this.props.currentUser.name;
     //TODO
     return (
       <div id="mainPageContainer">
-        Witaj !
+        Witaj {currentUser}!
         <br />
-        Ten serwis pozwoli Ci na wygodne rezerwowanie terminów jazd.
+        Ten serwis pozwoli Ci na wygodne rezerwowanie terminów jazd szkoleniowych.
       </div>
     );
   }
 }
+
+export default withRouter(MainPage);

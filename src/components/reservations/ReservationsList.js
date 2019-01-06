@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { Table, Button } from "react-bootstrap";
-import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import { withRouter } from "react-router-dom";
 import InstructorReservation from './InstructorReservation';
 import StudentReservation from './StudentReservation';
 import "./ReservationsList.css";
 
 const reservationUrl = API_BASE_URL + '/reservation';
 
-export default class Reservations extends Component {
+class Reservations extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +25,7 @@ export default class Reservations extends Component {
 
     var { reservations, instructorReservations } = this.state;
 
-    if (CURRENT_USER_ROLE === 'Instruktor') {
+    if ('Instruktor' === 'Instruktor') {
 
       const reservationList = instructorReservations.map(reservation =>
         <InstructorReservation key={reservation.id} reservation={reservation} />)
@@ -48,7 +49,7 @@ export default class Reservations extends Component {
             </tbody>
           </Table>
         </div>);
-    } else if (CURRENT_USER_ROLE === 'Kursant') {
+    } else if ('Instruktor' === 'Kursant') {
 
       const reservationList = reservations.map(reservation =>
         <StudentReservation key={reservation.id} reservation={reservation} />)
@@ -82,13 +83,13 @@ export default class Reservations extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    if (CURRENT_USER_ROLE === "Instruktor") {
+    if ('Instruktor' === "Instruktor") {
       request({
         url: reservationUrl + '/instructor',
         method: 'GET'
       }).then(data => this.setState({ instructorReservations: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
-    } else if (CURRENT_USER_ROLE === 'Kursant') {
+    } else if ('Instruktor' === 'Kursant') {
       request({
         url: reservationUrl + '/student',
         method: 'GET'
@@ -115,3 +116,5 @@ export default class Reservations extends Component {
     );
   }
 }
+
+export default withRouter(Reservations);

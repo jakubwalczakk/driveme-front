@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { API_BASE_URL, CURRENT_USER_ROLE } from "constants/constants";
+import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import { withRouter } from "react-router-dom";
 import PracticalExam from './PracticalExam';
 import TheoreticalExam from './TheoreticalExam';
 import "./Exams.css";
@@ -10,7 +11,7 @@ const practicalExamUrl = API_BASE_URL + '/practical_exam/student';
 const theoreticalExamUrl = API_BASE_URL + '/theoretical_exam/student';
 const instructorPracticalExamsUrl = API_BASE_URL + '/practical_exam/instructor';
 
-export default class Exams extends Component {
+class Exams extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +26,7 @@ export default class Exams extends Component {
 
   prepareTheContent() {
     var { practicalExam, theoreticalExams, instructorPracticalExams } = this.state;
-    if (CURRENT_USER_ROLE === 'Instruktor') {
+    if ('Instruktor' === 'Instruktor') {
 
       const instructorExams = instructorPracticalExams.map(exam =>
         <PracticalExam key={exam.id} exam={exam} />)
@@ -46,7 +47,7 @@ export default class Exams extends Component {
           </tbody>
         </Table>
       </div>);
-    } else if (CURRENT_USER_ROLE === 'Kursant') {
+    } else if ('Instruktor' === 'Kursant') {
 
       const studentExams = theoreticalExams.map(exam =>
         <TheoreticalExam key={exam.id} exam={exam} />)
@@ -84,7 +85,7 @@ export default class Exams extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    if (CURRENT_USER_ROLE === 'Kursant') {
+    if ('Instruktor' === 'Kursant') {
 
       request({
         url: practicalExamUrl,
@@ -98,7 +99,7 @@ export default class Exams extends Component {
       }).then(data => this.setState({ theoreticalExams: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
 
-    } else if (CURRENT_USER_ROLE === 'Instruktor') {
+    } else if ('Instruktor' === 'Instruktor') {
 
       request({
         url: instructorPracticalExamsUrl,
@@ -129,3 +130,5 @@ export default class Exams extends Component {
     );
   }
 }
+
+export default withRouter(Exams);

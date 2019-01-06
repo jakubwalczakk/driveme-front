@@ -146,7 +146,7 @@ export default class Car extends Component {
 
   handleActivateStudent() {
     var studentId = this.props.student.id;
-    console.log("STUDENT ZOSTAŁ POTWIERDZONY DO AKTYWACJI");
+    // console.log("STUDENT ZOSTAŁ POTWIERDZONY DO AKTYWACJI");
 
     request({
       url: studentUrl + `/activate/${studentId}`,

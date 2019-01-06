@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import { CURRENT_USER_ROLE, NAME_MIN_LENGTH, NAME_MAX_LENGTH, SURNAME_MIN_LENGTH, SURNAME_MAX_LENGTH, PESEL_LENGTH } from "constants/constants";
+import { NAME_MIN_LENGTH, NAME_MAX_LENGTH, SURNAME_MIN_LENGTH, SURNAME_MAX_LENGTH, PESEL_LENGTH } from "constants/constants";
 import { signup } from 'utils/APIUtils';
+import { withRouter } from 'react-router-dom';
 import './Register.css';
 
-export default class Register extends Component {
+class Register extends Component {
 
     constructor(props) {
         super(props);
@@ -112,7 +113,7 @@ export default class Register extends Component {
 
     handleSelectedUserRoleChange(event) {
         this.setState({ selectedUserRole: event.target.value })
-        console.log(this.state)
+        // console.log(this.state)
     }
 
     handleCityChange(event, validationFun) {
@@ -200,12 +201,12 @@ export default class Register extends Component {
                 userRole: selectedUserRole
             };
         }
-        console.log("***SIGNUP REQUEST***")
-        console.log(signupRequest)
+        // console.log("***SIGNUP REQUEST***")
+        // console.log(signupRequest)
 
         signup(signupRequest)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 // this.props.history.push("/login");
             }).catch(error => {
             });
@@ -224,7 +225,7 @@ export default class Register extends Component {
 
         var { name, surname, pesel, email, phoneNumber, selectedUserRole, city, zipCode, street, houseNo } = this.state;
 
-        if (CURRENT_USER_ROLE !== 'Administrator') {
+        if ('Instruktor' !== 'Admin') {
             return <p className="registrationInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
         } else {
 
@@ -426,13 +427,13 @@ export default class Register extends Component {
         }
         const PHONE_NUMBER_REGEX = RegExp("^\\d{3}-\\d{3}-\\d{3}$||^\\d{3} \\d{3} \\d{3}$||^\\d{9}$");
         if (PHONE_NUMBER_REGEX.test(phoneNumber)) {
-            console.log("Numer ok!!!")
+            // console.log("Numer ok!!!")
             return {
                 validateStatus: 'success',
                 message: null,
             };
         } else {
-            console.log("błędny numer!!!")
+            // console.log("błędny numer!!!")
             return {
                 validateStatus: 'error',
                 message: 'Numer telefonu nie jest zgodny z podanym formatem.'
@@ -516,3 +517,5 @@ export default class Register extends Component {
         }
     }
 }
+
+export default withRouter(Register);
