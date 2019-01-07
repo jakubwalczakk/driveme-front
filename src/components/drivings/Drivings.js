@@ -23,10 +23,10 @@ export default class Drivings extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    request({
-      url: drivingUrl,
-      method: 'GET'
-    }).then(data => this.setState({ drivings: data, isLoading: false }))
+    request(
+      'GET',
+      drivingUrl
+    ).then(data => this.setState({ drivings: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { FormGroup, FormControl, ControlLabel, Button, Modal } from "react-bootstrap";
+import { withRouter } from "react-router-dom";
+import DatePicker from 'react-datepicker';
 import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import { request } from "utils/APIUtils";
-import DatePicker from 'react-datepicker';
 import Calendar from './../calendar/Calendar';
-import { withRouter } from "react-router-dom";
-// import { pl } from 'date-fns/locale';
-import "./Booking.css";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import ServerError from "../../common/ServerError";
 import AccessDenied from "../../common/AccessDenied";
+// import { pl } from 'date-fns/locale';
+import "./Booking.css";
 
 // import plPL from 'antd/lib/locale-provider/pl_PL';
 // import { LocaleProvider } from 'antd';
@@ -84,10 +84,10 @@ class Booking extends Component {
     const instructorEmail = this.state.selectedInstructor.split(" - ")[1];
 
     if (carBrand !== '-' && instructorEmail !== '-') {
-      request({
-        url: eventsUrl + `/booking?instructor=${instructorEmail}&brand=${carBrand}`,
-        method: 'GET',
-      }).then(data => this.setState({
+      request(
+        'GET',
+        eventsUrl + `/booking?instructor=${instructorEmail}&brand=${carBrand}`
+      ).then(data => this.setState({
         reservations: data.reservations,
         drivings: data.drivings,
         exams: data.exams,
@@ -217,7 +217,7 @@ class Booking extends Component {
 
   handleReservationSubmit() {
 
-    var { reservationCarBrand, reservationInstructor, reservationCity, reservationStartDate, 
+    var { reservationCarBrand, reservationInstructor, reservationCity, reservationStartDate,
       reservationDuration, requestResponse } = this.state;
 
     const instructorEmail = reservationInstructor.split(" - ")[1];
@@ -225,11 +225,11 @@ class Booking extends Component {
 
     var data = reservationStartDate.toISOString();
 
-    request({
-      url: eventsUrl + `/term_availability?instructor=${instructorEmail}&brand=${reservationCarBrand}
-      &startDate=${data}&duration=${duration}`,
-      method: 'GET'
-    }).then(response => this.setState({ requestResponse: response, isLoading: false }))
+    request(
+      'GET',
+      eventsUrl + `/term_availability?instructor=${instructorEmail}&brand=${reservationCarBrand}
+      &startDate=${data}&duration=${duration}`
+    ).then(response => this.setState({ requestResponse: response, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
     if (requestResponse) {
@@ -241,11 +241,11 @@ class Booking extends Component {
         drivingCity: reservationCity
       }
 
-      request({
-        url: reservationUrl,
-        method: 'POST',
-        body: JSON.stringify(reservationRequest)
-      }).then(data => this.setState({ isLoading: false }))
+      request(
+        'POST',
+        reservationUrl,
+        reservationRequest
+      ).then(data => this.setState({ isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
 
       console.log("REZERWACJA ZOSTAŁA WYSŁANA DO SERWERA!!! | " + instructorEmail + " | " + reservationCarBrand
@@ -263,22 +263,22 @@ class Booking extends Component {
 
     this.setState({ isLoading: true });
 
-    request({
-      url: cityUrl,
-      method: 'GET'
-    }).then(data => this.setState({ cities: data, isLoading: false }))
+    request(
+      'GET',
+      cityUrl
+    ).then(data => this.setState({ cities: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
-    request({
-      url: carUrl + '/brands',
-      method: 'GET'
-    }).then(data => this.setState({ carBrands: data, isLoading: false }))
+    request(
+      'GET',
+      carUrl + '/brands'
+    ).then(data => this.setState({ carBrands: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
-    request({
-      url: instructorUrl,
-      method: 'GET'
-    }).then(data => this.setState({ instructors: data, isLoading: false }))
+    request(
+      'GET',
+      instructorUrl
+    ).then(data => this.setState({ instructors: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

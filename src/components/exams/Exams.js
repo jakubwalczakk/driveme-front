@@ -18,7 +18,7 @@ class Exams extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      practicalExam: [],
+      practicalExam: null,
       instructorPracticalExams: [],
       theoreticalExams: [],
       error: null,
@@ -75,10 +75,13 @@ class Exams extends Component {
         {/* TODO */}
         <p id="practicalExamLabel">Egzamin praktyczny</p>
         {/* TODO */}
-        <p>{practicalExam.id}</p>
+        {/* <p>{practicalExam.id}</p>
         <p>{practicalExam.startDate}</p>
         <p>{practicalExam.duration}</p>
+        <p>{practicalExam.passed}</p>
         <p>{practicalExam.finishDate}</p>
+        <p>{practicalExam.car.brand}</p>
+        <p>{practicalExam.instructor.name}</p> */}
       </div>);
     } else {
       return <AccessDenied />
@@ -86,31 +89,35 @@ class Exams extends Component {
   }
 
   componentDidMount() {
-    this.setState({ isLoading: true });
 
-    var currentUserRole = this.props.currentUserRole;
+    if (this.props.isAuthenticated) {
 
-    if (currentUserRole === USER_ROLES.Student) {
+      this.setState({ isLoading: true });
 
-      request({
-        url: practicalExamUrl,
-        method: 'GET'
-      }).then(data => this.setState({ practicalExam: data, isLoading: false }))
-        .catch(error => this.setState({ error, isLoading: false }));
+      var currentUserRole = this.props.currentUserRole;
 
-      request({
-        url: theoreticalExamUrl,
-        method: 'GET'
-      }).then(data => this.setState({ theoreticalExams: data, isLoading: false }))
-        .catch(error => this.setState({ error, isLoading: false }));
+      if (currentUserRole === USER_ROLES.Student) {
 
-    } else if (currentUserRole === USER_ROLES.Instructor) {
+        request(
+          'GET',
+          practicalExamUrl
+        ).then(data => this.setState({ practicalExam: data, isLoading: false }))
+          .catch(error => this.setState({ error, isLoading: false }));
 
-      request({
-        url: instructorPracticalExamsUrl,
-        method: 'GET'
-      }).then(data => this.setState({ instructorPracitcalExamsUrl: data, isLoading: false }))
-        .catch(error => this.setState({ error, isLoading: false }));
+        // request(
+        // 'GET',
+        // theoreticalExamUrl
+        // ).then(data => this.setState({ theoreticalExams: data, isLoading: false }))
+        //   .catch(error => this.setState({ error, isLoading: false }));
+
+      } else if (currentUserRole === USER_ROLES.Instructor) {
+
+        request(
+          'GET',
+          instructorPracticalExamsUrl,
+        ).then(data => this.setState({ instructorPracitcalExamsUrl: data, isLoading: false }))
+          .catch(error => this.setState({ error, isLoading: false }));
+      }
     }
   }
 

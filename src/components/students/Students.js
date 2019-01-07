@@ -24,11 +24,10 @@ class Students extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    request({
-      url: studentsUrl,
-      method: 'GET'
-    })
-      .then(data => this.setState({ students: data, isLoading: false }))
+    request(
+      'GET',
+      studentsUrl
+    ).then(data => this.setState({ students: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

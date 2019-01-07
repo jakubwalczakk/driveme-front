@@ -109,11 +109,11 @@ export default class DrivingInfo extends Component {
       comment: drivingComment
     }
 
-    request({
-      url: rateDrivingUrl,
-      method: 'PUT',
-      body: JSON.stringify(rateRequest)
-    }).then(data => this.setState({ isLoading: false }))
+    request(
+      'PUT',
+      rateDrivingUrl,
+      rateRequest
+    ).then(data => this.setState({ isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
     this.handleCloseRateModal();

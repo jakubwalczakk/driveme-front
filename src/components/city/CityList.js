@@ -95,11 +95,11 @@ class CityList extends Component {
             image: newCityImage
         }
 
-        request({
-            url: cityUrl,
-            method: 'POST',
-            body: JSON.stringify(addCityRequest)
-        }).then(data => this.setState({ isLoading: false }))
+        request(
+            'POST',
+            cityUrl,
+            addCityRequest
+        ).then(data => this.setState({ isLoading: false }))
             .catch(error => this.setState({ error, isLoading: false }));
 
         this.handleCloseAddModal();
@@ -153,10 +153,10 @@ class CityList extends Component {
         this.setState({ isLoading: true });
 
 
-        request({
-            url: cityUrl,
-            method: 'GET'
-        }).then(data => this.setState({ cities: data, isLoading: false }))
+        request(
+            'GET',
+            cityUrl
+        ).then(data => this.setState({ cities: data, isLoading: false }))
             .catch(error => this.setState({ error, isLoading: false }));
     }
 

@@ -24,10 +24,10 @@ class Payments extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    request({
-      url: paymentUrl,
-      method: 'GET'
-    }).then(data => this.setState({ payments: data, isLoading: false }))
+    request(
+      'GET',
+      paymentUrl
+    ).then(data => this.setState({ payments: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

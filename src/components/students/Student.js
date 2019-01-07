@@ -148,10 +148,10 @@ export default class Car extends Component {
     var studentId = this.props.student.id;
     // console.log("STUDENT ZOSTAŁ POTWIERDZONY DO AKTYWACJI");
 
-    request({
-      url: studentUrl + `/activate/${studentId}`,
-      method: 'PUT'
-    }).then(data => this.setState({ isLoading: false }))
+    request(
+      'PUT',
+      studentUrl + `/activate/${studentId}`
+    ).then(data => this.setState({ isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
     this.handleCloseActivateModal();
   }
@@ -186,10 +186,10 @@ export default class Car extends Component {
   handleDeleteStudent() {
     var studentId = this.props.student.id;
     console.log("STUDENT ZOSTAŁ POTWIERDZONY DO USUNIĘCIA");
-    request({
-      url: studentUrl + `/${studentId}`,
-      method: 'DELETE'
-    }).then(data => this.setState({ isLoading: false }))
+    request(
+      'DELETE',
+      studentUrl + `/${studentId}`
+    ).then(data => this.setState({ isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
     this.handleCloseDeleteModal();

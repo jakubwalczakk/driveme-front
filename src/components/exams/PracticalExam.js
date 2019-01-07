@@ -47,8 +47,6 @@ export default class PracticalExam extends Component {
 
   handleCloseRateModal() {
     this.setState({ showRateModal: false });
-    //FIXME??
-    this.forceUpdate();
   }
 
   handleShowRateModal() {
@@ -75,11 +73,11 @@ export default class PracticalExam extends Component {
       passed: examPassed
     }
 
-    request({
-      url: rateExamUrl,
-      method: 'PUT',
-      body: JSON.stringify(rateRequest)
-    }).then(data => this.setState({ isLoading: false }))
+    request(
+      'PUT',
+      rateExamUrl,
+      rateRequest
+    ).then(data => this.setState({ isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
     this.handleCloseRateModal();

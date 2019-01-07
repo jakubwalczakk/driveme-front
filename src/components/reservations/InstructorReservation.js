@@ -52,10 +52,10 @@ export default class InstructorReservation extends Component {
 
   handleAcceptReservation() {
     var reservationId = this.props.reservation.id;
-    request({
-      url: reservationUrl + `/accept/${reservationId}`,
-      method: 'POST'
-    }).then(data => this.setState({ isLoading: false }))
+    request(
+      'POST',
+      reservationUrl + `/accept/${reservationId}`
+    ).then(data => this.setState({ isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
     this.handleCloseAcceptationModal();

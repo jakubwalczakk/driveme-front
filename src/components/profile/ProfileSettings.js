@@ -70,14 +70,14 @@ class ProfileSettings extends Component {
   loadCurrentLoggedUser() {
     if (localStorage.getItem(ACCESS_TOKEN)) {
 
-      request({
-        url: 'http://localhost:8080/user/me',
-        method: 'GET'
-      }).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
-        .catch(error => this.setState({ error, isLoading: false }));
-    } else {
-      // console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
-      throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
+      //   request(
+      // 'GET',
+      // 'http://localhost:8080/user/me'
+      // ).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
+      //     .catch(error => this.setState({ error, isLoading: false }));
+      // } else {
+      //   // console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
+      //   throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
     }
   }
 
@@ -110,11 +110,11 @@ class ProfileSettings extends Component {
         }
       }
 
-      request({
-        url: studentUrl,
-        method: 'PUT',
-        body: JSON.stringify(updateRequest)
-      }).then(data => this.setState({ isLoading: false }))
+      request(
+        'PUT',
+        studentUrl,
+        updateRequest
+      ).then(data => this.setState({ isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
     }
     else {
@@ -146,11 +146,11 @@ class ProfileSettings extends Component {
         photo: photo
       }
 
-      request({
-        url: instructorUrl,
-        method: 'PUT',
-        body: JSON.stringify(updateRequest)
-      }).then(data => this.setState({ isLoading: false }))
+      request(
+        'PUT',
+        instructorUrl,
+        updateRequest
+      ).then(data => this.setState({ isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
 
       this.componentDidMount();
@@ -159,21 +159,21 @@ class ProfileSettings extends Component {
 
   componentDidMount() {
 
-    request({
-      url: 'http://localhost:8080/user/me',//currentLoggedUser.id,
-      method: 'GET'
-    })
-      .then(data => this.setState({
-        currentLoggedUser: data
-      })).then(data => this.setState({ payments: data, isLoading: false }))
-      .catch(error => this.setState({ error, isLoading: false }));
+    // request({
+    //   url: 'http://localhost:8080/user/me',//currentLoggedUser.id,
+    //   method: 'GET'
+    // })
+    //   .then(data => this.setState({
+    //     currentLoggedUser: data
+    //   })).then(data => this.setState({ payments: data, isLoading: false }))
+    //   .catch(error => this.setState({ error, isLoading: false }));
 
-    request({
-      url: instructorUrl + '/7',
-      method: 'GET'
-    }).then(data => this.setState({
-      image: data.photo
-    }));
+    // request({
+    //   url: instructorUrl + '/7',
+    //   method: 'GET'
+    // }).then(data => this.setState({
+    //   image: data.photo
+    // }));
   }
 
   render() {
@@ -301,9 +301,6 @@ class ProfileSettings extends Component {
   validateForm() {
     var { password, phoneNumber, city, zipCode, street, houseNo } = this.state;
 
-    //FIXME
-    //FIXME
-    //FIXME
     //FIXME
     //FIXME
     return password.validateStatus &&

@@ -24,10 +24,10 @@ class Ratings extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    request({
-      url: drivingUrl + '/instructor',
-      method: 'GET'
-    }).then(data => this.setState({ drivings: data, isLoading: false }))
+    request(
+      'GET',
+      drivingUrl + '/instructor'
+    ).then(data => this.setState({ drivings: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

@@ -194,7 +194,7 @@ class Register extends Component {
                 email: email.value,
                 phoneNumber: phoneNumber.value,
                 userRole: selectedUserRole,
-                workingHours: 20
+                // workingHours: 20
             };
         } else {
             signupRequest = {
@@ -205,14 +205,12 @@ class Register extends Component {
                 userRole: selectedUserRole
             };
         }
-        // console.log("***SIGNUP REQUEST***")
-        // console.log(signupRequest)
 
         signup(signupRequest)
             .then(response => {
-                // console.log(response);
-                // this.props.history.push("/login");
+                this.props.history.push("/register");
             }).catch(error => {
+                throw new Error('Coś poszło nie tak podczas rejestrowania użytkwonika, spróbuj ponownie później.');
             });
     }
 

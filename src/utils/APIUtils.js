@@ -1,7 +1,6 @@
-import React from "react";
 import { API_BASE_URL, ACCESS_TOKEN } from 'constants/constants';
 
-export const request = (options) => {
+export const request = (method, path, body) => {
   const headers = new Headers({
     'Accept': 'application/json',
     'Content-Type': 'application/json',
@@ -10,35 +9,44 @@ export const request = (options) => {
   if (localStorage.getItem(ACCESS_TOKEN)) {
     headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN));
   }
-  const defaults = { headers: headers };
-  options = Object.assign({}, defaults, options);
 
-  return fetch(options.url, options)
+  const url = path;
+  const options = { method, headers: headers };
+
+  if (body) {
+    options.body = JSON.stringify(body);
+  }
+
+  return fetch(new Request(url, options))
     .then(response =>
-      response.json().then(json => {
-        if (!response.ok) {
-          return Promise.reject(json);
-        }
-        return json;
-      })
-    );
+      response.json())
+    .catch(error => console.log(error));
+
+  // return fetch(options.url, options)
+  //   .then(response =>
+  //     response.json()
+  //   ).then(json =>
+  //     json
+  //   ).catch(error =>
+  //     console.log(error)
+  //   )
 }
 
 
 export function login(loginRequest) {
-  return request({
-    url: API_BASE_URL + "/auth/signin",
-    method: 'POST',
-    body: JSON.stringify(loginRequest)
-  });
+  return request(
+    'POST',
+    API_BASE_URL + "/auth/signin",
+    loginRequest
+  );
 }
 
 export function signup(signupRequest) {
-  return request({
-    url: API_BASE_URL + "/auth/signup",
-    method: 'POST',
-    body: JSON.stringify(signupRequest)
-  });
+  return request(
+    'POST',
+    API_BASE_URL + "/auth/signup",
+    signupRequest
+  );
 }
 
 export function trimDate(date) {

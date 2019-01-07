@@ -18,7 +18,6 @@ import Students from "./components/students/Students";
 import Exams from "./components/exams/Exams";
 import { ACCESS_TOKEN, API_BASE_URL } from './constants/constants';
 import { request } from './utils/APIUtils';
-import { get } from "http";
 import LoadingIndicator from "./common/LoadingIndicator";
 
 class App extends Component {
@@ -38,20 +37,28 @@ class App extends Component {
   loadCurrentUser() {
     this.setState({ isLoading: true });
 
-    request({
-      url: API_BASE_URL + '/user/me',
-      method: 'GET'
-    }).then(response => {
+    request(
+      'GET',
+      API_BASE_URL + '/user/me'
+    ).then(response => {
       this.setState({
         currentUser: response,
         isAuthenticated: true,
         isLoading: false
-      }).catch(error => {
-        this.setState({
-          isLoading: false
-        })
       })
-    })
+    }).catch(error => {
+      this.setState({
+        isLoading: false,
+        isAuthenticated: false
+      })
+    });
+    //   }).catch(error => {
+    //     this.setState({
+    //       isLoading: false,
+    //       isAuthenticated: false
+    //     })
+    //   })
+    // })
   }
 
   componentDidMount() {
@@ -68,11 +75,11 @@ class App extends Component {
     this.props.history.push("/");
   }
 
-  handleLogin() {
+  async handleLogin() {
 
     var parsedToken = localStorage.getItem(ACCESS_TOKEN) ?
       JSON.parse(atob(localStorage.getItem(ACCESS_TOKEN).split('.')[1])) : null;
-    this.setState({
+    await this.setState({
       isAuthenticated: true,
       currentUserRole: parsedToken.scopes,
     })
@@ -126,9 +133,8 @@ class App extends Component {
           />} />
         <Route path="/exams" render={() =>
           <Exams isAuthenticated={isAuthenticated}
-            currentUserRole={currentUserRole}
-          // currentUser={currentUser}
-          />} />
+            currentUserRole={currentUserRole} />}
+        />
         <Route path="/reservations" render={() =>
           <ReservationList isAuthenticated={isAuthenticated}
             currentUserRole={currentUserRole}
@@ -144,14 +150,14 @@ class App extends Component {
         <Route path="/instructors" render={() =>
           <Instructors isAuthenticated={isAuthenticated} />} />
         <Route path="/cars" render={() =>
-          <Cars isAuthenticated={isAuthenticated} 
-          currentUserRole={currentUserRole}/>} />
+          <Cars isAuthenticated={isAuthenticated}
+            currentUserRole={currentUserRole} />} />
         <Route path="/cities" render={() =>
           <CityList isAuthenticated={isAuthenticated}
-          currentUserRole={currentUserRole} />}
+            currentUserRole={currentUserRole} />}
         />
 
-      </div>
+      </div >
     );
   }
 }

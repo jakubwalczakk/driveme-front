@@ -26,10 +26,10 @@ class YourProgress extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    request({
-      url: courseUrl + '/student',
-      method: 'GET'
-    }).then(data => this.setState({ course: data, isLoading: false }))
+    request(
+      'GET',
+      courseUrl + '/student'
+    ).then(data => this.setState({ course: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 

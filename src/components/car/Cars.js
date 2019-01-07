@@ -104,11 +104,11 @@ class Cars extends Component {
 
         // console.log(addCarRequest)
 
-        request({
-            url: carUrl,
-            method: 'POST',
-            body: JSON.stringify(addCarRequest)
-        }).then(data => this.setState({ isLoading: false }))
+        request(
+            'POST',
+            carUrl,
+            addCarRequest
+        ).then(data => this.setState({ isLoading: false }))
             .catch(error => this.setState({ error, isLoading: false }));
 
         this.handleCloseAddModal();
@@ -182,16 +182,16 @@ class Cars extends Component {
     componentDidMount() {
         this.setState({ isLoading: true });
 
-        request({
-            url: carUrl + '/brands',
-            method: 'GET',
-        }).then(data => this.setState({ carBrands: data, isLoading: false }))
+        request(
+            'GET',
+            carUrl + '/brands'
+        ).then(data => this.setState({ carBrands: data, isLoading: false }))
             .catch(error => this.setState({ error, isLoading: false }));
 
-        request({
-            url: carUrl,
-            method: 'GET'
-        }).then(data => this.setState({ cars: data, isLoading: false }))
+        request(
+            'GET',
+            carUrl
+        ).then(data => this.setState({ cars: data, isLoading: false }))
             .catch(error => this.setState({ error, isLoading: false }));
     }
 

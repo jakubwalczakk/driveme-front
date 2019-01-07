@@ -59,7 +59,7 @@ class Reservations extends Component {
         <StudentReservation key={reservation.id} reservation={reservation} />)
 
       return (<div id="reservationsTableContainer">
-        <Button id="bookButton" href="/book">
+        <Button id="bookButton" onClick={() => this.props.history.push('/book')}>
           Wykonaj rezerwację
         </Button>
         <p id="reservationsLabel">Lista dokonanych przez Ciebie rezerwacji</p>
@@ -89,16 +89,16 @@ class Reservations extends Component {
     this.setState({ isLoading: true });
 
     if (currentUserRole === USER_ROLES.Instructor) {
-      request({
-        url: reservationUrl + '/instructor',
-        method: 'GET'
-      }).then(data => this.setState({ instructorReservations: data, isLoading: false }))
+      request(
+        'GET',
+        reservationUrl + '/instructor'
+      ).then(data => this.setState({ instructorReservations: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
     } else if (currentUserRole === USER_ROLES.Student) {
-      request({
-        url: reservationUrl + '/student',
-        method: 'GET'
-      }).then(data => this.setState({ reservations: data, isLoading: false }))
+      request(
+        'GET',
+        reservationUrl + '/student'
+      ).then(data => this.setState({ reservations: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
     }
   }
