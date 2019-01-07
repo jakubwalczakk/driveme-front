@@ -9,10 +9,6 @@ import "./ProfileSettings.css";
 const studentUrl = API_BASE_URL + '/student';
 const instructorUrl = API_BASE_URL + '/instructor';
 
-const currentUser = {
-  role: 'Instruktor'
-}
-
 class ProfileSettings extends Component {
   constructor(props) {
     super(props);

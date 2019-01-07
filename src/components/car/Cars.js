@@ -196,8 +196,8 @@ class Cars extends Component {
     }
 
     render() {
-
         var { cars, isLoading, error, showAddModal } = this.state;
+        var currentUserRole = this.props.currentUserRole;
         let addModal;
 
         if (showAddModal) {
@@ -213,7 +213,7 @@ class Cars extends Component {
         }
 
         let buttonVisibility;
-        if ('Administrator' === USER_ROLES.Admin) {
+        if (currentUserRole === USER_ROLES.Admin) {
             buttonVisibility = (
                 <Button id="addCarButton" onClick={this.handleShowAddModal}>
                     Dodaj samochód

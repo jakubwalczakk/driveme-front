@@ -144,9 +144,11 @@ class App extends Component {
         <Route path="/instructors" render={() =>
           <Instructors isAuthenticated={isAuthenticated} />} />
         <Route path="/cars" render={() =>
-          <Cars isAuthenticated={isAuthenticated} />} />
+          <Cars isAuthenticated={isAuthenticated} 
+          currentUserRole={currentUserRole}/>} />
         <Route path="/cities" render={() =>
-          <CityList isAuthenticated={isAuthenticated} />}
+          <CityList isAuthenticated={isAuthenticated}
+          currentUserRole={currentUserRole} />}
         />
 
       </div>

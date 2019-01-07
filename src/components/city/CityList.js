@@ -161,8 +161,8 @@ class CityList extends Component {
     }
 
     render() {
-
         var { cities, isLoading, error, showAddModal } = this.state;
+        var currentUserRole = this.props.currentUserRole;
         let addModal;
 
         if (isLoading) {
@@ -179,7 +179,7 @@ class CityList extends Component {
 
 
         let buttonVisibility;
-        if ('Instruktor' === USER_ROLES.Admin) {
+        if (currentUserRole === USER_ROLES.Admin) {
             buttonVisibility = (
                 <Button id="addCityButton" onClick={this.handleShowAddModal}>
                     Dodaj miasto

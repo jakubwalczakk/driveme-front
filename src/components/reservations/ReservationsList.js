@@ -85,15 +85,16 @@ class Reservations extends Component {
   }
 
   componentDidMount() {
+    var currentUserRole = this.props.currentUserRole;
     this.setState({ isLoading: true });
 
-    if ('Instruktor' === USER_ROLES.Instructor) {
+    if (currentUserRole === USER_ROLES.Instructor) {
       request({
         url: reservationUrl + '/instructor',
         method: 'GET'
       }).then(data => this.setState({ instructorReservations: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
-    } else if ('Instruktor' === USER_ROLES.Student) {
+    } else if (currentUserRole === USER_ROLES.Student) {
       request({
         url: reservationUrl + '/student',
         method: 'GET'
