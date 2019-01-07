@@ -102,6 +102,7 @@ class App extends Component {
             return < Login onLogin={this.handleLogin} />
           } else {
             return <MainPage isAuthenticated={isAuthenticated}
+              currentUserRole={currentUserRole}
               currentUser={currentUser} />
           }
         }} />

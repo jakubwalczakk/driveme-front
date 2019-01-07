@@ -57,7 +57,7 @@ export default class Drivings extends Component {
               <th>Samochód</th>
               <th>Miasto</th>
               <th>Data rozpoczęcia</th>
-              <th id="drivingDurationCol">Czas trwania (min.)</th>
+              <th id="drivingDurationCol">Czas trwania</th>
               <th>Ocena</th>
             </tr>
           </thead>

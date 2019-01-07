@@ -55,3 +55,12 @@ export function trimDate(date) {
 
   return part1 + ' ' + part2;
 }
+
+export function convertTime(time) {
+  var hours = Math.floor(time / 60);
+  var minutes = time % 60;
+
+  return {
+    hours, minutes
+  }
+}

@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import {convertTime} from 'utils/APIUtils';
 import './ReservationsList.css';
 
 export default class StudentReservation extends Component {
+
   render() {
     var reservation = this.props.reservation;
+    var time = convertTime(reservation.duration);
     return (
       <tr key={reservation.id}>
         <td>
@@ -12,7 +15,7 @@ export default class StudentReservation extends Component {
         <td>{reservation.carBrand} </td>
         <td>{reservation.drivingCity}</td>
         <td>{reservation.startDate}</td>
-        <td>{reservation.duration}</td>
+        <td>{`${time.hours}h ${time.minutes !== 0 ? (time.minutes + ` min.`) : ''}`}</td>
         <td>
           {reservation.accepted === true &&
             <i id="reservationAccepted" className="material-icons">check_circle</i>}

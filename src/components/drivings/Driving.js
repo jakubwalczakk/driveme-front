@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Badge } from "react-bootstrap";
-import { trimDate } from "utils/APIUtils";
+import { trimDate, convertTime } from "utils/APIUtils";
 
 export default class Driving extends Component {
   render() {
     const driving = this.props.driving;
     var date = trimDate((new Date()).toISOString());
+    var time = convertTime(driving.duration);
     return (
       <tr key={driving.id}>
         <td>{driving.title}</td>
@@ -14,7 +15,9 @@ export default class Driving extends Component {
         <td>{driving.drivingCity}</td>
         <td>{(driving.startDate > date && "PRAWDA") ||
           (driving.startDate < date && "FAŁSZ")}</td>
-        <td>{driving.duration}</td>
+        <td>
+          {`${time.hours}h ${time.minutes !== 0 ? (time.minutes + ` min.`) : ''}`}
+        </td>
         <td>
           <Badge>{driving.rating}</Badge>
         </td>

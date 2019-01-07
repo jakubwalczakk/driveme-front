@@ -328,7 +328,8 @@ class Booking extends Component {
               </FormGroup>
             </div>
             <div id="searchButtonContainer">
-              <Button id="searchEventsButton" onClick={this.handleSearchSubmit}>
+              <Button id="searchEventsButton" onClick={this.handleSearchSubmit} 
+              disabled={selectedCarBrand==='-'||selectedInstructor==='-'}>
                 Szukaj
               </Button>
             </div>

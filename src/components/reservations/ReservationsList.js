@@ -44,7 +44,7 @@ class Reservations extends Component {
                 <th>Samochód</th>
                 <th>Miasto</th>
                 <th>Data rozpoczęcia</th>
-                <th id="reservationDurationCol">Czas trwania (min.)</th>
+                <th id="reservationDurationCol">Czas trwania</th>
                 <th>Potwierdzenie</th>
               </tr>
             </thead>
@@ -70,7 +70,7 @@ class Reservations extends Component {
               <th>Samochód</th>
               <th>Miasto</th>
               <th>Data rozpoczęcia</th>
-              <th id="reservationDurationCol">Czas trwania (min.)</th>
+              <th id="reservationDurationCol">Czas trwania</th>
               <th>Status</th>
             </tr>
           </thead>

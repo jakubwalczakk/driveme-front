@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
-import { request } from "../../utils/APIUtils";
+import { request, convertTime } from "../../utils/APIUtils";
 
 const reservationUrl = API_BASE_URL + '/reservation';
 
@@ -66,6 +66,7 @@ export default class InstructorReservation extends Component {
     const reservation = this.props.reservation;
 
     let acceptationModal = this.prepareAcceptationModal();
+    var time = convertTime(reservation.duration);
 
     return (
       <tr key={reservation.id}>
@@ -75,7 +76,9 @@ export default class InstructorReservation extends Component {
         <td>{reservation.carBrand} </td>
         <td>{reservation.drivingCity}</td>
         <td>{reservation.startDate}</td>
-        <td>{reservation.duration}</td>
+        <td>
+          {`${time.hours}h ${time.minutes !== 0 ? (time.minutes + ` min.`) : ''}`}
+        </td>
         <td>
           {reservation.accepted === true &&
             <i id="reservationAccepted" className="material-icons">check_circle</i>}
