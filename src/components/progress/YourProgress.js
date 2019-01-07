@@ -5,6 +5,10 @@ import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
 import { withRouter } from 'react-router-dom';
 import "./YourProgress.css";
+import LoadingIndicator from "../../common/LoadingIndicator";
+import AccessDenied from "../../common/AccessDenied";
+import { USER_ROLES } from "../../constants/constants";
+import ServerError from "../../common/ServerError";
 
 const courseUrl = API_BASE_URL + '/course';
 
@@ -30,23 +34,25 @@ class YourProgress extends Component {
   }
 
   render() {
-
     var { course, isLoading, error } = this.state;
+    var currentUserRole = this.props.currentUserRole;
 
     var takenDrivingHours = course.takenDrivingHours;
     const amountOfCourseDrivingHours = 30;
     var percentOfCourseCompletion = Math.round(takenDrivingHours * 100 / amountOfCourseDrivingHours);
 
     if (error) {
-      return <p className="yourProgressInfoLabel">{error.message}</p>
+      return <ServerError />
     }
 
     if (isLoading) {
-      return <p className="yourProgressInfoLabel">Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
 
-    if ('Instruktor' !== 'Kursant') {
-      return <p className="yourProgressInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
+    if (currentUserRole !== USER_ROLES.Student) {
+      return <div>
+        <AccessDenied />
+      </div>
     } else {
       return (
         <div>

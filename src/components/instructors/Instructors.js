@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
-import { request } from "utils/APIUtils";
 import { withRouter } from "react-router-dom";
+import { request } from "utils/APIUtils";
+import { API_BASE_URL } from "constants/constants";
+import LoadingIndicator from "../../common/LoadingIndicator";
+import ServerError from '../../common/ServerError';
 import Instructor from "./Instructor";
 import "./Instructors.css";
 
@@ -33,11 +35,11 @@ class Instructors extends Component {
     var { instructors, isLoading, error } = this.state;
 
     if (error) {
-      return <p id="instructorsErrorLabel">{error.message}</p>
+      return <ServerError />
     }
 
     if (isLoading) {
-      return <p id="instructorsLoadingLabel">Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
 
     const instructorList = instructors.map(

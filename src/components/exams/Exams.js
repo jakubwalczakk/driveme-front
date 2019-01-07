@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
-import { request } from "utils/APIUtils";
 import { withRouter } from "react-router-dom";
+import { request } from "utils/APIUtils";
+import { API_BASE_URL, USER_ROLES } from "constants/constants";
+import LoadingIndicator from "../../common/LoadingIndicator";
+import ServerError from '../../common/ServerError';
 import PracticalExam from './PracticalExam';
 import TheoreticalExam from './TheoreticalExam';
 import "./Exams.css";
+import AccessDenied from "../../common/AccessDenied";
 
 const practicalExamUrl = API_BASE_URL + '/practical_exam/student';
 const theoreticalExamUrl = API_BASE_URL + '/theoretical_exam/student';
@@ -26,7 +29,9 @@ class Exams extends Component {
 
   prepareTheContent() {
     var { practicalExam, theoreticalExams, instructorPracticalExams } = this.state;
-    if ('Instruktor' === 'Instruktor') {
+    var currentUserRole = this.props.currentUserRole;
+
+    if (currentUserRole === USER_ROLES.Instructor) {
 
       const instructorExams = instructorPracticalExams.map(exam =>
         <PracticalExam key={exam.id} exam={exam} />)
@@ -47,7 +52,7 @@ class Exams extends Component {
           </tbody>
         </Table>
       </div>);
-    } else if ('Instruktor' === 'Kursant') {
+    } else if (currentUserRole === USER_ROLES.Student) {
 
       const studentExams = theoreticalExams.map(exam =>
         <TheoreticalExam key={exam.id} exam={exam} />)
@@ -76,16 +81,16 @@ class Exams extends Component {
         <p>{practicalExam.finishDate}</p>
       </div>);
     } else {
-      return <div id="examsTableContainer">
-        <p>Nie posiadasz dostępu do tego zasobu!</p>
-      </div>
+      return <AccessDenied />
     }
   }
 
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    if ('Instruktor' === 'Kursant') {
+    var currentUserRole = this.props.currentUserRole;
+
+    if (currentUserRole === USER_ROLES.Student) {
 
       request({
         url: practicalExamUrl,
@@ -99,7 +104,7 @@ class Exams extends Component {
       }).then(data => this.setState({ theoreticalExams: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
 
-    } else if ('Instruktor' === 'Instruktor') {
+    } else if (currentUserRole === USER_ROLES.Instructor) {
 
       request({
         url: instructorPracticalExamsUrl,
@@ -114,11 +119,11 @@ class Exams extends Component {
     var { error, isLoading } = this.state;
 
     if (error) {
-      return <p id="examsErrorLabel">{error.message}</p>
+      return <ServerError />
     }
 
     if (isLoading) {
-      return <p id="examsLoadingLabel">Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
 
     let content = this.prepareTheContent();

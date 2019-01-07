@@ -15,8 +15,7 @@ export default class DrivingInfo extends Component {
       showRateModal: false,
       drivingTitle: '',
       drivingComment: '',
-      //FIXME!!!
-      drivingRating: 'Świetnie'
+      drivingRating: ''
     }
     this.prepareRateModal = this.prepareRateModal.bind(this);
     this.handleCloseRateModal = this.handleCloseRateModal.bind(this);
@@ -37,18 +36,17 @@ export default class DrivingInfo extends Component {
     this.setState({
       drivingRating: event.target.value
     })
+    console.log(event.target.value)
   }
 
   handleDrivinCommentChange(event) {
     this.setState({
       drivingComment: event.target.value
     })
-    // console.log(event)
   }
 
   prepareRateModal() {
-
-    var { showRateModal, drivingTitle, drivingComment, drivingRating } = this.state;
+    var { showRateModal, drivingTitle, drivingComment } = this.state;
 
     return (
       <Modal show={showRateModal} onHide={this.handleCloseRateModal}>
@@ -63,11 +61,22 @@ export default class DrivingInfo extends Component {
           </FormGroup>
           <FormGroup>
             <ControlLabel>Ocena</ControlLabel>
-            <Radio name="radioGroup" inline >Rozczarowująco</Radio>
-            <Radio name="radioGroup" inline >Przeciętnie</Radio>
-            <Radio name="radioGroup" inline >OK</Radio>
-            <Radio name="radioGroup" inline >Świetnie</Radio>
-            <Radio name="radioGroup" inline >Mistrzowsko</Radio></FormGroup>
+            <Radio name="radioGroup" value="Rozczarowująco" inline onChange={this.handleDrivingRatingChange}>
+              Rozczarowująco
+            </Radio>
+            <Radio name="radioGroup" value="Przeciętnie" inline onChange={this.handleDrivingRatingChange}>
+              Przeciętnie
+            </Radio>
+            <Radio name="radioGroup" value="OK" inline onChange={this.handleDrivingRatingChange}>
+              OK
+            </Radio>
+            <Radio name="radioGroup" value="Świetnie" inline onChange={this.handleDrivingRatingChange}>
+              Świetnie
+            </Radio>
+            <Radio name="radioGroup" value="Mistrzowsko" inline onChange={this.handleDrivingRatingChange}>
+              Mistrzowsko
+            </Radio>
+          </FormGroup>
           <ControlLabel>Komentarz</ControlLabel>
           <FormGroup>
             <FormControl type="text"
@@ -107,12 +116,10 @@ export default class DrivingInfo extends Component {
     }).then(data => this.setState({ isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
 
-    // console.log("Zajęcia ocenione!");
     this.handleCloseRateModal();
   }
 
   render() {
-
     var { showRateModal } = this.state;
     let rateModal;
 
@@ -121,15 +128,14 @@ export default class DrivingInfo extends Component {
     }
 
     const driving = this.props.driving;
-    var date = "2019-01-09 19:27";//trimDate((new Date()).toISOString());
+    // var date = trimDate((new Date()).toISOString());
     return (
       <tr key={driving.id}>
         <td>{driving.student.name} {driving.student.surname}</td>
         <td>{driving.title}</td>
         <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
         <td>{driving.drivingCity}</td>
-        <td>{(driving.startDate > date && "PRAWDA") ||
-          (driving.startDate < date && "FAŁSZ")}</td>
+        <td>{driving.startDate}</td>
         <td>{driving.duration}</td>
         {<td>{driving.rating ?
           <Badge>{driving.rating}</Badge> :

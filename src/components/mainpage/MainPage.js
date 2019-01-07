@@ -13,9 +13,8 @@ class MainPage extends Component {
   }
 
   render() {
-
     var currentUser = this.props.currentUser && this.props.currentUser.name;
-    //TODO
+
     return (
       <div id="mainPageContainer">
         Witaj {currentUser}!

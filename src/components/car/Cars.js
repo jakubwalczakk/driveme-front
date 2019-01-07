@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
+import LoadingIndicator from 'common/LoadingIndicator';
+import ServerError from 'common/ServerError';
 import ReactFileReader from 'react-file-reader';
 import { request } from "utils/APIUtils";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import { withRouter } from "react-router-dom";
 import Car from "./Car";
 import "./Cars.css";
@@ -203,15 +205,15 @@ class Cars extends Component {
         }
 
         if (error) {
-            return <p id="carsErrorLabel">{error.message}</p>
+            return <ServerError />
         }
 
         if (isLoading) {
-            return <p id="carsLoadingLabel">Pobieranie danych...</p>
+            return <LoadingIndicator />
         }
 
         let buttonVisibility;
-        if ('Administrator' === 'Administrator') {
+        if ('Administrator' === USER_ROLES.Admin) {
             buttonVisibility = (
                 <Button id="addCarButton" onClick={this.handleShowAddModal}>
                     Dodaj samochód

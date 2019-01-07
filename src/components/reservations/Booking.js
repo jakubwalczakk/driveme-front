@@ -1,12 +1,21 @@
 import React, { Component } from "react";
 import { FormGroup, FormControl, ControlLabel, Button, Modal } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import { request } from "utils/APIUtils";
 import DatePicker from 'react-datepicker';
 import Calendar from './../calendar/Calendar';
 import { withRouter } from "react-router-dom";
 // import { pl } from 'date-fns/locale';
 import "./Booking.css";
+import LoadingIndicator from "../../common/LoadingIndicator";
+import ServerError from "../../common/ServerError";
+import AccessDenied from "../../common/AccessDenied";
+
+// import plPL from 'antd/lib/locale-provider/pl_PL';
+// import { LocaleProvider } from 'antd';
+// import { DatePicker } from 'antd';
+// ReactDOM.render(<DatePicker />, mountNode);
+// import 'antd/dist/antd.css'; 
 
 require('react-datepicker/dist/react-datepicker.css');
 
@@ -33,7 +42,6 @@ class Booking extends Component {
       instructors: [],
       cities: [],
       drivings: [],
-      reservations: [],
       exams: [],
       selectedInstructor: '-',
       selectedCarBrand: '-',
@@ -72,12 +80,8 @@ class Booking extends Component {
   }
 
   handleSearchSubmit() {
-
     const carBrand = this.state.selectedCarBrand;
     const instructorEmail = this.state.selectedInstructor.split(" - ")[1];
-
-    // console.log(carBrand)
-    // console.log(instructorEmail)
 
     if (carBrand !== '-' && instructorEmail !== '-') {
       request({
@@ -213,13 +217,13 @@ class Booking extends Component {
 
   handleReservationSubmit() {
 
-    var { reservationCarBrand, reservationInstructor, reservationCity, reservationStartDate, reservationDuration, requestResponse } = this.state;
+    var { reservationCarBrand, reservationInstructor, reservationCity, reservationStartDate, 
+      reservationDuration, requestResponse } = this.state;
 
     const instructorEmail = reservationInstructor.split(" - ")[1];
     const duration = parseFloat(reservationDuration.slice(0, -1)) * 60;
 
     var data = reservationStartDate.toISOString();
-    // console.log(data);
 
     request({
       url: eventsUrl + `/term_availability?instructor=${instructorEmail}&brand=${reservationCarBrand}
@@ -227,8 +231,6 @@ class Booking extends Component {
       method: 'GET'
     }).then(response => this.setState({ requestResponse: response, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
-
-    // console.log("Rezultat = " + requestResponse);
 
     if (requestResponse) {
       const reservationRequest = {
@@ -281,23 +283,22 @@ class Booking extends Component {
   }
 
   render() {
-    var { isLoading, error, carBrands, instructors, reservations, drivings, exams, events,
+    var { isLoading, error, carBrands, instructors, drivings, exams,
       selectedCarBrand, selectedInstructor } = this.state;
+    var currentUserRole = this.props.currentUserRole;
 
     if (error) {
-      return <p className="bookingsInfoLabel">{error.message}</p>
+      return <ServerError />
     }
 
     if (isLoading) {
-      return <p className="bookingsInfoLabel">Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
 
-    if ('Instruktor' !== 'Kursant') {
-      return <p className="bookingsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
+    if (currentUserRole !== USER_ROLES.Student) {
+      return <AccessDenied />
     } else {
-
       let reservationModal = this.prepareCourseModalStructure();
-
       return (
         <div id="bookingContainer">
           <p id="bookingLabel">Tutaj możesz dokonać rezerwacji</p>
@@ -332,7 +333,7 @@ class Booking extends Component {
               </Button>
             </div>
           </div>
-          <Calendar reservations={reservations} drivings={drivings} exams={exams} />
+          <Calendar drivings={drivings} exams={exams} />
           <Button id="reservationButton" onClick={this.handleReservationModalShow}>
             Rezerwuj
           </Button>

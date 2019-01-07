@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { ProgressBar } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
-import { request } from "utils/APIUtils";
 import { withRouter } from 'react-router-dom';
+import { request } from "utils/APIUtils";
+import { API_BASE_URL, USER_ROLES } from "../../constants/constants";
+import LoadingIndicator from "../../common/LoadingIndicator";
+import ServerError from '../../common/ServerError';
 import "./Course.css";
+import AccessDenied from "../../common/AccessDenied";
 
 const courseUrl = API_BASE_URL + '/course';
 
@@ -27,6 +30,7 @@ class Course extends Component {
   }
 
   render() {
+    var currentUserRole = this.props.currentUserRole;
 
     var { course, isLoading, error } = this.state;
     var currenPaymentOfCourse = course.currentPayment;
@@ -40,15 +44,15 @@ class Course extends Component {
     percentOfCourseCompletion = Math.round(percentOfCourseCompletion);
 
     if (error) {
-      return <p className="courseInfoLabel">{error.message}</p>
+      return <ServerError />
     }
 
     if (isLoading) {
-      return <p className="courseInfoLabel">Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
 
-    if ('Kursant' !== 'Kursant') {
-      return <p className="courseInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
+    if (currentUserRole !== USER_ROLES.Student) {
+      return <AccessDenied />
     } else {
       return (
         <div id="courseContainer">

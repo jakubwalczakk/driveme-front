@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
+import { withRouter } from "react-router-dom";
 import { request } from "utils/APIUtils";
 import { API_BASE_URL } from "constants/constants";
-import { withRouter } from "react-router-dom";
+import { USER_ROLES } from "../../constants/constants";
+import LoadingIndicator from "../../common/LoadingIndicator";
+import ServerError from '../../common/ServerError';
 import City from "./City";
 import "./CityList.css";
 
@@ -162,28 +165,21 @@ class CityList extends Component {
         var { cities, isLoading, error, showAddModal } = this.state;
         let addModal;
 
-        if (error) {
-            return <p id="citiesErrorLabel">{error.message}</p>
+        if (isLoading) {
+            return <LoadingIndicator />
         }
 
-        if (isLoading) {
-            return <p id="citiesLoadingLabel">Pobieranie danych...</p>
+        if (error) {
+            return <ServerError />
         }
 
         if (showAddModal) {
             addModal = this.prepareAddModalStructure();
         }
 
-        if (error) {
-            return <p id="citiesErrorLabel">{error.message}</p>
-        }
-
-        if (isLoading) {
-            return <p id="citiesLoadingLabel">Pobieranie danych...</p>
-        }
 
         let buttonVisibility;
-        if ('Instruktor' === 'Administrator') {
+        if ('Instruktor' === USER_ROLES.Admin) {
             buttonVisibility = (
                 <Button id="addCityButton" onClick={this.handleShowAddModal}>
                     Dodaj miasto

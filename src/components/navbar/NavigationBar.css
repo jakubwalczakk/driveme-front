@@ -5,7 +5,7 @@
 
  #logoBrand{
   height: 50px;
-  margin: 11px 48px 9px 0px;
+  margin: 11px 20px 9px -5px;
 }
 
 .navbar-header{
@@ -14,7 +14,7 @@
 
 .nav-bar-item{
   font-weight: 600;
-  margin: 11px 2px 9px 2px;
+  margin: 12px 2px 8px 2px;
   border-radius: 6px;
   background-color: white;
 }

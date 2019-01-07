@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import { request } from "utils/APIUtils";
 import { withRouter } from 'react-router-dom';
 import Student from "./Student";
 import "./Students.css";
+import LoadingIndicator from "../../common/LoadingIndicator";
+import ServerError from "../../common/ServerError";
+import AccessDenied from "../../common/AccessDenied";
 
 const studentsUrl = API_BASE_URL + '/student';
 
@@ -34,17 +37,18 @@ class Students extends Component {
     var { students,
       isLoading,
       error } = this.state;
+    var currentUserRole = this.props.currentUserRole;
 
     if (error) {
-      return <p id="studentsInfoLabel">{error.message}</p>
+      return <ServerError />
     }
 
     if (isLoading) {
-      return <p id="studentsInfoLabel">Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
 
-    if ('Instruktor' !== 'Administrator') {
-      return <p id="studentsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
+    if (currentUserRole !== USER_ROLES.Admin) {
+      return <AccessDenied />
     } else {
 
       const studentList = students.map(student =>

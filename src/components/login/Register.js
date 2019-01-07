@@ -4,6 +4,8 @@ import { NAME_MIN_LENGTH, NAME_MAX_LENGTH, SURNAME_MIN_LENGTH, SURNAME_MAX_LENGT
 import { signup } from 'utils/APIUtils';
 import { withRouter } from 'react-router-dom';
 import './Register.css';
+import { USER_ROLES } from '../../constants/constants';
+import AccessDenied from '../../common/AccessDenied';
 
 class Register extends Component {
 
@@ -168,7 +170,7 @@ class Register extends Component {
 
         let signupRequest;
 
-        if (selectedUserRole === 'Kursant') {
+        if (selectedUserRole === USER_ROLES.Student) {
             signupRequest = {
                 name: name.value,
                 surname: surname.value,
@@ -183,7 +185,9 @@ class Register extends Component {
                     houseNo: houseNo.value
                 }
             };
-        } else if (selectedUserRole === "Instruktor") {
+        }
+        //FIXME WORKING HOURS
+        else if (selectedUserRole === USER_ROLES.Instructor) {
             signupRequest = {
                 name: name.value,
                 surname: surname.value,
@@ -222,11 +226,11 @@ class Register extends Component {
     }
 
     render() {
-
         var { name, surname, pesel, email, phoneNumber, selectedUserRole, city, zipCode, street, houseNo } = this.state;
+        var currentUserRole = this.props.currentUserRole;
 
-        if ('Instruktor' !== 'Admin') {
-            return <p className="registrationInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
+        if (currentUserRole !== USER_ROLES.Admin) {
+            return <AccessDenied />
         } else {
 
             return (

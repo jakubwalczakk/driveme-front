@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import { request } from "utils/APIUtils";
 import { withRouter } from "react-router-dom";
 import Payment from './Payment';
 import "./Payments.css";
+import LoadingIndicator from "../../common/LoadingIndicator";
+import ServerError from "../../common/ServerError";
+import AccessDenied from "../../common/AccessDenied";
 
 const paymentUrl = API_BASE_URL + '/payment/student';
 
@@ -29,19 +32,19 @@ class Payments extends Component {
   }
 
   render() {
-
     var { payments, isLoading, error } = this.state;
+    var currentUserRole = this.props.currentUserRole;
 
     if (error) {
-      return <p id="paymentsInfoLabel">{error.message}</p>
+      return <ServerError />
     }
 
     if (isLoading) {
-      return <p id="paymentsInfoLabel">Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
 
-    if ('Instruktor' !== 'Kursant') {
-      return <p id="paymentsInfoLabel">Nie posiadasz dostępu do tego zasobu!</p>
+    if (currentUserRole !== USER_ROLES.Student) {
+      return <AccessDenied />
     } else {
 
       const paymentList = payments.map(payment =>

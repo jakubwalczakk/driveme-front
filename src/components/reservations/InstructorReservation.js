@@ -34,7 +34,6 @@ export default class InstructorReservation extends Component {
   prepareAcceptationModal() {
     var { showAcceptationModal } = this.state;
 
-    //TODO??
     return (
       <Modal show={showAcceptationModal} onHide={this.handleCloseAcceptationModal}>
         <Modal.Header closeButton>

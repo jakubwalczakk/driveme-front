@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Table } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
+import { API_BASE_URL } from "constants/constants";
+import LoadingIndicator from '../../common/LoadingIndicator';
+import ServerError from '../../common/ServerError';
 import Driving from "./Driving";
 import "./Drivings.css";
 
@@ -33,11 +35,11 @@ export default class Drivings extends Component {
     var { drivings, isLoading, error } = this.state;
 
     if (error) {
-      return <p id="drivingsErrorLabel">{error.message}</p>
+      return <ServerError />
     }
 
     if (isLoading) {
-      return <p id="drivingsLoadingLabel">Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
 
     const drivingList = drivings.map(driving =>

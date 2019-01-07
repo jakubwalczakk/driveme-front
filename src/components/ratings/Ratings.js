@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import { request } from "utils/APIUtils";
 import { withRouter } from 'react-router-dom';
 import DrivingInfo from './DrivingInfo';
 import "./Ratings.css";
+import AccessDenied from "../../common/AccessDenied";
+import LoadingIndicator from "../../common/LoadingIndicator";
+import ServerError from "../../common/ServerError";
 
 const drivingUrl = API_BASE_URL + '/driving';
 
@@ -31,17 +34,18 @@ class Ratings extends Component {
   render() {
 
     var { drivings, isLoading, error } = this.state;
+    var currentUserRole = this.props.currentUserRole;
 
     if (error) {
-      return <p className="ratingsInfoLabel">{error.message}</p>
+      return <ServerError />
     }
 
     if (isLoading) {
-      return <p className="ratingsInfoLabel">Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
 
-    if ('Instruktor' !== 'Instruktor') {
-      return <p className="ratingsInfoLabel">Nie masz dostępu do tego zasobu!</p>
+    if (currentUserRole !== USER_ROLES.Instructor) {
+      return <AccessDenied />
     } else {
 
       const drivingsInfoList = drivings.map(driving =>

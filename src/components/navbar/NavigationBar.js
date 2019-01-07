@@ -8,7 +8,6 @@ class NavigationBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoggedIn: true,
             showModal: false,
         };
 
@@ -37,9 +36,7 @@ class NavigationBar extends Component {
         this.handleCloseLogoutModal();
     }
 
-    //TODO
     prepareModalStructure() {
-
         var currentUserName = this.props.currentUser && this.props.currentUser.name;
 
         return (
@@ -60,15 +57,10 @@ class NavigationBar extends Component {
         );
     }
 
-    componentDidMount() {
-    }
-
     prepareNavBarStructure() {
+        var currentUserRole = this.props.currentUserRole;
 
-        // var currentUserRole = this.props.currentUserRole;
-        // console.log(currentUserRole)
-
-        if ('Kursant' === USER_ROLES.Student) {
+        if (currentUserRole === USER_ROLES.Student) {
             return (
                 <Nav>
                     <NavItem className="nav-bar-item" onClick={() => { this.props.history.push("/course") }}>
@@ -87,7 +79,7 @@ class NavigationBar extends Component {
                         Płatności
                     </NavItem>
                 </Nav>);
-        } else if ('Instruktor' === USER_ROLES.Admin) {
+        } else if (currentUserRole === USER_ROLES.Admin) {
             return (
                 <Nav>
                     <NavItem className="nav-bar-item" onClick={() => { this.props.history.push("/register") }}>
@@ -97,13 +89,13 @@ class NavigationBar extends Component {
                         Kursanci
                     </NavItem>
                 </Nav>);
-        } else if ('x' === USER_ROLES.Instructor) {
+        } else if (currentUserRole === USER_ROLES.Instructor) {
             return (
                 <Nav>
                     <NavItem className="nav-bar-item" onClick={() => { this.props.history.push("/exams") }}>
                         Egzaminy
                     </NavItem>
-                    <NavItem className="nav-bar-item" eonClick={() => { this.props.history.push("/reservations") }}>
+                    <NavItem className="nav-bar-item" onClick={() => { this.props.history.push("/reservations") }}>
                         Rezerwacje
                     </NavItem>
                     <NavItem className="nav-bar-item" onClick={() => { this.props.history.push("/drivings") }}>
@@ -115,7 +107,6 @@ class NavigationBar extends Component {
     }
 
     render() {
-
         var { showModal } = this.state;
 
         var currentUser = this.props.currentUser;
@@ -130,6 +121,7 @@ class NavigationBar extends Component {
                     <NavItem id="welcomeMsg" className="nav-bar-item-logged" onClick={() => this.props.history.push('/profile')}>
                         {`Cześć ${currentUserName}!`}
                     </NavItem>
+
                     <NavItem id="logoutButton" className="material-icons nav-bar-item-logged" onClick={this.handleShowLogoutModal}>
                         power_settings_new
                     </NavItem>
@@ -149,14 +141,17 @@ class NavigationBar extends Component {
                 </Navbar.Header>
                 <Navbar.Collapse>
                     <Nav>
+                        <NavItem className="material-icons nav-bar-item" onClick={() => this.props.history.push('/')}>
+                            home
+                        </NavItem>
                         {navBarTypes}
-                        <NavItem className="nav-bar-item" eventKey={4} onClick={() => { this.props.history.push("/instructors") }}>
+                        <NavItem className="nav-bar-item" onClick={() => { this.props.history.push("/instructors") }}>
                             Instruktorzy
                         </NavItem>
-                        <NavItem className="nav-bar-item" eventKey={5} onClick={() => { this.props.history.push("/cars") }}>
+                        <NavItem className="nav-bar-item" onClick={() => { this.props.history.push("/cars") }}>
                             Samochody
                         </NavItem>
-                        <NavItem className="nav-bar-item" eventKey={6} onClick={() => { this.props.history.push("/cities") }}>
+                        <NavItem className="nav-bar-item" onClick={() => { this.props.history.push("/cities") }}>
                             Miasta
                         </NavItem>
                     </Nav>

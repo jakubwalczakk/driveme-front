@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { Table, Button } from "react-bootstrap";
-import { API_BASE_URL } from "constants/constants";
+import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import { request } from "utils/APIUtils";
 import { withRouter } from "react-router-dom";
 import InstructorReservation from './InstructorReservation';
 import StudentReservation from './StudentReservation';
 import "./ReservationsList.css";
+import LoadingIndicator from "../../common/LoadingIndicator";
+import ServerError from "../../common/ServerError";
+import AccessDenied from "../../common/AccessDenied";
 
 const reservationUrl = API_BASE_URL + '/reservation';
 
@@ -22,10 +25,11 @@ class Reservations extends Component {
   }
 
   prepareTheContent() {
+    var currentUserRole = this.props.currentUserRole;
 
     var { reservations, instructorReservations } = this.state;
 
-    if ('Instruktor' === 'Instruktor') {
+    if (currentUserRole === USER_ROLES.Instructor) {
 
       const reservationList = instructorReservations.map(reservation =>
         <InstructorReservation key={reservation.id} reservation={reservation} />)
@@ -49,7 +53,7 @@ class Reservations extends Component {
             </tbody>
           </Table>
         </div>);
-    } else if ('Instruktor' === 'Kursant') {
+    } else if (currentUserRole === USER_ROLES.Student) {
 
       const reservationList = reservations.map(reservation =>
         <StudentReservation key={reservation.id} reservation={reservation} />)
@@ -76,20 +80,20 @@ class Reservations extends Component {
         </Table>
       </div>);
     } else {
-      return <p>Nie posiadasz dostępu do tego zasobu!</p>
+      return <AccessDenied />
     }
   }
 
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    if ('Instruktor' === "Instruktor") {
+    if ('Instruktor' === USER_ROLES.Instructor) {
       request({
         url: reservationUrl + '/instructor',
         method: 'GET'
       }).then(data => this.setState({ instructorReservations: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
-    } else if ('Instruktor' === 'Kursant') {
+    } else if ('Instruktor' === USER_ROLES.Student) {
       request({
         url: reservationUrl + '/student',
         method: 'GET'
@@ -103,11 +107,11 @@ class Reservations extends Component {
     var { isLoading, error } = this.state;
 
     if (error) {
-      return <p id="reservationsErrorLabel">{error.message}</p>
+      return <ServerError />
     }
 
     if (isLoading) {
-      return <p id="reservationsLoadingLabel">Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
 
     let content = this.prepareTheContent();

@@ -19,6 +19,7 @@ import Exams from "./components/exams/Exams";
 import { ACCESS_TOKEN, API_BASE_URL } from './constants/constants';
 import { request } from './utils/APIUtils';
 import { get } from "http";
+import LoadingIndicator from "./common/LoadingIndicator";
 
 class App extends Component {
   constructor(props) {
@@ -81,27 +82,26 @@ class App extends Component {
   render() {
     var { isLoading, isAuthenticated, currentUserRole, currentUser } = this.state;
     if (isLoading) {
-      return <p>Pobieranie danych...</p>
+      return <LoadingIndicator />
     }
     return (
       <div>
         <NavigationBar handleLogout={this.handleLogout}
           isAuthenticated={isAuthenticated}
+          currentUserRole={currentUserRole}
           currentUser={currentUser} />
         <Route exact path="/" render={() => {
           if (!isAuthenticated) {
             return < Login onLogin={this.handleLogin} />
           } else {
             return <MainPage isAuthenticated={isAuthenticated}
-              // currentUserRole={currentUserRole}
               currentUser={currentUser} />
           }
         }} />
         <Route path="/register"
           render={() =>
             <Register isAuthenticated={isAuthenticated}
-              // currentUserRole={currentUserRole}
-              currentUser={currentUser} />} />
+              currentUserRole={currentUserRole} />} />
         <Route path="/profile"
           render={() =>
             <ProfileSettings isAuthenticated={isAuthenticated}
@@ -110,60 +110,45 @@ class App extends Component {
             />} />
         <Route path="/course" render={() =>
           <Course isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
-          // currentUser={currentUser} 
-          />} />
+            currentUserRole={currentUserRole} />} />
         <Route path="/progress" render={() =>
           <YourProgress isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
-          // currentUser={currentUser} 
-          />} />
+            currentUserRole={currentUserRole} />} />
         <Route path="/drivings" render={() =>
           <Ratings isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
+            currentUserRole={currentUserRole}
           // currentUser={currentUser} 
           />} />
         <Route path="/students" render={() =>
           <Students isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
+            currentUserRole={currentUserRole}
           // currentUser={currentUser} 
+          />} />
+        <Route path="/exams" render={() =>
+          <Exams isAuthenticated={isAuthenticated}
+            currentUserRole={currentUserRole}
+          // currentUser={currentUser}
           />} />
         <Route path="/reservations" render={() =>
           <ReservationList isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
+            currentUserRole={currentUserRole}
           // currentUser={currentUser} 
           />} />
         <Route path="/book" render={() =>
           <Booking isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
-          // currentUser={currentUser} 
-          />} />
+            currentUserRole={currentUserRole} />} />
         <Route path="/payments" render={() =>
           <Payments isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
-          // currentUser={currentUser} 
+            currentUserRole={currentUserRole}
           />} />
         <Route path="/instructors" render={() =>
-          <Instructors isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
-          // currentUser={currentUser} 
-          />} />
+          <Instructors isAuthenticated={isAuthenticated} />} />
         <Route path="/cars" render={() =>
-          <Cars isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
-          // currentUser={currentUser} 
-          />} />
+          <Cars isAuthenticated={isAuthenticated} />} />
         <Route path="/cities" render={() =>
-          <CityList isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
-          // currentUser={currentUser} 
-          />}
+          <CityList isAuthenticated={isAuthenticated} />}
         />
-        <Route path="/exams" render={() =>
-          <Exams isAuthenticated={isAuthenticated}
-          // currentUserRole={currentUserRole}
-          // currentUser={currentUser}
-          />} />
+
       </div>
     );
   }
