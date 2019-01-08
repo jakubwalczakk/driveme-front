@@ -28,8 +28,11 @@ class MainPage extends Component {
 
     return (
       <div id="mainPageContainer">
-        {`Witaj ${currentUser}!
-        Ten serwis odmieni Twoje życie.`}
+        Witaj {currentUser}!
+        <br />
+        DriveMe pozwoli Ci na wygodne zarządzanie kursem szkoleniowym.
+        <br/>
+        Życzymy owocnej nauki.
       </div>
     );
   }

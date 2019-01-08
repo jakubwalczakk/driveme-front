@@ -21,15 +21,6 @@ export const request = (method, path, body) => {
     .then(response =>
       response.json())
     .catch(error => console.log(error));
-
-  // return fetch(options.url, options)
-  //   .then(response =>
-  //     response.json()
-  //   ).then(json =>
-  //     json
-  //   ).catch(error =>
-  //     console.log(error)
-  //   )
 }
 
 

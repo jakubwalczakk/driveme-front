@@ -2,14 +2,18 @@ import React, { Component } from "react";
 import { FormGroup, FormControl, ControlLabel, Button, Modal } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 import DatePicker from 'react-datepicker';
+import { registerLocale } from 'react-datepicker';
+import { enGB } from 'date-fns/locale'
 import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import { request } from "utils/APIUtils";
 import Calendar from './../calendar/Calendar';
 import LoadingIndicator from "../../common/LoadingIndicator";
 import ServerError from "../../common/ServerError";
 import AccessDenied from "../../common/AccessDenied";
-// import { pl } from 'date-fns/locale';
+import 'react-datepicker/dist/react-datepicker.css';
 import "./Booking.css";
+
+registerLocale('enGB', enGB);
 
 // import plPL from 'antd/lib/locale-provider/pl_PL';
 // import { LocaleProvider } from 'antd';
@@ -17,7 +21,6 @@ import "./Booking.css";
 // ReactDOM.render(<DatePicker />, mountNode);
 // import 'antd/dist/antd.css'; 
 
-require('react-datepicker/dist/react-datepicker.css');
 
 const carUrl = API_BASE_URL + '/car';
 const instructorUrl = API_BASE_URL + '/instructor';
@@ -43,18 +46,17 @@ class Booking extends Component {
       cities: [],
       drivings: [],
       exams: [],
-      selectedInstructor: '-',
+      selectedInstructorId: 0,
       selectedCarBrand: '-',
-      reservationInstructor: '-',
+      reservationInstructorId: 0,
       reservationCarBrand: '-',
       reservationStartDate: null,
-      reservationDuration: '1h',
+      reservationDuration: 0,
       reservationCity: '-',
       showReservationModal: false,
-      requestResponse: false
     }
     this.handleSelectedCarBrandChange = this.handleSelectedCarBrandChange.bind(this);
-    this.handleSelectedInstructorChange = this.handleSelectedInstructorChange.bind(this);
+    this.handleSelectedInstructorIdChange = this.handleSelectedInstructorIdChange.bind(this);
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
 
     this.handleReservationModalShow = this.handleReservationModalShow.bind(this);
@@ -75,25 +77,34 @@ class Booking extends Component {
     this.setState({ selectedCarBrand: event.target.value })
   }
 
-  handleSelectedInstructorChange(event) {
-    this.setState({ selectedInstructor: event.target.value })
+  handleSelectedInstructorIdChange(event) {
+    const selectedIndex = event.target.options.selectedIndex;
+    this.setState({
+      selectedInstructorId: event.target.options[selectedIndex].getAttribute('key-data')
+    });
   }
 
   handleSearchSubmit() {
-    const carBrand = this.state.selectedCarBrand;
-    const instructorEmail = this.state.selectedInstructor.split(" - ")[1];
+    var { selectedCarBrand, selectedInstructorId } = this.state;
 
-    if (carBrand !== '-' && instructorEmail !== '-') {
+    if (selectedCarBrand !== '-' && selectedInstructorId !== 0) {
       request(
         'GET',
-        eventsUrl + `/booking?instructor=${instructorEmail}&brand=${carBrand}`
+        eventsUrl + `/booking?instructor=${selectedInstructorId}&brand=${selectedCarBrand}`
       ).then(data => this.setState({
-        reservations: data.reservations,
         drivings: data.drivings,
         exams: data.exams,
         isLoading: false
-      }))
-        .catch(error => this.setState({ error, isLoading: false }));
+      })).catch(error => this.setState({ error, isLoading: false }));
+    } else if (selectedInstructorId !== 0) {
+      request(
+        'GET',
+        eventsUrl + `/booking?instructor=${selectedInstructorId}`
+      ).then(data => this.setState({
+        drivings: data.drivings,
+        exams: data.exams,
+        isLoading: false
+      })).catch(error => this.setState({ error, isLoading: false }));
     }
   }
 
@@ -106,8 +117,7 @@ class Booking extends Component {
   }
 
   prepareCourseModalStructure() {
-    var { carBrands, instructors, cities, reservationCarBrand, reservationInstructor,
-      reservationStartDate, reservationDuration, reservationCity } = this.state;
+    var { carBrands, instructors, cities, reservationStartDate } = this.state;
 
     return (
       <Modal show={this.state.showReservationModal} onHide={this.handleReservationModalClose}>
@@ -119,7 +129,7 @@ class Booking extends Component {
         <Modal.Body>
           <FormGroup>
             <ControlLabel>Marka</ControlLabel>
-            <FormControl componentClass="select" onChange={this.handleReservationCarBrandChange} value={reservationCarBrand}>
+            <FormControl componentClass="select" onChange={this.handleReservationCarBrandChange}>
               <option>-</option>
               {carBrands.map(brand => (
                 <option key={brand}>{brand}</option>)
@@ -128,19 +138,23 @@ class Booking extends Component {
           </FormGroup>
           <FormGroup>
             <ControlLabel>Instruktor</ControlLabel>
-            <FormControl componentClass="select" onChange={this.handleReservationInstructorChange} value={reservationInstructor}>
-              <option>-</option>
+            <FormControl componentClass="select" onChange={this.handleReservationInstructorChange}>
+              <option key={0}>-</option>
               {instructors.map(instructor => (
-                <option key={instructor.id}>{instructor.name} {instructor.surname} - {instructor.email}</option>)
+                <option key={instructor.id} key-data={instructor.id}>
+                  {instructor.name} {instructor.surname} - {instructor.email}
+                </option>)
               )}
             </FormControl>
           </FormGroup>
           <FormGroup>
             <ControlLabel>Miasto</ControlLabel>
-            <FormControl componentClass="select" onChange={this.handleReservationCityChange} value={reservationCity}>
-              <option>-</option>
+            <FormControl componentClass="select" onChange={this.handleReservationCityChange}>
+              <option key={0}>-</option>
               {cities.map(city => (
-                <option key={city.name}>{city.name}</option>)
+                <option key={city.id} key-data={city.id}>
+                  {city.name}
+                </option>)
               )}
             </FormControl>
           </FormGroup>
@@ -152,27 +166,26 @@ class Booking extends Component {
               showTimeSelect
               timeFormat="HH:mm"
               timeIntervals={15}
-              dateFormat="MMMM d, yyyy h:mm"
+              dateFormat="MMMM dd, yyyy HH:mm"
               timeCaption="czas"
               minDate={(new Date().addDays(3))}
               minTime={new Date(2019, 0, 1, 8)}
               maxTime={new Date(2019, 0, 1, 18)}
-              // locale={'pl'}
-              isClearable={true}
+              locale='enGB'
               showMonthDropdown
               showWeekNumbers
             />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Czas trwania</ControlLabel>
-            <FormControl componentClass="select" onChange={this.handleReservationDurationChange} value={reservationDuration}>
-              <option key={'1h'}>{'1h'}</option>
-              <option key={'1.5h'}>{'1.5h'}</option>
-              <option key={'2h'}>{'2h'}</option>
-              <option key={'2.5h'}>{'2.5h'}</option>
-              <option key={'3h'}>{'3h'}</option>
-              <option key={'3.5h'}>{'3.5h'}</option>
-              <option key={'4h'}>{'4h'}</option>
+            <FormControl componentClass="select" onChange={this.handleReservationDurationChange}>
+              <option key={0} key-data={0}>0</option>
+              <option key={'1h'} key-data={'1h'}>{'1h'}</option>
+              <option key={'1.5h'} key-data={'1.5h'}>{'1.5h'}</option>
+              <option key={'2h'} key-data={'2h'}>{'2h'}</option>
+              <option key={'2.5h'} key-data={'2.5h'}>{'2.5h'}</option>
+              <option key={'3h'} key-data={'3h'}>{'3h'}</option>
+              <option key={'3.5h'} key-data={'3.5h'}>{'3.5h'}</option>
             </FormControl>
           </FormGroup>
         </Modal.Body>
@@ -187,16 +200,21 @@ class Booking extends Component {
   }
 
   validateReservationForm() {
-    var { reservationCarBrand, reservationInstructor, reservationCity, reservationStartDate } = this.state;
+    var { reservationCarBrand, reservationInstructorId, reservationCity, reservationStartDate, reservationDuration } = this.state;
 
     return (reservationCarBrand !== '-' &&
-      reservationInstructor !== '-' &&
+      reservationInstructorId !== 0 &&
       reservationCity !== '-' &&
-      reservationStartDate !== null);
+      reservationStartDate !== null &&
+
+      reservationDuration !== 0);
   }
 
   handleReservationInstructorChange(event) {
-    this.setState({ reservationInstructor: event.target.value })
+    const selectedIndex = event.target.options.selectedIndex;
+    this.setState({
+      reservationInstructorId: event.target.options[selectedIndex].getAttribute('key-data')
+    });
   }
 
   handleReservationCarBrandChange(event) {
@@ -212,55 +230,57 @@ class Booking extends Component {
   }
 
   handleReservationDurationChange(event) {
-    this.setState({ reservationDuration: event.target.value })
+    const selectedIndex = event.target.options.selectedIndex;
+    this.setState({
+      reservationDuration: event.target.options[selectedIndex].getAttribute('key-data')
+    });
   }
 
   handleReservationSubmit() {
 
-    var { reservationCarBrand, reservationInstructor, reservationCity, reservationStartDate,
-      reservationDuration, requestResponse } = this.state;
-
-    const instructorEmail = reservationInstructor.split(" - ")[1];
+    var { reservationCarBrand, reservationInstructorId, reservationCity, reservationStartDate, reservationDuration } = this.state;
     const duration = parseFloat(reservationDuration.slice(0, -1)) * 60;
 
     var data = reservationStartDate.toISOString();
 
+    const reservationRequest = {
+      startDate: reservationStartDate.toISOString(),
+      duration: duration,
+      instructor: { id: reservationInstructorId },
+      carBrand: reservationCarBrand,
+      drivingCity: reservationCity
+    }
+
+    var availabilityRequestResponse;
+
     request(
       'GET',
-      eventsUrl + `/term_availability?instructor=${instructorEmail}&brand=${reservationCarBrand}
+      eventsUrl + `/term_availability?instructor=${reservationInstructorId}&brand=${reservationCarBrand}
       &startDate=${data}&duration=${duration}`
-    ).then(response => this.setState({ requestResponse: response, isLoading: false }))
-      .catch(error => this.setState({ error, isLoading: false }));
-
-    if (requestResponse) {
-      const reservationRequest = {
-        startDate: reservationStartDate.toISOString(),
-        duration: duration,
-        instructor: { email: instructorEmail },
-        carBrand: reservationCarBrand,
-        drivingCity: reservationCity
+    ).then(response => {
+      availabilityRequestResponse = response
+    }).then(() => {
+      if (availabilityRequestResponse) {
+        request(
+          'POST',
+          reservationUrl,
+          reservationRequest
+        ).then(response => {
+          if (response) {
+           this.handleReservationModalClose();
+          } else {
+            alert(`Niestety, nie udało się dokonać rezerwacji.`);
+          }
+        })
+      } else {
+        alert(`Niestety, rezerwacja nie została zaakceptowana. 
+              Podany termin rezerwacji nie jest dostępny!`);
       }
-
-      request(
-        'POST',
-        reservationUrl,
-        reservationRequest
-      ).then(data => this.setState({ isLoading: false }))
-        .catch(error => this.setState({ error, isLoading: false }));
-
-      console.log("REZERWACJA ZOSTAŁA WYSŁANA DO SERWERA!!! | " + instructorEmail + " | " + reservationCarBrand
-        + " | " + reservationStartDate + " | " + reservationDuration + " | " + reservationCity)
-      this.handleReservationModalClose();
-    } else {
-      console.log("REZERWACJA NISTETY NIE ZOSTAŁA WYSŁANA DO SERWERA!!! | " + instructorEmail + " | " + reservationCarBrand
-        + " | " + reservationStartDate + " | " + reservationDuration + " | " + reservationCity)
-      alert(`Niestety, rezerwacja nie została zaakceptowana. 
-      Podany termin rezerwacji nie jest dostępny!`);
-    }
+    })
+      .catch(error => this.setState({ error, isLoading: false }));
   }
 
   componentDidMount() {
-
     this.setState({ isLoading: true });
 
     request(
@@ -284,7 +304,7 @@ class Booking extends Component {
 
   render() {
     var { isLoading, error, carBrands, instructors, drivings, exams,
-      selectedCarBrand, selectedInstructor } = this.state;
+      selectedCarBrand, selectedInstructorId } = this.state;
     var currentUserRole = this.props.currentUserRole;
 
     if (error) {
@@ -319,17 +339,19 @@ class Booking extends Component {
               <p id="instructorSelectLabel">Wybierz instruktora</p>
               <FormGroup id="instructorSelectList">
                 <ControlLabel>Instruktor</ControlLabel>
-                <FormControl componentClass="select" onChange={this.handleSelectedInstructorChange} value={selectedInstructor}>
+                <FormControl componentClass="select" onChange={this.handleSelectedInstructorIdChange}>
                   <option>-</option>
                   {instructors.map(instructor => (
-                    <option key={instructor.id}>{instructor.name} {instructor.surname} - {instructor.email}</option>)
+                    <option key={instructor.id} key-data={instructor.id}>
+                      {instructor.name} {instructor.surname} - {instructor.email}
+                    </option>)
                   )}
                 </FormControl>
               </FormGroup>
             </div>
             <div id="searchButtonContainer">
-              <Button id="searchEventsButton" onClick={this.handleSearchSubmit} 
-              disabled={selectedCarBrand==='-'||selectedInstructor==='-'}>
+              <Button id="searchEventsButton" onClick={this.handleSearchSubmit}
+                disabled={selectedInstructorId === 0}>
                 Szukaj
               </Button>
             </div>

@@ -5,10 +5,11 @@ import { request } from "utils/APIUtils";
 import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import ServerError from '../../common/ServerError';
+import AccessDenied from "../../common/AccessDenied";
 import PracticalExam from './PracticalExam';
 import TheoreticalExam from './TheoreticalExam';
+import StudentExam from './StudentExam';
 import "./Exams.css";
-import AccessDenied from "../../common/AccessDenied";
 
 const practicalExamUrl = API_BASE_URL + '/practical_exam/student';
 const theoreticalExamUrl = API_BASE_URL + '/theoretical_exam/student';
@@ -54,11 +55,13 @@ class Exams extends Component {
       </div>);
     } else if (currentUserRole === USER_ROLES.Student) {
 
-      const studentExams = theoreticalExams.map(exam =>
+      const studentTheoreticalExams = theoreticalExams.map(exam =>
         <TheoreticalExam key={exam.id} exam={exam} />)
 
-      return (<div id="examsTableContainer">
-        {/* <p id="examsLabel">Egzaminy teoretyczne</p>
+      if (practicalExam !== null && practicalExam !== undefined) {
+        const studentExam = <StudentExam key={practicalExam.id} exam={practicalExam} />
+        return (<div id="examsTableContainer">
+          {/* <p id="examsLabel">Egzaminy teoretyczne</p>
         <Table id="theoreticalExamsTable" responsive striped bordered condensed hover>
           <thead>
             <tr>
@@ -69,20 +72,35 @@ class Exams extends Component {
             </tr>
           </thead>
           <tbody>
-            {studentExams}
+            {studentTheoreticalExams}
           </tbody>
         </Table> */}
-        {/* TODO */}
-        <p id="practicalExamLabel">Egzamin praktyczny</p>
-        {/* TODO */}
-        {/* <p>{practicalExam.id}</p>
-        <p>{practicalExam.startDate}</p>
-        <p>{practicalExam.duration}</p>
-        <p>{practicalExam.passed}</p>
-        <p>{practicalExam.finishDate}</p>
-        <p>{practicalExam.car.brand}</p>
-        <p>{practicalExam.instructor.name}</p> */}
-      </div>);
+          <p id="practicalExamLabel">Egzamin praktyczny</p>
+          <Table id="practicalExamsTable" responsive striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>Data egzaminu</th>
+                <th>Samochód</th>
+                <th>Typ silnika</th>
+                <th>Instruktor</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {studentExam}
+            </tbody>
+          </Table>
+        </div>);
+      } else {
+        return (
+          <div id="examsTableContainer">
+            <p id="practicalExamLabel">
+              Twój egzamin praktyczny jeszcze się nie odbył.
+              <br />
+              W celu ustalenia daty egzaminu zgłoś się do biura akademii.
+            </p>
+          </div>);
+      }
     } else {
       return <AccessDenied />
     }
