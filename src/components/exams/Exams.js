@@ -7,12 +7,10 @@ import LoadingIndicator from "../../common/LoadingIndicator";
 import ServerError from '../../common/ServerError';
 import AccessDenied from "../../common/AccessDenied";
 import PracticalExam from './PracticalExam';
-import TheoreticalExam from './TheoreticalExam';
 import StudentExam from './StudentExam';
 import "./Exams.css";
 
 const practicalExamUrl = API_BASE_URL + '/practical_exam/student';
-const theoreticalExamUrl = API_BASE_URL + '/theoretical_exam/student';
 const instructorPracticalExamsUrl = API_BASE_URL + '/practical_exam/instructor';
 
 class Exams extends Component {
@@ -21,7 +19,6 @@ class Exams extends Component {
     this.state = {
       practicalExam: null,
       instructorPracticalExams: [],
-      theoreticalExams: [],
       error: null,
       isLoading: false,
     }
@@ -29,7 +26,7 @@ class Exams extends Component {
   }
 
   prepareTheContent() {
-    var { practicalExam, theoreticalExams, instructorPracticalExams } = this.state;
+    var { practicalExam, instructorPracticalExams } = this.state;
     var currentUserRole = this.props.currentUserRole;
 
     if (currentUserRole === USER_ROLES.Instructor) {
@@ -55,26 +52,11 @@ class Exams extends Component {
       </div>);
     } else if (currentUserRole === USER_ROLES.Student) {
 
-      const studentTheoreticalExams = theoreticalExams.map(exam =>
-        <TheoreticalExam key={exam.id} exam={exam} />)
+
 
       if (practicalExam !== null && practicalExam !== undefined) {
         const studentExam = <StudentExam key={practicalExam.id} exam={practicalExam} />
         return (<div id="examsTableContainer">
-          {/* <p id="examsLabel">Egzaminy teoretyczne</p>
-        <Table id="theoreticalExamsTable" responsive striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th>Data egzaminu</th>
-              <th>Status</th>
-              <th>Zdobyte punkty</th>
-              <th>Wynik</th>
-            </tr>
-          </thead>
-          <tbody>
-            {studentTheoreticalExams}
-          </tbody>
-        </Table> */}
           <p id="practicalExamLabel">Egzamin praktyczny</p>
           <Table id="practicalExamsTable" responsive striped bordered condensed hover>
             <thead>
@@ -121,12 +103,6 @@ class Exams extends Component {
           practicalExamUrl
         ).then(data => this.setState({ practicalExam: data, isLoading: false }))
           .catch(error => this.setState({ error, isLoading: false }));
-
-        // request(
-        // 'GET',
-        // theoreticalExamUrl
-        // ).then(data => this.setState({ theoreticalExams: data, isLoading: false }))
-        //   .catch(error => this.setState({ error, isLoading: false }));
 
       } else if (currentUserRole === USER_ROLES.Instructor) {
 

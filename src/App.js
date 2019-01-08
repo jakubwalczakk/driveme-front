@@ -16,7 +16,7 @@ import Course from "./components/course/Course";
 import YourProgress from "./components/progress/YourProgress";
 import Students from "./components/students/Students";
 import Exams from "./components/exams/Exams";
-import { ACCESS_TOKEN, API_BASE_URL } from './constants/constants';
+import { API_BASE_URL, ACCESS_TOKEN, CURRENT_USER, CURRENT_USER_ROLE, IS_AUTHENTICATED } from './constants/constants';
 import { request } from './utils/APIUtils';
 import LoadingIndicator from "./common/LoadingIndicator";
 
@@ -24,10 +24,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAuthenticated: false,
+      isAuthenticated: localStorage.getItem(IS_AUTHENTICATED),
       isLoading: false,
-      currentUser: null,
-      currentUserRole: null
+      currentUser: JSON.parse(localStorage.getItem(CURRENT_USER)),
+      currentUserRole: localStorage.getItem(CURRENT_USER_ROLE)
     }
     this.handleLogin = this.handleLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
@@ -43,8 +43,9 @@ class App extends Component {
     ).then(response => {
       this.setState({
         currentUser: response,
-        isAuthenticated: true,
         isLoading: false
+      }, () => {
+        localStorage.setItem(CURRENT_USER, JSON.stringify(this.state.currentUser));
       })
     }).catch(error => {
       this.setState({
@@ -52,25 +53,22 @@ class App extends Component {
         isAuthenticated: false
       })
     });
-    //   }).catch(error => {
-    //     this.setState({
-    //       isLoading: false,
-    //       isAuthenticated: false
-    //     })
-    //   })
-    // })
   }
 
   componentDidMount() {
+    var { currentUser, isAuthenticated } = this.state;
+    if (currentUser === (null || undefined) && isAuthenticated) {
+      this.loadCurrentUser();
+    }
   }
 
   async handleLogout() {
-    localStorage.removeItem(ACCESS_TOKEN);
-
     await this.setState({
       currentUser: null,
       isAuthenticated: false,
       currentUserRole: null
+    }, () => {
+      localStorage.clear();
     })
     this.props.history.push("/");
   }
@@ -82,6 +80,9 @@ class App extends Component {
     await this.setState({
       isAuthenticated: true,
       currentUserRole: parsedToken.scopes,
+    }, () => {
+      localStorage.setItem(IS_AUTHENTICATED, this.state.isAuthenticated);
+      localStorage.setItem(CURRENT_USER_ROLE, this.state.currentUserRole);
     })
     this.loadCurrentUser();
   }
@@ -113,9 +114,8 @@ class App extends Component {
         <Route path="/profile"
           render={() =>
             <ProfileSettings isAuthenticated={isAuthenticated}
-            // currentUserRole={currentUserRole}
-            // currentUser={currentUser} 
-            />} />
+              currentUserRole={currentUserRole}
+              currentUser={currentUser} />} />
         <Route path="/course" render={() =>
           <Course isAuthenticated={isAuthenticated}
             currentUserRole={currentUserRole} />} />
@@ -124,23 +124,17 @@ class App extends Component {
             currentUserRole={currentUserRole} />} />
         <Route path="/drivings" render={() =>
           <Ratings isAuthenticated={isAuthenticated}
-            currentUserRole={currentUserRole}
-          // currentUser={currentUser} 
-          />} />
+            currentUserRole={currentUserRole} />} />
         <Route path="/students" render={() =>
           <Students isAuthenticated={isAuthenticated}
-            currentUserRole={currentUserRole}
-          // currentUser={currentUser} 
-          />} />
+            currentUserRole={currentUserRole} />} />
         <Route path="/exams" render={() =>
           <Exams isAuthenticated={isAuthenticated}
             currentUserRole={currentUserRole} />}
         />
         <Route path="/reservations" render={() =>
           <ReservationList isAuthenticated={isAuthenticated}
-            currentUserRole={currentUserRole}
-          // currentUser={currentUser} 
-          />} />
+            currentUserRole={currentUserRole} />} />
         <Route path="/book" render={() =>
           <Booking isAuthenticated={isAuthenticated}
             currentUserRole={currentUserRole} />} />

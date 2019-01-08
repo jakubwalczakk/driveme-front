@@ -5,6 +5,7 @@ import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, ACCESS_TOKEN } 
 import { trimDate, request } from "utils/APIUtils";
 import { withRouter } from 'react-router-dom';
 import "./ProfileSettings.css";
+import { USER_ROLES } from "../../constants/constants";
 
 const studentUrl = API_BASE_URL + '/student';
 const instructorUrl = API_BASE_URL + '/instructor';
@@ -52,7 +53,7 @@ class ProfileSettings extends Component {
         value: ''
       },
       image: '',
-      currentLoggedUser: ''
+      currentLoggedUser: null
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSaveChanges = this.handleSaveChanges.bind(this);
@@ -64,21 +65,6 @@ class ProfileSettings extends Component {
     this.validateStreet = this.validateStreet.bind(this);
     this.validateHouseNo = this.validateHouseNo.bind(this);
     this.handleChangePhoto = this.handleChangePhoto.bind(this);
-  }
-
-  //TODO
-  loadCurrentLoggedUser() {
-    if (localStorage.getItem(ACCESS_TOKEN)) {
-
-      //   request(
-      // 'GET',
-      // 'http://localhost:8080/user/me'
-      // ).then(data => this.setState({ currentLoggedUser: data, isLoading: false }))
-      //     .catch(error => this.setState({ error, isLoading: false }));
-      // } else {
-      //   // console.log("Nie można pobrać informacji na temat zalogowanego użytkownika");
-      //   throw new Error('Nie można pobrać informacji na temat zalogowanego użytkownika...');
-    }
   }
 
   handleChange = (event, validationFun) => {
@@ -118,7 +104,7 @@ class ProfileSettings extends Component {
         .catch(error => this.setState({ error, isLoading: false }));
     }
     else {
-      // console.log("WIELKI BŁĄd")
+      alert('Nie można dokonać zmiany danych, nowe są błędne.')
     }
   }
 
@@ -152,8 +138,6 @@ class ProfileSettings extends Component {
         updateRequest
       ).then(data => this.setState({ isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
-
-      this.componentDidMount();
     }
   }
 
@@ -178,18 +162,20 @@ class ProfileSettings extends Component {
 
   render() {
 
-    var { currentLoggedUser, id, name, surname, registrationDate, pesel, email, password, phoneNumber, city, zipCode, street, houseNo, image } = this.state;
+    var { id, name, surname, registrationDate, pesel, email, password, phoneNumber, city, zipCode, street, houseNo, image } = this.state;
 
-    // console.log("Current/ logged user = " + currentLoggedUser.name);
 
     const passwordTooltip = (
       <Tooltip id="password-tooltip">
         <strong>Tutaj możesz zmienić swoje hasło.</strong>
       </Tooltip>);
 
+    var currentUser = this.props.currentUser;
+    var currentUserRole = this.props.currentUserRole;
+
     return (
       <div id="profileSettingsContainer">
-        <div id="userPhotoContainer" hidden={true}>
+        <div id="userPhotoContainer" hidden={currentUserRole !== USER_ROLES.Instructor}>
           {/*src={"data:image/jpeg;base64," + image} src="/legoman.jpg"*/}
           <Image id="userPhotoImage" src={"data:image/jpeg;base64," + image} rounded responsive />
           <ReactFileReader fileTypes={[".jpg", ".png"]} base64={true} multipleFiles={false} handleFiles={this.handleChangePhoto}>
@@ -203,14 +189,14 @@ class ProfileSettings extends Component {
             <ControlLabel>Imię</ControlLabel>
             <FormControl id="name"
               disabled
-              value={currentLoggedUser.name}
+              value={currentUser.name}
             />
           </FormGroup>
           <FormGroup id="surname-form">
             <ControlLabel>Nazwisko</ControlLabel>
             <FormControl id="surname"
               disabled
-              value={currentLoggedUser.surname}
+              value={currentUser.surname}
             />
           </FormGroup>
         </div>
@@ -220,7 +206,7 @@ class ProfileSettings extends Component {
             <ControlLabel>Data rejestracji</ControlLabel>
             <FormControl id="registrationDate"
               disabled
-              value={currentLoggedUser.surname}
+              value={currentUser && currentUser.surname}
             />
           </FormGroup>
           <FormGroup id="pesel-form">
@@ -237,7 +223,7 @@ class ProfileSettings extends Component {
             <ControlLabel>E-mail</ControlLabel>
             <FormControl id="email"
               disabled
-              value={currentLoggedUser.email}
+              value={currentUser.email}
             />
           </FormGroup>
           <OverlayTrigger placement="left" overlay={passwordTooltip}>
