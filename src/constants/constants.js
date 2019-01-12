@@ -21,7 +21,7 @@ export const PASSWORD_MAX_LENGTH = 32;
 export const MINUTE_IN_MICROS = 1000 * 60;
 
 export const USER_ROLES = {
-  Admin: 'Admin',
-  Instructor: 'Instruktor',
-  Student: 'Kursant'
+  Admin: 'ADMIN',
+  Instructor: 'INSTRUCTOR',
+  Student: 'STUDENT'
 }

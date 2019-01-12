@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
-import { request, trimDate } from "utils/APIUtils";
+import { request, trimDate, convertTime } from "utils/APIUtils";
 
 const rateDrivingUrl = API_BASE_URL + '/driving/rate';
 
@@ -36,7 +36,6 @@ export default class DrivingInfo extends Component {
     this.setState({
       drivingRating: event.target.value
     })
-    console.log(event.target.value)
   }
 
   handleDrivinCommentChange(event) {
@@ -128,7 +127,10 @@ export default class DrivingInfo extends Component {
     }
 
     const driving = this.props.driving;
-    // var date = trimDate((new Date()).toISOString());
+    var curentDate = new Date();
+    var startDate = new Date(driving.startDate);
+    var time = convertTime(driving.duration);
+
     return (
       <tr key={driving.id}>
         <td>{driving.student.name} {driving.student.surname}</td>
@@ -136,10 +138,11 @@ export default class DrivingInfo extends Component {
         <td>{driving.car.brand} {driving.car.model} - {driving.car.licensePlate} </td>
         <td>{driving.drivingCity}</td>
         <td>{driving.startDate}</td>
-        <td>{driving.duration}</td>
-        {<td>{driving.rating ?
-          <Badge>{driving.rating}</Badge> :
-          <Button id="rateButton" onClick={this.handleShowRateModal}>Oceń</Button>}
+        <td>
+          {`${time.hours}h ${time.minutes !== 0 ? (time.minutes + ` min.`) : ''}`}</td>
+        {<td>{(!driving.rating && startDate < curentDate) ?
+          <Button id="rateButton" onClick={this.handleShowRateModal}>Oceń</Button> :
+          <Badge>{driving.rating}</Badge>}
         </td>}
         {rateModal}
       </tr>

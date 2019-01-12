@@ -166,11 +166,11 @@ class Booking extends Component {
               showTimeSelect
               timeFormat="HH:mm"
               timeIntervals={15}
-              dateFormat="MMMM dd, yyyy HH:mm"
+              dateFormat="dd MMMM, yyyy HH:mm"
               timeCaption="czas"
               minDate={(new Date().addDays(3))}
-              minTime={new Date(2019, 0, 1, 8)}
-              maxTime={new Date(2019, 0, 1, 18)}
+              minTime={new Date(2019, 0, 1, 6)}
+              maxTime={new Date(2019, 0, 1, 22)}
               locale='enGB'
               showMonthDropdown
               showWeekNumbers

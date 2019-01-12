@@ -17,6 +17,7 @@ export default class InstructorReservation extends Component {
     this.handleShowAcceptationModal = this.handleShowAcceptationModal.bind(this);
     this.prepareAcceptationModal = this.prepareAcceptationModal.bind(this);
     this.handleAcceptReservation = this.handleAcceptReservation.bind(this);
+    this.handleDenyReservation = this.handleDenyReservation.bind(this);
   }
 
   handleCloseAcceptationModal() {
@@ -40,11 +41,12 @@ export default class InstructorReservation extends Component {
           <Modal.Title>Akceptacja rezerwacji</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Czy na pewno chcesz potwierdzić rezerwację?
+          Czy chcesz potwierdzić rezerwację?
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.handleCloseAcceptationModal}>Anuluj</Button>
           <Button onClick={this.handleAcceptReservation}>Potwierdź</Button>
+          <Button onClick={this.handleDenyReservation}>Odmów</Button>
         </Modal.Footer>
       </Modal >
     );
@@ -61,6 +63,17 @@ export default class InstructorReservation extends Component {
     this.handleCloseAcceptationModal();
   }
 
+  handleDenyReservation() {
+    var reservationId = this.props.reservation.id;
+    request(
+      'POST',
+      reservationUrl + `/deny/${reservationId}`
+    ).then(data => this.setState({ isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
+
+    this.handleCloseAcceptationModal();
+
+  }
   render() {
 
     const reservation = this.props.reservation;

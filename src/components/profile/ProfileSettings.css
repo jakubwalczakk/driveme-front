@@ -7,20 +7,18 @@
 
 #nameContainer{
   width: 50%;
-  /* display: inline-block; */
   float: left;
   padding:15px;
 }
 
 #basicInfoContainer{
   width: 50%;
-  /* display: inline-block; */
   float: left;
   padding:15px;
 }
 
 #userPhotoContainer{
-  width: 20%;
+  width: 150px;
   margin-left: auto;
   margin-right: auto; 
 }

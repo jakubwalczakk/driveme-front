@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger, Image } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
-import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, ACCESS_TOKEN } from "constants/constants";
+import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "constants/constants";
 import { trimDate, request } from "utils/APIUtils";
 import { withRouter } from 'react-router-dom';
-import "./ProfileSettings.css";
 import { USER_ROLES } from "../../constants/constants";
+import AccessDenied from '../../common/AccessDenied';
+import "./ProfileSettings.css";
 
 const studentUrl = API_BASE_URL + '/student';
 const instructorUrl = API_BASE_URL + '/instructor';
@@ -16,58 +17,26 @@ class ProfileSettings extends Component {
     this.state = {
       isLoading: false,
       error: null,
-      id: {
-        value: ''
-      },
-      name: {
-        value: ''
-      },
-      surname: {
-        value: ''
-      },
-      registrationDate: {
-        value: ''
-      },
-      pesel: {
-        value: ''
-      },
-      email: {
-        value: ''
-      },
+      user: null,
       password: {
-        value: ''
+        value: '',
       },
       phoneNumber: {
-        value: ''
-      },
-      city: {
-        value: ''
-      },
-      zipCode: {
-        value: ''
-      },
-      street: {
-        value: ''
-      },
-      houseNo: {
-        value: ''
+        value: '',
       },
       image: '',
-      currentLoggedUser: null
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSaveChanges = this.handleSaveChanges.bind(this);
     this.validateForm = this.validateForm.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.validatePhoneNumber = this.validatePhoneNumber.bind(this);
-    this.validateCity = this.validateCity.bind(this);
-    this.validateZipCode = this.validateZipCode.bind(this);
-    this.validateStreet = this.validateStreet.bind(this);
-    this.validateHouseNo = this.validateHouseNo.bind(this);
     this.handleChangePhoto = this.handleChangePhoto.bind(this);
+    this.getTheUser = this.getTheUser.bind(this);
   }
 
   handleChange = (event, validationFun) => {
+
     const inputValue = event.target.value;
 
     this.setState({
@@ -75,43 +44,45 @@ class ProfileSettings extends Component {
         value: inputValue,
         ...validationFun(inputValue)
       }
-    });
+    })
   }
 
   handleSaveChanges() {
+    var { password, user, image } = this.state;
+    var currentUserRole = this.props.currentUserRole;
 
-    var { id, password, phoneNumber, city, zipCode, street, houseNo } = this.state;
-
-    if (this.validateForm()) {
-
+    if (currentUserRole === (USER_ROLES.Student || USER_ROLES.Admin)) {
       const updateRequest = {
-        id: id,
-        password: password,
-        phoneNumber: phoneNumber,
-        address: {
-          city: city,
-          zipCode: zipCode,
-          street: street,
-          houseNo: houseNo
-        }
+        id: user.id,
+        password: password.value,
+        phoneNumber: user.phoneNumber
       }
 
       request(
         'PUT',
         studentUrl,
         updateRequest
-      ).then(data => this.setState({ isLoading: false }))
+      ).then(this.setState({ isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
     }
-    else {
-      alert('Nie można dokonać zmiany danych, nowe są błędne.')
+    else if (currentUserRole === USER_ROLES.Instructor) {
+      const updateRequest = {
+        id: user.id,
+        photo: image,
+        password: password.value,
+        phoneNumber: user.phoneNumber
+      }
+
+      request(
+        'PUT',
+        instructorUrl,
+        updateRequest
+      ).then(this.setState({ isLoading: false }))
+        .catch(error => this.setState({ error, isLoading: false }));
     }
   }
 
-  handleChangePhoto = (files) => {
-
-    var { currentLoggedUser } = this.state;
-
+  handleChangePhoto(files) {
     let photoString = files.base64;
     let photo;
 
@@ -127,43 +98,40 @@ class ProfileSettings extends Component {
     }
 
     if (photo != null) {
-      const updateRequest = {
-        id: currentLoggedUser.id,
-        photo: photo
-      }
 
-      request(
-        'PUT',
-        instructorUrl,
-        updateRequest
-      ).then(data => this.setState({ isLoading: false }))
-        .catch(error => this.setState({ error, isLoading: false }));
+      this.setState({
+        image: photo
+      })
+    } else {
+      alert('Został wybrany zły format zdjęcia. Spróbuj ponownie! (tym razem wybierz format .jpg lub .png)')
     }
   }
 
-  componentDidMount() {
+  getTheUser() {
+    var currentUserRole = this.props.currentUserRole;
+    var userId = this.props.currentUser.id;
+    var specifiedPath = '';
 
-    // request({
-    //   url: 'http://localhost:8080/user/me',//currentLoggedUser.id,
-    //   method: 'GET'
-    // })
-    //   .then(data => this.setState({
-    //     currentLoggedUser: data
-    //   })).then(data => this.setState({ payments: data, isLoading: false }))
-    //   .catch(error => this.setState({ error, isLoading: false }));
-
-    // request({
-    //   url: instructorUrl + '/7',
-    //   method: 'GET'
-    // }).then(data => this.setState({
-    //   image: data.photo
-    // }));
+    if (currentUserRole === USER_ROLES.Student) {
+      specifiedPath = '/student';
+    } else if (currentUserRole === USER_ROLES.Instructor) {
+      specifiedPath = '/instructor';
+    } else if (currentUserRole === USER_ROLES.Admin) {
+      specifiedPath = '/admin';
+    }
+    request(
+      'GET',
+      'http://localhost:8080' + specifiedPath + "/" + userId
+    ).then(response => {
+      this.setState({ user: response, image: response.photo });
+    })
   }
 
   render() {
 
-    var { id, name, surname, registrationDate, pesel, email, password, phoneNumber, city, zipCode, street, houseNo, image } = this.state;
+    console.log(this.state)
 
+    var { password, image, user } = this.state;
 
     const passwordTooltip = (
       <Tooltip id="password-tooltip">
@@ -173,14 +141,43 @@ class ProfileSettings extends Component {
     var currentUser = this.props.currentUser;
     var currentUserRole = this.props.currentUserRole;
 
+    if (user === null) {
+      this.getTheUser();
+    }
+
+    let studentDetails;
+    if (currentUserRole === USER_ROLES.Student) {
+      studentDetails = (
+
+        <div>
+          <FormGroup id="registrationDate-form">
+            <ControlLabel>Data rejestracji</ControlLabel>
+            <FormControl id="registrationDate"
+              disabled
+              value={(user && trimDate(user.registrationDate)) || ''}
+            />
+          </FormGroup>
+          <FormGroup id="pesel-form">
+            <ControlLabel>PESEL</ControlLabel>
+            <FormControl id="pesel"
+              disabled
+              value={(user && user.pesel) || ''}
+            />
+          </FormGroup>
+        </div>
+      )
+    }
+
+    if (currentUser === null || undefined) {
+      return <AccessDenied />;
+    }
     return (
       <div id="profileSettingsContainer">
         <div id="userPhotoContainer" hidden={currentUserRole !== USER_ROLES.Instructor}>
-          {/*src={"data:image/jpeg;base64," + image} src="/legoman.jpg"*/}
           <Image id="userPhotoImage" src={"data:image/jpeg;base64," + image} rounded responsive />
           <ReactFileReader fileTypes={[".jpg", ".png"]} base64={true} multipleFiles={false} handleFiles={this.handleChangePhoto}>
             <Button id="userPhotoChangeButton" bsStyle="primary">
-              Zmień
+              Zmień zdjęcie
           </Button>
           </ReactFileReader>
         </div>
@@ -199,26 +196,6 @@ class ProfileSettings extends Component {
               value={currentUser.surname}
             />
           </FormGroup>
-        </div>
-
-        <div id="basicInfoContainer" hidden={true}>
-          <FormGroup id="registrationDate-form">
-            <ControlLabel>Data rejestracji</ControlLabel>
-            <FormControl id="registrationDate"
-              disabled
-              value={currentUser && currentUser.surname}
-            />
-          </FormGroup>
-          <FormGroup id="pesel-form">
-            <ControlLabel>PESEL</ControlLabel>
-            <FormControl id="pesel"
-              disabled
-              value={pesel.value}
-            />
-          </FormGroup>
-        </div>
-
-        <div id="credentialsContainer">
           <FormGroup id="email-form">
             <ControlLabel>E-mail</ControlLabel>
             <FormControl id="email"
@@ -226,6 +203,9 @@ class ProfileSettings extends Component {
               value={currentUser.email}
             />
           </FormGroup>
+        </div>
+
+        <div id="basicInfoContainer">
           <OverlayTrigger placement="left" overlay={passwordTooltip}>
             <FormGroup id="password-form">
               <ControlLabel>Hasło</ControlLabel>
@@ -241,60 +221,22 @@ class ProfileSettings extends Component {
             <ControlLabel>Nr telefonu</ControlLabel>
             <FormControl id="phoneNumber" type="text"
               pattern="^\d{3}-\d{3}-\d{3}$||^\d{3} \d{3} \d{3}$||^\d{9}$"
-              value={phoneNumber.value}
+              value={(user && user.phoneNumber) || ''}
               onChange={(event) => this.handleChange(event, this.validatePhoneNumber)}
             />
           </FormGroup>
+          {studentDetails}
         </div>
-
-        <div id="addressInfoContainer" hidden={true}>
-          <FormGroup id="city-form">
-            <ControlLabel>Miasto</ControlLabel>
-            <FormControl id="city"
-              value={city.value}
-              onChange={(event) => this.handleChange(event, this.validateCity)}
-            />
-          </FormGroup>
-          <FormGroup id="zipCode-form">
-            <ControlLabel>Kod pocztowy</ControlLabel>
-            <FormControl id="zipCode"
-              type="text"
-              pattern="^\d{2}-\d{3}$"
-              value={zipCode.value}
-              onChange={(event) => this.handleChange(event, this.validateZipCode)}
-            />
-          </FormGroup>
-          <FormGroup id="street-form">
-            <ControlLabel>Ulica</ControlLabel>
-            <FormControl id="street"
-              value={street.value}
-              onChange={(event) => this.handleChange(event, this.validateStreet)}
-            />
-          </FormGroup>
-          <FormGroup id="houseNo-form">
-            <ControlLabel>Nr domu</ControlLabel>
-            <FormControl id="houseNo"
-              value={houseNo.value}
-              onChange={(event) => this.handleChange(event, this.validateHouseNo)}
-            />
-          </FormGroup>
-        </div>
-        <Button id="saveSettingsBtn" onClick={this.handleSaveChanges} disabled={!this.validateForm()}>Zapisz</Button>
+        <Button id="saveSettingsBtn" onClick={this.handleSaveChanges}>Zapisz</Button>
       </div>
     );
   }
 
   validateForm() {
-    var { password, phoneNumber, city, zipCode, street, houseNo } = this.state;
+    var { password, user } = this.state;
 
-    //FIXME
-    //FIXME
     return password.validateStatus &&
-      phoneNumber.validateStatus;// &&
-    //   city.validateStatus &&
-    //   zipCode.validateStatus &&
-    //   street.validateStatus &&
-    //   houseNo.validateStatus;
+      user.phoneNumber.validateStatus;
   }
 
   validatePassword = (password) => {
@@ -325,93 +267,15 @@ class ProfileSettings extends Component {
     }
     const PHONE_NUMBER_REGEX = RegExp("^\\d{3}-\\d{3}-\\d{3}$||^\\d{3} \\d{3} \\d{3}$||^\\d{9}$");
     if (PHONE_NUMBER_REGEX.test(phoneNumber)) {
-      // console.log("Numer ok!!!")
       return {
         validateStatus: true,
         message: null,
       };
     } else {
-      // console.log("błędny numer!!!")
       return {
         validateStatus: false,
         message: 'Numer telefonu nie jest zgodny z podanym formatem.'
       }
-    }
-  }
-
-  validateCity = (city) => {
-    if (city.length < 1) {
-      return {
-        validateStatus: false,
-        message: `Nazwa miasta jest zbyt krótka.`
-      }
-    } else if (city.length > 100) {
-      return {
-        validateStatus: false,
-        message: `Nazwa miasta jest zbyt długa.`
-      }
-    } else {
-      return {
-        validateStatus: true,
-        message: null,
-      };
-    }
-  }
-
-  validateZipCode = (zipCode) => {
-    if (zipCode.length < 1) {
-      return {
-        validateStatus: false,
-        message: `Kod pocztowy jest zbyt krótki.`
-      }
-    } else if (zipCode.length > 100) {
-      return {
-        validateStatus: false,
-        message: `Kod pocztowy jest zbyt długi.`
-      }
-    } else {
-      return {
-        validateStatus: true,
-        message: null,
-      };
-    }
-  }
-
-  validateStreet = (street) => {
-    if (street.length < 1) {
-      return {
-        validateStatus: false,
-        message: `Nazwa ulicy jest zbyt krótka.`
-      }
-    } else if (street.length > 100) {
-      return {
-        validateStatus: false,
-        message: `Nazwa ulicy jest zbyt długa.`
-      }
-    } else {
-      return {
-        validateStatus: true,
-        message: null,
-      };
-    }
-  }
-
-  validateHouseNo = (houseNo) => {
-    if (houseNo.length < 1) {
-      return {
-        validateStatus: false,
-        message: `Numer domu jest zbyt krótki.`
-      }
-    } else if (houseNo.length > 100) {
-      return {
-        validateStatus: false,
-        message: `Numer domu jest zbyt długi.`
-      }
-    } else {
-      return {
-        validateStatus: true,
-        message: null,
-      };
     }
   }
 }

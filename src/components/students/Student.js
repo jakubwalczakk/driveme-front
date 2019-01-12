@@ -60,13 +60,16 @@ export default class Car extends Component {
         <Modal.Body>
           <FormGroup>
             <FormControl.Static>
-              <b>{student.name} {student.surname} - {student.email} {student.phoneNumber}</b>
+              <b>{student.name} {student.surname} - {student.email}</b>
+            </FormControl.Static>
+            <FormControl.Static>
+              <b>tel. {student.phoneNumber}</b>
             </FormControl.Static>
             <FormControl.Static>
               <b>PESEL: {student.pesel}</b>
             </FormControl.Static>
             <FormControl.Static>
-              Zapłacona kwota: {course.currentPayment} PLN
+              Zapłacona kwota: {course.currentPayment} zł
             </FormControl.Static>
             <FormControl.Static>
               Zaliczone godziny: {course.takenDrivingHours}h

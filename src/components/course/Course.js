@@ -58,7 +58,7 @@ class Course extends Component {
         <div id="courseContainer">
           {/* <p id="courseLabel">Tutaj pojawią się informacje na temat Twojego kursu.</p> */}
           <p>Data rozpoczęcia kursu: {course.startDate}</p>
-          <p>Wpłacona kwota: {percentPaymentOfCourse}% - {currenPaymentOfCourse}PLN
+          <p>Wpłacona kwota: {percentPaymentOfCourse}% - {currenPaymentOfCourse} zł
                   {currenPaymentOfCourse === 1500.0 &&
               <i id="paymentsAccepted" className="material-icons">check_circle</i>}</p>
           <p>Ukończonych godzin: {course.takenDrivingHours}h ({percentOfCourseCompletion}%)</p>

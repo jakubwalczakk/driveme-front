@@ -13,8 +13,7 @@ export default class Driving extends Component {
         <td>{driving.instructor.name} {driving.instructor.surname}</td>
         <td>{driving.car.brand} {driving.car.model}</td>
         <td>{driving.drivingCity}</td>
-        <td>{(driving.startDate > date && "PRAWDA") ||
-          (driving.startDate < date && "FAŁSZ")}</td>
+        <td>{driving.startDate}</td>
         <td>
           {`${time.hours}h ${time.minutes !== 0 ? (time.minutes + ` min.`) : ''}`}
         </td>
