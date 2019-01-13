@@ -244,7 +244,7 @@ class Booking extends Component {
     var data = reservationStartDate.toISOString();
 
     const reservationRequest = {
-      startDate: reservationStartDate.toISOString(),
+      startDate: data,
       duration: duration,
       instructor: { id: reservationInstructorId },
       carBrand: reservationCarBrand,

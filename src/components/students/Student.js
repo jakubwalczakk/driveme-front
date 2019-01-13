@@ -1,10 +1,16 @@
 import React, { Component } from "react";
 import { Button, Modal, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { trimDate, request } from "utils/APIUtils";
-import { API_BASE_URL } from "../../constants/constants";
+import { API_BASE_URL } from "../../constants/constants"; import DatePicker from 'react-datepicker';
+import { registerLocale } from 'react-datepicker';
+import { enGB } from 'date-fns/locale'
 import './Students.css';
+import 'react-datepicker/dist/react-datepicker.css';
+
+registerLocale('enGB', enGB);
 
 const studentUrl = API_BASE_URL + '/student';
+const paymentsUrl = API_BASE_URL + '/payment';
 
 export default class Car extends Component {
   constructor(props) {
@@ -15,8 +21,9 @@ export default class Car extends Component {
       showActivateModal: false,
       showDeleteModal: false,
       amountOfPayment: {
-        value: 0
+        value: 100
       },
+      paymentDate: null
     }
 
     this.handleCloseCourseModal = this.handleCloseCourseModal.bind(this);
@@ -27,6 +34,7 @@ export default class Car extends Component {
     this.handleShowPaymentsModal = this.handleShowPaymentsModal.bind(this);
     this.handleAddPayment = this.handleAddPayment.bind(this);
     this.handleChangeAmountOfPayment = this.handleChangeAmountOfPayment.bind(this);
+    this.handleChangePaymentDate = this.handleChangePaymentDate.bind(this);
     this.preparePaymentsModalStructure = this.preparePaymentsModalStructure.bind(this);
 
     this.handleShowActivateModal = this.handleShowActivateModal.bind(this);
@@ -90,7 +98,9 @@ export default class Car extends Component {
     this.setState({
       amountOfPayment: {
         value: 0
-      }, showPaymentsModal: false
+      },
+      paymentDate: null,
+      showPaymentsModal: false
     });
   }
 
@@ -99,7 +109,18 @@ export default class Car extends Component {
   }
 
   handleAddPayment() {
-    console.log("PŁATNOŚĆ ZARAZ ZOSTANIE UTWORZONA");
+    var currentUserId = this.props.student.id;
+    var { amountOfPayment, paymentDate } = this.state;
+
+    const paymentRequest = {
+      student: {
+        id: currentUserId
+      },
+      date: paymentDate.toISOString(),
+      amount: amountOfPayment.value
+    }
+
+    request('POST', paymentsUrl, paymentRequest);
     this.handleClosePaymentsModal();
   }
 
@@ -111,8 +132,13 @@ export default class Car extends Component {
     });
   }
 
+  handleChangePaymentDate(event) {
+    this.setState({ paymentDate: event })
+  }
+
   preparePaymentsModalStructure() {
-    var { amountOfPayment } = this.state;
+    var { amountOfPayment, paymentDate } = this.state;
+    var currentPayment = this.props.student.course.currentPayment;
     return (
       <Modal show={this.state.showPaymentsModal} onHide={this.handleClosePaymentsModal}>
         <Modal.Header closeButton>
@@ -125,15 +151,28 @@ export default class Car extends Component {
           <FormGroup id="car-licensePlate-form" className="addCarForm">
             <ControlLabel>Kwota</ControlLabel>
             <FormControl id="carLicensePlate" type="number"
-              min={1} max={1500}
+              min={100} max={1500}
               value={amountOfPayment.value}
               onChange={this.handleChangeAmountOfPayment}
             />
           </FormGroup>
+          <DatePicker
+            selected={paymentDate}
+            onChange={this.handleChangePaymentDate}
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            dateFormat="dd MMMM, yyyy HH:mm"
+            timeCaption="czas"
+            minDate={(new Date())}
+            locale='enGB'
+            showMonthDropdown
+            showWeekNumbers
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button className="modals-button" onClick={this.handleClosePaymentsModal}>Anuluj</Button>
-          <Button className="modals-button" onClick={this.handleAddPayment}>Dodaj</Button>
+          <Button className="modals-button" disabled={currentPayment + amountOfPayment > 1500} onClick={this.handleAddPayment}>Dodaj</Button>
         </Modal.Footer>
       </Modal>
     );
