@@ -7,7 +7,7 @@
 
 #drivingCitiesHeader{
   text-align: center;
-  font-size: 44px;
+  font-size: 40px;
   padding: 10px 10px 35px 10px;
   width: 68%;
   margin-left: auto;
@@ -41,10 +41,6 @@
   padding: 12px 12px 12px 12px;
   width: 16%;
   margin-left: 42%;
-}
-
-#drivingCitiesTable{
-  margin-top: 2%;
 }
 
 #drivingCitiesTable td, th{

@@ -7,7 +7,7 @@
 
 #carsHeader{
   text-align: center;
-  font-size: 44px;
+  font-size: 40px;
   padding: 10px 10px 35px 10px;
   width: 52%;
   margin-left: auto;
@@ -25,14 +25,10 @@
   margin-left: 41%;
 }
 
-#carsTable{
-  margin-top: 2%;
-}
-
 #carsTable th{
-  padding:15px;
-  font-weight: 700;
-  font-size: 22px;
+  padding:12px;
+  font-weight: 600;
+  font-size: 20px;
   text-align: center;
   vertical-align: middle; 
 }

@@ -33,13 +33,13 @@
   width: 72%;
   margin-right: auto;
   margin-left: auto;
+
+  text-align: center;
 }
 
 .date-form{
   margin-top: 30px;
   margin-bottom: 25px;
-  margin-left: 15px;
-  margin-right: 15px;
   display: inline-block; 
 }
 
@@ -47,7 +47,7 @@
   background-color: #631033;
   color: white;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 18px;
   padding: 8px 12px 8px 12px;
   font-weight: 500;
 }

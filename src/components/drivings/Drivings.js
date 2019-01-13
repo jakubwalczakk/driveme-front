@@ -1,46 +1,13 @@
 import React, { Component } from 'react';
 import { Table } from "react-bootstrap";
-import { request } from "utils/APIUtils";
-import { API_BASE_URL } from "constants/constants";
-import LoadingIndicator from '../../common/LoadingIndicator';
-import ServerError from '../../common/ServerError';
 import Driving from "./Driving";
 import "./Drivings.css";
 
-const drivingUrl = API_BASE_URL + '/driving/student';
 
 export default class Drivings extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      drivings: [],
-      isLoading: false,
-      error: null,
-    };
-  }
-
-  componentDidMount() {
-    this.setState({ isLoading: true });
-
-    request(
-      'GET',
-      drivingUrl
-    ).then(data => this.setState({ drivings: data, isLoading: false }))
-      .catch(error => this.setState({ error, isLoading: false }));
-  }
-
+  
   render() {
-
-    var { drivings, isLoading, error } = this.state;
-
-    if (error) {
-      return <ServerError />
-    }
-
-    if (isLoading) {
-      return <LoadingIndicator />
-    }
+    var drivings = this.props.drivings;
 
     const drivingList = drivings.map(driving =>
       <Driving key={driving.id} driving={driving} />)

@@ -46,7 +46,7 @@ class Login extends Component {
                 if (error.status === 401) {
                     alert('Twój e-mail lub hasło jest niepoprawne. Spróbuj ponownie!')
                 } else {
-                    alert('Przepraszamy! Coś poszło nie tak :( Spróbuj ponownie.')
+                    alert('Podane dane są niepoprawne. Spróbuj ponownie!')
                 }
             });
         this.props.onLogin();

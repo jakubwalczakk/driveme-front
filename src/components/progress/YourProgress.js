@@ -11,12 +11,14 @@ import { USER_ROLES } from "../../constants/constants";
 import ServerError from "../../common/ServerError";
 
 const courseUrl = API_BASE_URL + '/course';
+const drivingUrl = API_BASE_URL + '/driving/student';
 
 class YourProgress extends Component {
   constructor(props) {
     super(props);
     this.state = {
       course: [],
+      drivings: [],
       isLoading: false,
       error: null,
       currentLoggedUser: ''
@@ -31,10 +33,16 @@ class YourProgress extends Component {
       courseUrl + '/student'
     ).then(data => this.setState({ course: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
+
+    request(
+      'GET',
+      drivingUrl
+    ).then(data => this.setState({ drivings: data, isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
   }
 
   render() {
-    var { course, isLoading, error } = this.state;
+    var { course, isLoading, error, drivings } = this.state;
     var currentUserRole = this.props.currentUserRole;
 
     var takenDrivingHours = course.takenDrivingHours;
@@ -56,9 +64,9 @@ class YourProgress extends Component {
     } else {
       return (
         <div>
-          <p id="progressLabel">Twój postęp: {percentOfCourseCompletion}%</p>
+          <p id="progressLabel">Twój postęp: {percentOfCourseCompletion}% ({course.takenDrivingHours} h)</p>
           <ProgressBar id="ratingProgressBar" bsStyle="success" now={percentOfCourseCompletion} />
-          <Drivings />
+          <Drivings drivings={drivings}/>
         </div>);
     }
   }
