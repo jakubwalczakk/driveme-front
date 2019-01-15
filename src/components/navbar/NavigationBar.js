@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Nav, Navbar, NavItem, Image, Modal, Button } from "react-bootstrap";
 import { withRouter } from 'react-router-dom';
+import { Nav, Navbar, NavItem, Image, Modal, Button } from "react-bootstrap";
 import { USER_ROLES } from 'constants/constants';
 import "./NavigationBar.css";
 
@@ -12,15 +12,10 @@ class NavigationBar extends Component {
         };
 
         this.prepareNavBarStructure = this.prepareNavBarStructure.bind(this);
-        this.handleLoginClick = this.handleLoginClick.bind(this);
         this.handleShowLogoutModal = this.handleShowLogoutModal.bind(this);
         this.handleCloseLogoutModal = this.handleCloseLogoutModal.bind(this);
         this.handleLogoutButtonClick = this.handleLogoutButtonClick.bind(this);
         this.prepareModalStructure = this.prepareModalStructure.bind(this);
-    }
-
-    handleLoginClick() {
-        this.setState({ isLoggedIn: true });
     }
 
     handleShowLogoutModal() {

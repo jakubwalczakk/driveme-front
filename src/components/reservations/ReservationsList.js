@@ -36,7 +36,7 @@ class Reservations extends Component {
 
       return (
         <div id="reservationsTableContainer">
-          <p id="reservationsLabel">Lista Twoich rezerwacji (instruktor)</p>
+          <p id="reservationsLabel">Lista Twoich rezerwacji</p>
           <Table id="reservationsTable" responsive striped bordered condensed hover>
             <thead>
               <tr>
@@ -58,27 +58,28 @@ class Reservations extends Component {
       const reservationList = reservations.map(reservation =>
         <StudentReservation key={reservation.id} reservation={reservation} />)
 
-      return (<div id="reservationsTableContainer">
-        <Button id="bookButton" onClick={() => this.props.history.push('/book')}>
-          Wykonaj rezerwację
+      return (
+        <div id="reservationsTableContainer">
+          <p id="reservationsLabel">Lista wykonanych przez Ciebie rezerwacji</p>
+          <Table id="reservationsTable" responsive striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>Instruktor</th>
+                <th>Samochód</th>
+                <th>Miasto</th>
+                <th>Data rozpoczęcia</th>
+                <th id="reservationDurationCol">Czas trwania</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {reservationList}
+            </tbody>
+          </Table>
+          <Button id="bookButton" onClick={() => this.props.history.push('/book')}>
+            Wykonaj rezerwację
         </Button>
-        <p id="reservationsLabel">Lista dokonanych przez Ciebie rezerwacji</p>
-        <Table id="reservationsTable" responsive striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th>Instruktor</th>
-              <th>Samochód</th>
-              <th>Miasto</th>
-              <th>Data rozpoczęcia</th>
-              <th id="reservationDurationCol">Czas trwania</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reservationList}
-          </tbody>
-        </Table>
-      </div>);
+        </div>);
     } else {
       return <AccessDenied />
     }
@@ -86,15 +87,16 @@ class Reservations extends Component {
 
   componentDidMount() {
     var currentUserRole = this.props.currentUserRole;
-    this.setState({ isLoading: true });
 
     if (currentUserRole === USER_ROLES.Instructor) {
+      this.setState({ isLoading: true });
       request(
         'GET',
         reservationUrl + '/instructor'
       ).then(data => this.setState({ instructorReservations: data, isLoading: false }))
         .catch(error => this.setState({ error, isLoading: false }));
     } else if (currentUserRole === USER_ROLES.Student) {
+      this.setState({ isLoading: true });
       request(
         'GET',
         reservationUrl + '/student'

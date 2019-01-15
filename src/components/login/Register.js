@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import { NAME_MIN_LENGTH, NAME_MAX_LENGTH, SURNAME_MIN_LENGTH, SURNAME_MAX_LENGTH, PESEL_LENGTH } from "constants/constants";
+import { NAME_MIN_LENGTH,  SURNAME_MIN_LENGTH,  PESEL_LENGTH } from "constants/constants";
 import { signup } from 'utils/APIUtils';
 import { withRouter } from 'react-router-dom';
 import './Register.css';
@@ -185,17 +185,6 @@ class Register extends Component {
                     houseNo: houseNo.value
                 }
             };
-        }
-        //FIXME WORKING HOURS
-        else if (selectedUserRole === USER_ROLES.Instructor) {
-            signupRequest = {
-                name: name.value,
-                surname: surname.value,
-                email: email.value,
-                phoneNumber: phoneNumber.value,
-                userRole: selectedUserRole,
-                // workingHours: 20
-            };
         } else {
             signupRequest = {
                 name: name.value,
@@ -215,12 +204,23 @@ class Register extends Component {
     }
 
     isFormValid() {
-        var { name, surname, email, phoneNumber, selectedUserRole, city, zipCode, street, houseNo } = this.state;
-        return (name.validateStatus &&
-            surname.validateStatus &&
-            email.validateStatus //&&
-            //phoneNumber.validateStatus;
-        );
+        var { name, surname, email, phoneNumber, selectedUserRole, city, zipCode, street } = this.state;
+        if (selectedUserRole === USER_ROLES.Student) {
+            return (name.validateStatus &&
+                surname.validateStatus &&
+                email.validateStatus &&
+                phoneNumber.validateStatus &&
+                city.validateStatus &&
+                zipCode.validateStatus &&
+                street.validateStatus
+            );
+        } else {
+            return (name.validateStatus &&
+                surname.validateStatus &&
+                email.validateStatus &&
+                phoneNumber.validateStatus
+            );
+        }
     }
 
     render() {
@@ -333,12 +333,7 @@ class Register extends Component {
         else if (name.length < NAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Imię jest zbyt krótkie (Poprawnę imię zawiera co najmniej ${NAME_MIN_LENGTH} znaków.)`
-            }
-        } else if (name.length > NAME_MAX_LENGTH) {
-            return {
-                validationStatus: 'error',
-                errorMsg: `Imię jest zbyt długie (Poprawnę imię zawiera co najwyżej ${NAME_MAX_LENGTH} znaków.)`
+                errorMsg: `Imię jest zbyt krótkie, poprawne imię zawiera co najmniej ${NAME_MIN_LENGTH} znaków.`
             }
         } else {
             return {
@@ -352,18 +347,13 @@ class Register extends Component {
         if (!surname) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Nazwisko nie może być puste.)`
+                errorMsg: `Nazwisko nie może być puste.`
             }
         }
         else if (surname.length < SURNAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Nazwisko jest zbyt krótkie (Poprawnę nazwisko zawiera co najmniej ${NAME_MIN_LENGTH} znaków.)`
-            }
-        } else if (surname.length > SURNAME_MAX_LENGTH) {
-            return {
-                validationStatus: 'error',
-                errorMsg: `Nazwisko jest zbyt długie (Poprawnę nazwisko zawiera co najwyżej ${NAME_MAX_LENGTH} znaków.)`
+                errorMsg: `Nazwisko jest zbyt krótkie, poprawne nazwisko zawiera co najmniej ${NAME_MIN_LENGTH} znaków.`
             }
         } else {
             return {
@@ -377,13 +367,13 @@ class Register extends Component {
         if (!pesel) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Numer PESEL nie może być pusty.)`
+                errorMsg: `Numer PESEL nie może być pusty.`
             }
         }
         else if (pesel.length !== PESEL_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `PESEL nie składa się z 11 znaków, poprawny PESEL składa się z ${PESEL_LENGTH} znaków.)`
+                errorMsg: `PESEL nie składa się z 11 znaków, poprawny PESEL składa się z ${PESEL_LENGTH} znaków.`
             }
         }
         const PESEL_REGEX = RegExp('^[0-9]{11}$');
@@ -429,13 +419,11 @@ class Register extends Component {
         }
         const PHONE_NUMBER_REGEX = RegExp("^\\d{3}-\\d{3}-\\d{3}$||^\\d{3} \\d{3} \\d{3}$||^\\d{9}$");
         if (PHONE_NUMBER_REGEX.test(phoneNumber)) {
-            // console.log("Numer ok!!!")
             return {
                 validateStatus: 'success',
                 message: null,
             };
         } else {
-            // console.log("błędny numer!!!")
             return {
                 validateStatus: 'error',
                 message: 'Numer telefonu nie jest zgodny z podanym formatem.'
