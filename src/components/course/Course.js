@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { ProgressBar } from "react-bootstrap";
 import { withRouter } from 'react-router-dom';
+import { ProgressBar } from "react-bootstrap";
 import { request } from "utils/APIUtils";
 import { API_BASE_URL, USER_ROLES } from "../../constants/constants";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import ServerError from '../../common/ServerError';
-import "./Course.css";
 import AccessDenied from "../../common/AccessDenied";
+import "./Course.css";
 
 const courseUrl = API_BASE_URL + '/course';
 
@@ -56,7 +56,6 @@ class Course extends Component {
     } else {
       return (
         <div id="courseContainer">
-          {/* <p id="courseLabel">Tutaj pojawią się informacje na temat Twojego kursu.</p> */}
           <p>Data rozpoczęcia kursu: {course.startDate}</p>
           <p>Wpłacona kwota: {percentPaymentOfCourse}% - {currenPaymentOfCourse} zł
                   {currenPaymentOfCourse === 1500.0 &&

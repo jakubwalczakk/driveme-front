@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+import { withRouter } from 'react-router-dom';
 import { Button, FormGroup, FormControl, ControlLabel, Tooltip, OverlayTrigger, Image } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
 import { API_BASE_URL, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "constants/constants";
 import { trimDate, request } from "utils/APIUtils";
-import { withRouter } from 'react-router-dom';
 import { USER_ROLES } from "../../constants/constants";
 import AccessDenied from '../../common/AccessDenied';
 import "./ProfileSettings.css";
@@ -128,9 +128,6 @@ class ProfileSettings extends Component {
   }
 
   render() {
-
-    console.log(this.state)
-
     var { password, image, user } = this.state;
 
     const passwordTooltip = (

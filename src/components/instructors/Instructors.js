@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Table } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
+import { Table } from "react-bootstrap";
 import { request } from "utils/APIUtils";
 import { API_BASE_URL } from "constants/constants";
 import LoadingIndicator from "../../common/LoadingIndicator";

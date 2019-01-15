@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, FormGroup, FormControl, ControlLabel, Button, Modal } from "react-bootstrap";
+import { Table, FormGroup, ControlLabel, Button } from "react-bootstrap";
 import DatePicker from 'react-datepicker';
 import { registerLocale } from 'react-datepicker';
 import { enGB } from 'date-fns/locale'
@@ -105,7 +105,7 @@ class Ratings extends Component {
                 showMonthDropdown
                 showWeekNumbers />
             </FormGroup>
-            <Button id="searchDrivingsButton" onClick={()=>this.getInstructorDrivings()}>
+            <Button id="searchDrivingsButton" onClick={() => this.getInstructorDrivings()}>
               Szukaj
             </Button>
           </div>

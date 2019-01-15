@@ -1,14 +1,14 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { Table, Button } from "react-bootstrap";
 import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import { request } from "utils/APIUtils";
-import { withRouter } from "react-router-dom";
-import InstructorReservation from './InstructorReservation';
-import StudentReservation from './StudentReservation';
-import "./ReservationsList.css";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import ServerError from "../../common/ServerError";
 import AccessDenied from "../../common/AccessDenied";
+import InstructorReservation from './InstructorReservation';
+import StudentReservation from './StudentReservation';
+import "./ReservationsList.css";
 
 const reservationUrl = API_BASE_URL + '/reservation';
 

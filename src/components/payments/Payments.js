@@ -1,13 +1,13 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import { API_BASE_URL, USER_ROLES } from "constants/constants";
 import { request } from "utils/APIUtils";
-import { withRouter } from "react-router-dom";
-import Payment from './Payment';
-import "./Payments.css";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import ServerError from "../../common/ServerError";
 import AccessDenied from "../../common/AccessDenied";
+import Payment from './Payment';
+import "./Payments.css";
 
 const paymentUrl = API_BASE_URL + '/payment/student';
 
@@ -63,7 +63,6 @@ class Payments extends Component {
           <Table id="paymentsTable" responsive striped bordered condensed hover>
             <thead>
               <tr>
-                {/* <th id="paymentNo">#</th> */}
                 <th id="paymentDateCol">Data wpłaty</th>
                 <th id="paymentAmountCol">Kwota</th>
               </tr>

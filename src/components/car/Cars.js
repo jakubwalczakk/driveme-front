@@ -1,11 +1,11 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
-import LoadingIndicator from 'common/LoadingIndicator';
-import ServerError from 'common/ServerError';
 import ReactFileReader from 'react-file-reader';
 import { request } from "utils/APIUtils";
 import { API_BASE_URL, USER_ROLES } from "constants/constants";
-import { withRouter } from "react-router-dom";
+import LoadingIndicator from 'common/LoadingIndicator';
+import ServerError from 'common/ServerError';
 import Car from "./Car";
 import "./Cars.css";
 
@@ -101,8 +101,6 @@ class Cars extends Component {
             photo: newCarImage,
             gasType: newCarGasType,
         }
-
-        // console.log(addCarRequest)
 
         request(
             'POST',

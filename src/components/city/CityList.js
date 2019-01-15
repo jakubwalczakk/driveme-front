@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { Table, Image, Button, Modal, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import ReactFileReader from 'react-file-reader';
-import { withRouter } from "react-router-dom";
 import { request } from "utils/APIUtils";
 import { API_BASE_URL } from "constants/constants";
 import { USER_ROLES } from "../../constants/constants";

@@ -4,7 +4,6 @@ import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
 import "./Exams.css";
 
-
 const rateExamUrl = API_BASE_URL + '/practical_exam/rate';
 
 export default class PracticalExam extends Component {

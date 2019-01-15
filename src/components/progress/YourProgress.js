@@ -1,14 +1,14 @@
 import React, { Component } from "react";
+import { withRouter } from 'react-router-dom';
 import { ProgressBar } from "react-bootstrap";
-import Drivings from "components/drivings/Drivings";
 import { API_BASE_URL } from "constants/constants";
 import { request } from "utils/APIUtils";
-import { withRouter } from 'react-router-dom';
-import "./YourProgress.css";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import AccessDenied from "../../common/AccessDenied";
 import { USER_ROLES } from "../../constants/constants";
 import ServerError from "../../common/ServerError";
+import Drivings from "components/drivings/Drivings";
+import "./YourProgress.css";
 
 const courseUrl = API_BASE_URL + '/course';
 const drivingUrl = API_BASE_URL + '/driving/student';

@@ -39,25 +39,3 @@ export default class Calendar extends Component {
 
   }
 }
-
-// import AvailableTimes from 'react-available-times';
-// return (
-  // <AvailableTimes
-  //   weekStartsOn="monday"
-  //   onChange={(selections) => {
-  //     selections.forEach(({ start, end }) => {
-  //       console.log('Start:', start, 'End:', end);
-  //     })
-  //   }}
-  //   onEventsRequested={({ calendarId, start, end, callback }) => {
-  //     this.loadMoreEvents(calendarId, start, end).then(callback);
-  //   }}
-  //   initialSelections={
-  //     // [{ start: new Date('2019-01-03 11:11'), end: new Date('2019-01-03 14:22') }]}
-  //     [initial]}
-  //   height={400}
-  //   recurring={false}
-  //   availableDays={['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']}
-  //   availableHourRange={{ start: 8, end: 22 }}
-  // />
-// )

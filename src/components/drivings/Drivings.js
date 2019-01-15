@@ -3,7 +3,6 @@ import { Table } from "react-bootstrap";
 import Driving from "./Driving";
 import "./Drivings.css";
 
-
 export default class Drivings extends Component {
   
   render() {

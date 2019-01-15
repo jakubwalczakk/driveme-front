@@ -15,13 +15,6 @@ import "./Booking.css";
 
 registerLocale('enGB', enGB);
 
-// import plPL from 'antd/lib/locale-provider/pl_PL';
-// import { LocaleProvider } from 'antd';
-// import { DatePicker } from 'antd';
-// ReactDOM.render(<DatePicker />, mountNode);
-// import 'antd/dist/antd.css'; 
-
-
 const carUrl = API_BASE_URL + '/car';
 const instructorUrl = API_BASE_URL + '/instructor';
 const cityUrl = API_BASE_URL + '/city';

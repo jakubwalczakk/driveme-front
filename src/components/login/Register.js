@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { NAME_MIN_LENGTH,  SURNAME_MIN_LENGTH,  PESEL_LENGTH } from "constants/constants";
 import { signup } from 'utils/APIUtils';
-import { withRouter } from 'react-router-dom';
-import './Register.css';
 import { USER_ROLES } from '../../constants/constants';
 import AccessDenied from '../../common/AccessDenied';
+import './Register.css';
 
 class Register extends Component {
 
@@ -115,7 +115,6 @@ class Register extends Component {
 
     handleSelectedUserRoleChange(event) {
         this.setState({ selectedUserRole: event.target.value })
-        // console.log(this.state)
     }
 
     handleCityChange(event, validationFun) {

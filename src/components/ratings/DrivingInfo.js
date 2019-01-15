@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, Badge, FormGroup, ControlLabel, FormControl, Radio } from "react-bootstrap";
 import { API_BASE_URL } from "constants/constants";
-import { request, trimDate, convertTime } from "utils/APIUtils";
+import { request, convertTime } from "utils/APIUtils";
 
 const rateDrivingUrl = API_BASE_URL + '/driving/rate';
 

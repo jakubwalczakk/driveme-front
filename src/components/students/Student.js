@@ -188,7 +188,6 @@ export default class Car extends Component {
 
   handleActivateStudent() {
     var studentId = this.props.student.id;
-    // console.log("STUDENT ZOSTAŁ POTWIERDZONY DO AKTYWACJI");
 
     request(
       'PUT',
@@ -227,7 +226,6 @@ export default class Car extends Component {
 
   handleDeleteStudent() {
     var studentId = this.props.student.id;
-    console.log("STUDENT ZOSTAŁ POTWIERDZONY DO USUNIĘCIA");
     request(
       'DELETE',
       studentUrl + `/${studentId}`

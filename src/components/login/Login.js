@@ -1,8 +1,8 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { ACCESS_TOKEN } from "constants/constants";
 import { login } from 'utils/APIUtils';
-import { withRouter } from "react-router-dom";
 import "./Login.css";
 
 class Login extends Component {
